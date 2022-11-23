@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="winsou.cn" />
+    <meta name="Keywords" content="" />
+    <meta name="Description" content="" /> 
+    <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+    <title>南通反走私数据可视化</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="stylesheet" type="text/css" href="font/iconfonts/iconfont.css" />
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/drawMixin.js"></script>
+    <script src="js/echarts.min.js"></script> 
+    <script src="js/scroll.js"></script>
+</head>  
+
+<body>
+
+    <div class="app">
+        <div class="container" id="container">
+            <div class="header">
+                <div class="date">
+                    <span class="iconfont">&#xe869;</span>
+                    <span id="date"></span>
+                </div>
+                <ul class="headerInfo">
+                    <li>
+                        
+                        <!-- <input id="place" style="background-color: rgb(16,58,90);width: 200px;border: 0;color: white;" placeholder="地点名称" list="batch_list"></input> -->
+                        <div class="options">
+                            <div class="dropdown">
+                                <span class="iconfont">&#xe614;</span>
+                                <input id="place" style="background-color: rgb(16,58,90);width: 200px;border: 0;color: white;" placeholder="地点名称" onchange="onChange()"></input>
+                                <div class="showItems" id="batch_list">
+                                    <!-- <p>2022年</p>
+                                    <p>2021年</p>
+                                    <p>2020年</p> -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="options">
+                            <div class="dropdown">
+                                <div class="showText">2022年</div>
+                                <div class="showItems">
+                                    <p>2022年</p>
+                                    <p>2021年</p>
+                                    <p>2020年</p>
+                                </div>
+                            </div>
+                        </div> -->
+                    </li>
+                    <li>
+                        <iframe scrolling="no" src="https://tianqiapi.com/api.php?style=te&skin=pitaya&city=南通&color=1FC0FC&fontsize=30&align=center" width="300" height="34" frameborder="0" allowtransparency="true"></iframe>
+                    </li>
+                    <!-- <li>
+                        <span class="iconfont">&#xe600;</span>
+                        <span class="blue">管理员</span>
+                    </li>
+                    <li>
+                        <a href="#">退出</a>
+                    </li> -->
+                </ul>
+            </div>
+            <div class="main">
+                <div class="frame">
+                    <div class="frameSidebarItem frameLeft">
+
+                        <div class="sidebarBox">
+                            <div class="showBox">
+                                <div class="decorate lt"></div>
+                                <div class="decorate rt"></div>
+                                <div class="showTitleBox">
+                                    <div class="showTitle">
+                                        <h2>点位岸线情况 <span>dianweianxianqingkuang</span></h2>
+                                        <div class="showTitleNav">
+                                            <a href="#" id="point1_0" onclick="changePoint1(0)">点位</a>
+                                            <a href="#" id="point1_1" onclick="changePoint1(1)">岸线</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="showInner">
+                                    <div class="innerTitle">
+                                        <div class="innerTitleInfo">
+                                            总数<span id="pointCount"></span>个
+                                        </div>
+                                        <div class="showTitleNav">
+                                            <a href="#" id="point2_0" onclick="changePoint2(0)">类型分布</a>
+                                            <a href="#" id="point2_1" onclick="changePoint2(1)">区县分布</a>
+                                        </div>
+                                    </div>
+                                    <div class="showReport" id="chartOne">
+                                        <script src="js/reportData/chartOne.js"></script>
+                                    </div>
+                               </div>
+
+                            </div> 
+                        </div>
+
+                        <div class="sidebarBox">
+                            <div class="showBox">
+                                <div class="decorate lt"></div>
+                                <div class="decorate rt"></div>
+                                <div class="showTitleBox">
+                                    <div class="showTitle">
+                                        <h2>巡查情况 <span>xunchaqingkuang</span></h2>
+                                        <div class="calendar">
+                                            <!--日历位置-->
+                                            <div class="packagingCalendar">
+                                                <div class="showCalendar" id="showCalendar"></div>
+                                                <div class="calendarBox">
+                                                    <span id="calendar"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="showCon">
+                                    <div class="showUp">
+                                         <div class="showReportInfo">本月巡查总数<span id="xunchaCount"></span>次</div>
+                                         <div class="showReport" id="chartTwo">
+                                            <script src="js/reportData/chartTwo.js"></script>     
+                                         </div>
+                                    </div>
+                                    <div class="showDown">
+                                        <div class="subTitleBox">
+                                            <div class="subTitle">
+                                                <h2><img src="./images/tit_bg.png" class="titImg" alt="">巡查内容</h2>
+                                                <img class="titInfo" src="./images/tit_info.png" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="dataList">
+                                            <ul class="dataListTitle"> 
+                                                <li style="width: 15%;">县市区</li>
+                                                <li style="width: 20%;">部门/乡镇街道</li>
+                                                <li style="width: 10%;">巡查人</li>
+                                                <li style="width: 15%;">开始时间</li>
+                                                <li style="width: 15%;">结束时间</li>
+                                                <li style="width: 15%;">巡查结果</li>
+                                                <li style="width: 10%;">查看</li>
+                                            </ul>
+                                            <div class="dataListContent">
+                                                <ul class="dataListItems" id="xunchaContent">
+                                                    <!-- <li>
+                                                        <p style="width: 15%;">通州</p>
+                                                        <p style="width: 20%;">xx部门</p>
+                                                        <p style="width: 10%;">张金生</p>
+                                                        <p style="width: 15%;">11:30</p>
+                                                        <p style="width: 15%;">12:15</p>
+                                                        <p style="width: 15%;">正常</p>
+                                                        <p style="width: 10%;"><a href="#">查看</a></p>
+                                                    </li>
+                                                    <li>
+                                                        <p style="width: 15%;">通州</p>
+                                                        <p style="width: 20%;">xx部门</p>
+                                                        <p style="width: 10%;">张金生</p>
+                                                        <p style="width: 15%;">11:30</p>
+                                                        <p style="width: 15%;">12:15</p>
+                                                        <p style="width: 15%;">正常</p>
+                                                        <p style="width: 10%;"><a href="#">查看</a></p>
+                                                    </li>
+                                                    <li>
+                                                        <p style="width: 15%;">通州</p>
+                                                        <p style="width: 20%;">xx部门</p>
+                                                        <p style="width: 10%;">张金生</p>
+                                                        <p style="width: 15%;">11:30</p>
+                                                        <p style="width: 15%;">12:15</p>
+                                                        <p style="width: 15%;">正常</p>
+                                                        <p style="width: 10%;"><a href="#">查看</a></p>
+                                                    </li>
+                                                    <li>
+                                                        <p style="width: 15%;">通州</p>
+                                                        <p style="width: 20%;">xx部门</p>
+                                                        <p style="width: 10%;">张金生</p>
+                                                        <p style="width: 15%;">11:30</p>
+                                                        <p style="width: 15%;">12:15</p>
+                                                        <p style="width: 15%;">正常</p>
+                                                        <p style="width: 10%;"><a href="#">查看</a></p>
+                                                    </li>
+                                                    <li>
+                                                        <p style="width: 15%;">通州</p>
+                                                        <p style="width: 20%;">xx部门</p>
+                                                        <p style="width: 10%;">张金生</p>
+                                                        <p style="width: 15%;">11:30</p>
+                                                        <p style="width: 15%;">12:15</p>
+                                                        <p style="width: 15%;">正常</p>
+                                                        <p style="width: 10%;"><a href="#">查看</a></p>
+                                                    </li>
+                                                    <li>
+                                                        <p style="width: 15%;">通州</p>
+                                                        <p style="width: 20%;">xx部门</p>
+                                                        <p style="width: 10%;">张金生</p>
+                                                        <p style="width: 15%;">11:30</p>
+                                                        <p style="width: 15%;">12:15</p>
+                                                        <p style="width: 15%;">正常</p>
+                                                        <p style="width: 10%;"><a href="#">查看</a></p>
+                                                    </li>
+                                                    <li>
+                                                        <p style="width: 15%;">通州</p>
+                                                        <p style="width: 20%;">xx部门</p>
+                                                        <p style="width: 10%;">张金生</p>
+                                                        <p style="width: 15%;">11:30</p>
+                                                        <p style="width: 15%;">12:15</p>
+                                                        <p style="width: 15%;">正常</p>
+                                                        <p style="width: 10%;"><a href="#">查看</a></p>
+                                                    </li>
+                                                    <li>
+                                                        <p style="width: 15%;">通州</p>
+                                                        <p style="width: 20%;">xx部门</p>
+                                                        <p style="width: 10%;">张金生</p>
+                                                        <p style="width: 15%;">11:30</p>
+                                                        <p style="width: 15%;">12:15</p>
+                                                        <p style="width: 15%;">正常</p>
+                                                        <p style="width: 10%;"><a href="#">查看</a></p>
+                                                    </li> -->
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </div>
+                            </div> 
+                        </div>
+
+                    </div>
+                    
+                    <div class="frameSidebarItem frameRight">
+
+                        <div class="sidebarBox">
+                            <div class="showBox">
+                                <div class="decorate lt"></div>
+                                <div class="decorate rt"></div>
+                                <div class="showTitleBox">
+                                    <div class="showTitle">
+                                        <h2>走私案发情况 <span>zousianfaqingkuang</span></h2>
+                                        <!-- <div class="showTitleNav">
+                                            <a href="#" class="current">2021年</a>
+                                            <a href="#">2022年</a>
+                                        </div> -->
+                                        <div class="calendar">
+                                            <!--日历位置-->
+                                            <div class="packagingCalendar">
+                                                <div class="showCalendar2" id="showCalendar2"></div>
+                                                <div class="calendarBox2">
+                                                    <span id="calendar2"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="chartContainer">
+                                    <div class="chartHeader">
+                                        <div class="chartItem">
+                                            <span class="tit">全年走私案件</span>
+                                            <span class="data" id="anfaCount"></span>
+                                            <span class="unit">件</span>
+                                        </div>
+                                    </div>
+                                    <div class="chartBottom" id="chartThree">
+                                        <script src="js/reportData/chartThree.js"></script>
+                                    </div>     
+                                </div>
+                            </div> 
+                        </div>
+
+                        <div class="sidebarBox">
+                            <div class="showBox">
+                                <div class="decorate lt"></div>
+                                <div class="decorate rt"></div>
+                                <div class="showTitleBox">
+                                    <div class="showTitle">
+                                        <h2>隐患排查 <span>yinhuanpaicha</span></h2>
+                                        <!-- <div class="showTitleNav">
+                                            <a href="#">2020年</a>
+                                            <a href="#" class="current">2021年</a>
+                                            <a href="#">2022年</a>
+                                        </div> -->
+                                        <div class="calendar">
+                                            <!--日历位置-->
+                                            <div class="packagingCalendar">
+                                                <div class="showCalendar3" id="showCalendar3"></div>
+                                                <div class="calendarBox3">
+                                                    <span id="calendar3"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="chartContainer">
+                                    <div class="chartHeader">
+                                        <div class="chartItem">
+                                            <span class="tit">发现数</span>
+                                            <span class="data" style="color: #FF5858;" id="risk_1"></span>
+                                        </div>
+                                        <div class="chartItem">
+                                            <span class="tit">已处置数</span>
+                                            <span class="data" id="risk_2"></span>
+                                        </div>
+                                    </div>
+                                    <div class="chartBottom">
+                                        <div class="showReport" id="chartFour">
+                                            <script src="js/reportData/chartFour.js"></script>
+                                        </div>
+                                    </div>     
+                                </div>
+                            </div> 
+                        </div>
+
+                        <div class="sidebarBox">
+                            <div class="showBox">
+                                <div class="decorate lt"></div>
+                                <div class="decorate rt"></div>
+                                <div class="showTitleBox">
+                                    <div class="showTitle">
+                                        <h2>今日潮汐 <span>jinrichaoxi</span></h2>
+                                    </div>
+                                </div>
+                                <div class="showCon tides">
+                                    <div class="tide">
+                                        <div class="text">
+                                            早潮时间
+                                            <span><span id="riseTime"></span>  — <span id="riseTime2"></span></span>
+                                        </div>
+                                    </div>
+                                    <div class="tide">
+                                        <div class="text">
+                                            晚潮时间
+                                            <span><span id="fallTime"></span>  — <span id="fallTime2"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+
+                    </div>
+
+                    <div class="frameMidItem">
+                        <a href="#" onclick="filterPoint(0)">
+                            <img src="./images/all.png" alt="">
+                            <p>全部</p>
+                        </a>
+                        <a href="#" onclick="filterPoint(1)">
+                            <img src="./images/icon6.png" alt="">
+                            <p>码头</p>
+                        </a>
+                        <a href="#" onclick="filterPoint(2)">
+                            <img src="./images/icon5.png" alt="">
+                            <p>渔港</p>
+                        </a>
+                        <a href="#" onclick="filterPoint(3)">
+                            <img src="./images/icon4.png" alt="">
+                            <p>船闸</p>
+                        </a>
+                        <a href="#" onclick="filterPoint(4)">
+                            <img src="./images/icon3.png" alt="">
+                            <p>船舶临时<br>停靠点</p>
+                        </a>
+                        <a href="#" onclick="filterPoint(5)">
+                            <img src="./images/icon2.png" alt="">
+                            <p>其他走私<br>风险点</p>
+                        </a>
+                        <a href="#" onclick="filterPoint(6)">
+                            <img src="./images/icon7.png" alt="">
+                            <p>走私<br>案发点</p>
+                        </a>
+                        <a href="#" onclick="filterPoint(7)">
+                            <img src="./images/icon1.png" alt="">
+                            <p>岸线</p>
+                        </a>
+                        <a href="#" onclick="filterPoint(8)">
+                            <img src="./images/jiankong.png" alt="">
+                            <p>监控</p>
+                        </a>
+                    </div>
+
+                    <div class="riskBox">
+                        <a href="#">高风险<span id="rise_high"></span>个</a>
+                        <a href="#">中风险<span id="rise_middle"></span>个</a>
+                        <a href="#">低风险<span id="rise_low"></span>个</a>
+                    </div>
+
+                </div>
+            </div>
+            <div class="map" id="map"></div>
+
+            <div class="mapInfo" id="detailWindow"  style="height:900px;width:1400px;display:none;background: url(./images/map_bg2.png) no-repeat 0 0;background-size: 100% 100%;position: absolute;top:30%;left: 30%;">
+                <div class="mapInfoTitle">
+                    <span>巡查内容</span>
+                    <img src="./images/close.png" align="right" style="position:absolute;right:0px;cursor:pointer;margin:2px 20px" onclick="closeDetail()">
+                </div>
+                <div >
+                    <table class="mapTable" border="0"> 
+                        <tr>
+                            <td>县市区&emsp;：<span id="detail_area"></span></td>
+                            <td>部门乡镇：<span id="detail_streetname"></span></td>
+                        </tr>
+                        <tr>
+                            <td>开始时间：<span id="detail_starttime"></span></td>
+                            <td>结束时间：<span id="detail_endtime"></span></td>
+                        </tr>
+                        <tr>
+                            <td>巡查人&emsp;：<span id="detail_xunchaname"></span></td>
+                            <td>巡查结果：<span id="detail_result"></span></td>
+                        </tr>
+                    </table>
+                </div>
+                <div  id="detailMap" style="height:600px;top: 0;left: 0;"></div>
+                    <!-- <div style="text-align: center;"><a href="#" onclick="closeDetail()">
+                        <p>关闭</p>
+                    </a></div> -->
+                    
+            </div>
+                
+            <div class="mapInfo" id="photoWindow"  style="max-height:1200px;max-width:1400px;display:none;background: url(./images/map_bg2.png) no-repeat 0 0;background-size: 100% 100%;position: absolute;top:10%;left: 30%;">
+                <div class="mapInfoTitle">
+                    <span>照片</span>
+                    <img src="./images/close.png" align="right" style="position:absolute;right:0px;cursor:pointer;margin:2px 20px" onclick="closePhoto()">
+                </div>
+                <div >
+                    <img id="bigPhotoId">
+                </div>  
+            </div>
+
+            <!-- <div class="mapInfo" id="cameraWindow"  style="height:1100px;width:2600px;display:none;background: url(./images/map_bg2.png) no-repeat 0 0;background-size: 100% 100%;position: absolute;top:10%;left: 25%;">
+                
+                <div class="mapInfoTitle">
+                    <span>监控</span>
+                    <img src="./images/close.png" align="right" style="position:absolute;right:0px;cursor:pointer;margin:2px 20px" onclick="closeCamera()">
+                </div>
+                <div >
+                    <iframe id="cameraIframe" align="center" width="100%" height="1000" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" ></iframe>
+                    
+
+                </div>
+                    
+            </div> -->
+            
+        </div>
+
+    </div>
+ 
+
+    <script src="https://api.map.baidu.com/api?v=3.0&ak=OaGr78TjxBO0bS6dxptYXom91MGzFQuT"></script>
+    <script src="js/infobox.js"></script> 
+    <script src="laydate/laydate.js"></script>
+    <script>
+        $(function(){
+             //选择年
+            $('#showCalendar').click(function(){
+                if($(".calendarBox").is(':hidden')){
+                    $(".calendarBox").show();
+                }else{
+                    $(".calendarBox").hide();
+                }
+                return false
+            });
+            $(document.body).click(function(){
+                if(!$(".calendarBox").is(':hidden')){
+                    $(".calendarBox").hide();
+                }
+            })
+            laydate.render({
+                elem: '#calendar',
+                type: 'month',
+                position: 'static',
+                showBottom: false,
+                theme: '#1FC0FC',
+                ready: function(date){
+                    // console.log('--------修改日期1')
+                    $('#showCalendar').html(date.year + '-' + (date.month < 10 ? '0'+ date.month : date.month));
+                },
+                change: function(value, date){ //监听日期被切换
+                    // console.log('--------修改日期2')
+                    $('#showCalendar').html(value);
+                    queryXuncha(value)
+                },
+                done: function(value, date, endDate){
+                    // console.log('--------修改日期3')
+                    $(".calendarBox").hide();
+                }
+            });
+
+            //走私案发年份
+            $('#showCalendar2').click(function(){
+                if($(".calendarBox2").is(':hidden')){
+                    $(".calendarBox2").show();
+                }else{
+                    $(".calendarBox2").hide();
+                }
+                return false
+            });
+            $(document.body).click(function(){
+                if(!$(".calendarBox2").is(':hidden')){
+                    $(".calendarBox2").hide();
+                }
+            })
+            laydate.render({
+                elem: '#calendar2',
+                type: 'year',
+                position: 'static',
+                showBottom: false,
+                theme: '#1FC0FC',
+                ready: function(date){
+                    // console.log('--------修改日期1')
+                    $('#showCalendar2').html(date.year);
+                },
+                change: function(value, date){ //监听日期被切换
+                    // console.log('--------修改日期2')
+                    $('#showCalendar2').html(value);
+                    //走私案发情况
+                    queryAnfaCount(value);
+                  
+                },
+                done: function(value, date, endDate){
+                    // console.log('--------修改日期3')
+                    $(".calendarBox2").hide();
+                }
+            });
+
+            //隐患排查年份
+            $('#showCalendar3').click(function(){
+                if($(".calendarBox3").is(':hidden')){
+                    $(".calendarBox3").show();
+                }else{
+                    $(".calendarBox3").hide();
+                }
+                return false
+            });
+            $(document.body).click(function(){
+                if(!$(".calendarBox3").is(':hidden')){
+                    $(".calendarBox3").hide();
+                }
+            })
+            laydate.render({
+                elem: '#calendar3',
+                type: 'year',
+                position: 'static',
+                showBottom: false,
+                theme: '#1FC0FC',
+                ready: function(date){
+                    // console.log('--------修改日期1')
+                    $('#showCalendar3').html(date.year);
+                },
+                change: function(value, date){ //监听日期被切换
+                    // console.log('--------修改日期2')
+                    $('#showCalendar3').html(value);
+               
+                    //隐患排查
+                    queryRiskCount(value);
+                    queryRiskRatio(value);
+                },
+                done: function(value, date, endDate){
+                    // console.log('--------修改日期3')
+                    $(".calendarBox3").hide();
+                }
+            });
+        });
+    </script>
+    <script>
+        /**
+        * 指定经纬度，图标，标注文本
+        * 在地图上添加标注
+        * longitude 经度
+        * latitude  纬度
+        * icon      图标路径
+        * text      标注文本
+        **/
+        window.lastInfoBox = null;
+        //点位类型：1-码头，2-渔港，3-船闸，4-船舶临时停靠点，5-其他走私风险点,6-走私案发点
+        var markerList =[];
+        var lineList =[];
+        //码头点位
+        function addMarker1(longitude, latitude, data) {
+            if (!map) return;
+            var point = new BMap.Point(longitude, latitude); 
+            var myIcon = new BMap.Icon('./images/icon6.png', new BMap.Size(84, 75));
+            // 指定位置及标注的图标
+            var marker = new BMap.Marker(point, { icon: myIcon });  // 创建标注
+            markerList.push(marker);
+            // 点标记添加点击事件
+            var html = `<div class="mapInfo">
+                <div class="mapInfoTitle">
+                    <img src="./images/map.png" alt="">
+                    <span>${data.name}</span>
+                </div>
+                <div class="mapInfoContent">
+                    <table class="mapTable" border="0"> 
+                        <tr>
+                            <th>详细信息</th>`;
+                    if(data.gbcode){
+                        html+=`<th style="text-align:right;"><a href="#" onclick="watchCamera('`+data.gbcode+`')" style="color:rgb(8,252,218);text-decoration:underline;">进入监控</a></th>`;
+                    }     
+                    html+=`</tr>
+                        <tr>
+                            <td>性质：${data.propertiesName}</td>
+                            <td>类别：${data.categoryName}</td>
+                        </tr>
+                        <tr>
+                            <td>泊位数：${data.berthNum}个</td>
+                            <td>吊机情况：${data.craneName}</td>
+                        </tr>
+                        <tr>
+                            <td>最大吨级：${data.maxTon}</td>
+                            <td>走私风险等级：${data.riskLevelName}</td>
+                        </tr>
+                    </table>`;
+                    if(data.photoList){
+                        html+=`<div class="mapImg">`;
+                        data.photoList.forEach(element => {
+                            html+=`<img onclick="clickPhoto('`+element+`')" style="width:260px;height:200px;margin:10px 10px;" src="${element}" alt="">`;
+                        });
+                        html+=`</div>`;
+                    }
+                    html+=`</div> </div>`;
+                
+            var infoBox = new BMapLib.InfoBox(map,html,{ 
+                boxClass: "mapLayer",
+                enableAutoPan: true,
+                align: INFOBOX_AT_TOP,
+                offset: new BMap.Size(0, 40),
+                closeIconUrl: "./images/close.png"  // 关闭按钮的图片url
+            })
+
+            marker.addEventListener('click', function () {
+                if(lastInfoBox){
+                    lastInfoBox.close();
+                }
+                infoBox.open(marker);
+                lastInfoBox = infoBox;
+            });
+            // 添加到地图上
+            map.addOverlay(marker);
+        }
+
+        //渔港点位
+        function addMarker2(longitude, latitude, data) {
+            if (!map) return;
+            var point = new BMap.Point(longitude, latitude); 
+            var myIcon = new BMap.Icon('./images/icon5.png', new BMap.Size(84, 75));
+            // 指定位置及标注的图标
+            var marker = new BMap.Marker(point, { icon: myIcon });  // 创建标注
+            markerList.push(marker);
+            // 点标记添加点击事件
+            var html = `<div class="mapInfo">
+                <div class="mapInfoTitle">
+                    <img src="./images/map.png" alt="">
+                    <span>${data.name}</span>
+                </div>
+                <div class="mapInfoContent">
+                    <table class="mapTable" border="0"> 
+                        <tr>
+                            <th>详细信息</th>`;
+                    if(data.gbcode){
+                        html+=`<th style="text-align:right;"><a href="#" onclick="watchCamera('`+data.gbcode+`')" style="color:rgb(8,252,218);text-decoration:underline;">进入监控</a></th>`;
+                    }     
+                    html+=`
+                        </tr>
+                        <tr>
+                            <td>沿江/沿海：${data.alongName}</td>
+                            <td>类别：${data.categoryName}</td>
+                        </tr>
+                        <tr>
+                            <td>码头数：${data.dockNum}个</td>
+                            <td>可停靠船舶数：${data.berthNum}</td>
+                        </tr>
+                        <tr>
+                            <td>最大吨级：${data.maxTon}</td>
+                            <td>走私风险等级：${data.riskLevelName}</td>
+                        </tr>
+                    </table>`;
+                    if(data.photoList){
+                        html+=`<div class="mapImg">`;
+                        data.photoList.forEach(element => {
+                            html+=`<img style="width:260px;height:200px;margin:10px 10px;" src="${element}" alt="">`;
+                        });
+                        html+=`</div>`;
+                    }
+                html+=`</div> </div>`;
+                
+            var infoBox = new BMapLib.InfoBox(map,html,{ 
+                boxClass: "mapLayer",
+                enableAutoPan: true,
+                align: INFOBOX_AT_TOP,
+                offset: new BMap.Size(0, 40),
+                closeIconUrl: "./images/close.png"  // 关闭按钮的图片url
+            })
+
+            marker.addEventListener('click', function () {
+                if(lastInfoBox){
+                    lastInfoBox.close();
+                }
+                infoBox.open(marker);
+                lastInfoBox = infoBox;
+            });
+            // 添加到地图上
+            map.addOverlay(marker);
+        }
+
+        //船闸点位
+        function addMarker3(longitude, latitude, data) {
+            if (!map) return;
+            var point = new BMap.Point(longitude, latitude); 
+            var myIcon = new BMap.Icon('./images/icon4.png', new BMap.Size(84, 75));
+            // 指定位置及标注的图标
+            var marker = new BMap.Marker(point, { icon: myIcon });  // 创建标注
+            markerList.push(marker);
+            // 点标记添加点击事件
+            var html = `<div class="mapInfo">
+                <div class="mapInfoTitle">
+                    <img src="./images/map.png" alt="">
+                    <span>${data.name}</span>
+                </div>
+                <div class="mapInfoContent">
+                    <table class="mapTable" border="0"> 
+                        <tr>
+                            <th>详细信息</th>`;
+                    if(data.gbcode){
+                        html+=`<th style="text-align:right;"><a href="#" onclick="watchCamera('`+data.gbcode+`')" style="color:rgb(8,252,218);text-decoration:underline;">进入监控</a></th>`;
+                    }     
+                    html+=`
+                        </tr>
+                        <tr>
+                            <td>沿江/沿海：${data.alongName}</td>
+                            <td>类别：${data.categoryName}</td>
+                        </tr>
+                        <tr>
+                            <td>是否通航：${data.whetherSailName}个</td>
+                            <td>日均进闸船舶数：${data.averageBoats}</td>
+                        </tr>
+                        <tr>
+                            <td>最大吨级：${data.maxTon}</td>
+                            <td>走私风险等级：${data.riskLevelName}</td>
+                        </tr>
+                    </table>`;
+                    if(data.photoList){
+                        html+=`<div class="mapImg">`;
+                        data.photoList.forEach(element => {
+                            html+=`<img style="width:260px;height:200px;margin:10px 10px;" src="${element}" alt="">`;
+                        });
+                        html+=`</div>`;
+                    }
+                html+=`</div> </div>`;
+                
+            var infoBox = new BMapLib.InfoBox(map,html,{ 
+                boxClass: "mapLayer",
+                enableAutoPan: true,
+                align: INFOBOX_AT_TOP,
+                offset: new BMap.Size(0, 40),
+                closeIconUrl: "./images/close.png"  // 关闭按钮的图片url
+            })
+
+            marker.addEventListener('click', function () {
+                if(lastInfoBox){
+                    lastInfoBox.close();
+                }
+                infoBox.open(marker);
+                lastInfoBox = infoBox;
+            });
+            // 添加到地图上
+            map.addOverlay(marker);
+        }
+        
+        //船舶临时停靠点
+        function addMarker4(longitude, latitude, data) {
+            if (!map) return;
+            var point = new BMap.Point(longitude, latitude); 
+            var myIcon = new BMap.Icon('./images/icon3.png', new BMap.Size(84, 75));
+            // 指定位置及标注的图标
+            var marker = new BMap.Marker(point, { icon: myIcon });  // 创建标注
+            markerList.push(marker);
+            // 点标记添加点击事件
+            var html = `<div class="mapInfo">
+                <div class="mapInfoTitle">
+                    <img src="./images/map.png" alt="">
+                    <span>${data.name}</span>
+                </div>
+                <div class="mapInfoContent">
+                    <table class="mapTable" border="0"> 
+                        <tr>
+                            <th>详细信息</th>`;
+                    if(data.gbcode){
+                        html+=`<th style="text-align:right;"><a href="#" onclick="watchCamera('`+data.gbcode+`')" style="color:rgb(8,252,218);text-decoration:underline;">进入监控</a></th>`;
+                    }     
+                    html+=`
+                        </tr>
+                        <tr>
+                            <td>沿江/沿海：${data.alongName}</td>
+                            <td>用途：${data.useFor}</td>
+                        </tr>
+                        <tr>
+                            <td>吊机情况：${data.craneName}个</td>
+                            <td>可停靠船舶数：${data.berthNum}</td>
+                        </tr>
+                        <tr>
+                            <td>最大吨级：${data.maxTon}</td>
+                            <td>走私风险等级：${data.riskLevelName}</td>
+                        </tr>
+                    </table>`;
+                    if(data.photoList){
+                        html+=`<div class="mapImg">`;
+                        data.photoList.forEach(element => {
+                            html+=`<img style="width:260px;height:200px;margin:10px 10px;" src="${element}" alt="">`;
+                        });
+                        html+=`</div>`;
+                    }
+                html+=`</div> </div>`;
+                
+            var infoBox = new BMapLib.InfoBox(map,html,{ 
+                boxClass: "mapLayer",
+                enableAutoPan: true,
+                align: INFOBOX_AT_TOP,
+                offset: new BMap.Size(0, 40),
+                closeIconUrl: "./images/close.png"  // 关闭按钮的图片url
+            })
+
+            marker.addEventListener('click', function () {
+                if(lastInfoBox){
+                    lastInfoBox.close();
+                }
+                infoBox.open(marker);
+                lastInfoBox = infoBox;
+            });
+            // 添加到地图上
+            map.addOverlay(marker);
+        }
+
+        //其他走私风险点
+        function addMarker5(longitude, latitude, data) {
+            if (!map) return;
+            var point = new BMap.Point(longitude, latitude); 
+            var myIcon = new BMap.Icon('./images/icon2.png', new BMap.Size(84, 75));
+            // 指定位置及标注的图标
+            var marker = new BMap.Marker(point, { icon: myIcon });  // 创建标注
+            markerList.push(marker);
+            // 点标记添加点击事件
+            var html = `<div class="mapInfo">
+                <div class="mapInfoTitle">
+                    <img src="./images/map.png" alt="">
+                    <span>${data.name}</span>
+                </div>
+                <div class="mapInfoContent">
+                    <table class="mapTable" border="0"> 
+                        <tr>
+                            <th>详细信息</th>`;
+                    if(data.gbcode){
+                        html+=`<th style="text-align:right;"><a href="#" onclick="watchCamera('`+data.gbcode+`')" style="color:rgb(8,252,218);text-decoration:underline;">进入监控</a></th>`;
+                    }     
+                    html+=`
+                        </tr>
+                        <tr>
+                            <td>沿江/沿海：${data.alongName}</td>
+                            <td>走私风险等级：${data.riskLevelName}</td>
+                        </tr>
+                    </table>`;
+                    if(data.photoList){
+                        html+=`<div class="mapImg">`;
+                        data.photoList.forEach(element => {
+                            html+=`<img style="width:260px;height:200px;margin:10px 10px;" src="${element}" alt="">`;
+                        });
+                        html+=`</div>`;
+                    }
+                html+=`</div> </div>`;
+                
+            var infoBox = new BMapLib.InfoBox(map,html,{ 
+                boxClass: "mapLayer",
+                enableAutoPan: true,
+                align: INFOBOX_AT_TOP,
+                offset: new BMap.Size(0, 40),
+                closeIconUrl: "./images/close.png"  // 关闭按钮的图片url
+            })
+
+            marker.addEventListener('click', function () {
+                if(lastInfoBox){
+                    lastInfoBox.close();
+                }
+                infoBox.open(marker);
+                lastInfoBox = infoBox;
+            });
+            // 添加到地图上
+            map.addOverlay(marker);
+        }
+
+        //走私案发点
+        function addMarker6(longitude, latitude, data) {
+            if (!map) return;
+            var point = new BMap.Point(longitude, latitude); 
+            var myIcon = new BMap.Icon('./images/icon7.png', new BMap.Size(84, 75));
+            // 指定位置及标注的图标
+            var marker = new BMap.Marker(point, { icon: myIcon });  // 创建标注
+            markerList.push(marker);
+            // 点标记添加点击事件
+            var html = `<div class="mapInfo">
+                <div class="mapInfoTitle">
+                    <img src="./images/map.png" alt="">
+                    <span>${data.name}</span>
+                </div>
+                <div class="mapInfoContent">
+                    <table class="mapTable" border="0"> 
+                        <tr>
+                            <th>详细信息</th>`;
+                    if(data.gbcode){
+                        html+=`<th style="text-align:right;"><a href="#" onclick="watchCamera('`+data.gbcode+`')" style="color:rgb(8,252,218);text-decoration:underline;">进入监控</a></th>`;
+                    }     
+                    html+=`
+                        </tr>
+                        <tr>
+                            <td>案发区域：${data.alongName}</td>
+                            <td>案发部位：${data.partName}</td>
+                        </tr>
+                        <tr>
+                            <td>案发货物类型：${data.goodstypeName}个</td>
+                            <td>案发时间：${data.crimetime}</td>
+                        </tr>
+                    </table>`;
+                    if(data.photoList){
+                        html+=`<div class="mapImg">`;
+                        data.photoList.forEach(element => {
+                            html+=`<img style="width:260px;height:200px;margin:10px 10px;" src="${element}" alt="">`;
+                        });
+                        html+=`</div>`;
+                    }
+                html+=`</div> </div>`;
+                
+            var infoBox = new BMapLib.InfoBox(map,html,{ 
+                boxClass: "mapLayer",
+                enableAutoPan: true,
+                align: INFOBOX_AT_TOP,
+                offset: new BMap.Size(0, 40),
+                closeIconUrl: "./images/close.png"  // 关闭按钮的图片url
+            })
+
+            marker.addEventListener('click', function () {
+                if(lastInfoBox){
+                    lastInfoBox.close();
+                }
+                infoBox.open(marker);
+                lastInfoBox = infoBox;
+            });
+            // 添加到地图上
+            map.addOverlay(marker);
+        }
+
+        //岸线
+        function addPolyline(startlng, startlat,endlng,endlat, data) {
+            if (!map) return;
+            var startPoint = new BMap.Point(startlng, startlat);
+            var endPoint = new BMap.Point(endlng, endlat);
+            var polyline = new BMap.Polyline([
+                startPoint,endPoint],{strokeColor:"#08FCDA", strokeWeight:5, strokeOpacity:0.5,strokeStyle:'dashed'}
+            )
+            lineList.push(polyline);
+            var point = new BMap.Point(startlng, startlat); 
+            var myIcon = new BMap.Icon('./images/icon1.png', new BMap.Size(84, 75));
+            // 指定位置及标注的图标
+            var marker = new BMap.Marker(point, { icon: myIcon });  // 创建标注
+            markerList.push(marker);
+            // 点标记添加点击事件
+            var html = `<div class="mapInfo">
+                <div class="mapInfoTitle">
+                    <img src="./images/map.png" alt="">
+                    <span>${data.name}</span>
+                </div>
+                <div class="mapInfoContent">
+                    <table class="mapTable" border="0"> 
+                        <tr>
+                            <th colspan="2">详细信息</th>
+                        </tr>
+                        <tr>
+                            <td>区县：${data.area}</td>
+                            <td>街道：${data.street}</td>
+                        </tr>
+                    </table>
+                    
+                </div>
+                </div>`;
+                
+            var infoBox = new BMapLib.InfoBox(map,html,{ 
+                boxClass: "mapLayer",
+                enableAutoPan: true,
+                align: INFOBOX_AT_TOP,
+                offset: new BMap.Size(0, 40),
+                closeIconUrl: "./images/close.png"  // 关闭按钮的图片url
+            })
+
+            marker.addEventListener('click', function () {
+                if(lastInfoBox){
+                    lastInfoBox.close();
+                }
+                infoBox.open(marker);
+                lastInfoBox = infoBox;
+                addExpand();
+            });
+            // 添加到地图上
+            map.addOverlay(polyline);
+            map.addOverlay(marker);
+        }
+
+        //监控
+        function addCamera(longitude, latitude, data) {
+            if (!map) return;
+            var point = new BMap.Point(longitude, latitude); 
+            var myIcon = new BMap.Icon('./images/jiankong.png', new BMap.Size(84, 75));
+            // 指定位置及标注的图标
+            var marker = new BMap.Marker(point, { icon: myIcon });  // 创建标注
+            marker.setLabel("12222");
+            markerList.push(marker);
+            // 点标记添加点击事件
+            var html = `<div class="mapInfo" style="height:200px;">
+                <div class="mapInfoTitle">
+                    <img src="./images/map.png" alt="">
+                    <span>${data.name}</span>
+                </div>
+                <div class="mapInfoContent" >
+                    <table class="mapTable" border="0"> 
+                        <tr>
+                            `;
+                    if(data.gbcode){
+                        html+=`<th style="text-align:right;"><a href="#" onclick="watchCamera('`+data.gbcode+`')" style="color:rgb(8,252,218);text-decoration:underline;">进入监控</a></th>`;
+                    }     
+                    html+=`
+                        </tr>
+                    </table>`;
+                html+=`</div> </div>`;
+                
+            var infoBox = new BMapLib.InfoBox(map,html,{ 
+                boxClass: "mapLayer2",
+                enableAutoPan: true,
+                align: INFOBOX_AT_TOP,
+                offset: new BMap.Size(0, 40),
+                closeIconUrl: "./images/close.png"  // 关闭按钮的图片url
+            })
+
+            marker.addEventListener('click', function () {
+                if(lastInfoBox){
+                    lastInfoBox.close();
+                }
+                infoBox.open(marker);
+                lastInfoBox = infoBox;
+                // var url = "../camera/camera.html?cameraCode=" + data.gbcode;
+                // window.open(url, "", "fullscreen=no,location=no,menubar=no,resizable=no,scrollbars=yes,status=no,titlebar=no,toolbar=no,width=" + (screen.width - 10) + ",height=" + (screen.height - 30));
+            });
+            // 添加到地图上
+            map.addOverlay(marker);
+        }
+
+        // 百度地图API功能
+        var map = new BMap.Map("map");
+        var point = new BMap.Point(120.900872,32.148632);
+        map.centerAndZoom(point, 11); 
+        map.setMapStyleV2({     
+            styleId: '9a19d2808947daed2d9c658c597628e9'
+        });
+        map.enableScrollWheelZoom();     //开启鼠标滚轮缩放
+
+        getBoundary();
+
+        function getBoundary(){       
+		var bdary = new BMap.Boundary();
+		bdary.get("南通市", function(rs){       //获取行政区域     
+			var count = rs.boundaries.length; //行政区域的点有多少个
+			if (count === 0) {
+				alert('未能获取当前输入行政区域');
+				return ;
+			}
+          	var pointArray = [];
+			for (var i = 0; i < count; i++) {
+				var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 3, fillOpacity: 0.1,strokeColor: "#0868B1"}); //建立多边形覆盖物
+                ply.setFillColor('#0868B1');
+				map.addOverlay(ply);  //添加覆盖物
+				pointArray = pointArray.concat(ply.getPath());
+			}    
+			map.setViewport(pointArray);    //调整视野  
+		           
+		});   
+	}
+
+
+        function clearMaker(){
+            markerList.forEach(element=>{
+                map.removeOverlay(element)
+            })
+            lineList.forEach(element=>{
+                map.removeOverlay(element)
+            })
+            // map.clearOverlays()
+            
+        }
+
+        //初始化巡查内容的地图
+        var detailMap = new BMap.Map("detailMap");
+       
+        var detailPolyline;
+        var detailPointList=[];
+        function setDetailContent(list) {
+            console.log('----------kaishi-----')
+            console.log(detailPolyline)
+            console.log(detailPointList)
+            //设置中心位置
+            var detailPoint = new BMap.Point(list[0].lng,list[0].lat);
+            detailMap.centerAndZoom(detailPoint, 11); 
+            // map.setMapStyleV2({     
+            //     styleId: '9a19d2808947daed2d9c658c597628e9'
+            // });
+            detailMap.enableScrollWheelZoom();     //开启鼠标滚轮缩放
+
+            if (!detailMap) return;
+            for (var i = 0; i < list.length; i++) {
+                var point = new BMap.Point(list[i].lng,list[i].lat);
+                var marker = new BMap.Marker(point);
+                detailMap.addOverlay(marker);
+                detailPointList.push(point)
+            }
+            //点位连线
+            detailPolyline =  new BMap.Polyline(detailPointList, {strokeColor: "blue", strokeWeight: 6, strokeOpacity: 0.5});
+            console.log(detailPolyline)
+            detailMap.addOverlay(detailPolyline);
+        }
+
+        function clearDetailMap(){
+            detailPointList=[];
+            //清除上一次查看信息
+            detailMap.removeOverlay(detailPolyline);
+            detailMap.clearOverlays();
+        }
+
+    </script>
+
+    <script>
+        //  var ctx = "http://localhost:7003/ycjAdmin";
+        var ctx = "https://www.nteport.com/ycjAdmin";
+
+        var token=getQueryVariable("token");
+
+        function getQueryVariable(variable){
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if(pair[0] == variable){return pair[1];}
+            }
+            return(false);
+        }
+
+        initData();
+        function initData(){
+            //点位岸线情况
+            changePoint1(0)
+            changePoint2(0)
+            //巡查情况
+            queryXuncha(getYearMonth());
+            //巡查内容
+            queryXunchaContent();
+            var nowYear = getYear();
+            //走私案发情况
+            queryAnfaCount(nowYear);
+            //隐患排查
+            queryRiskCount(nowYear);
+            queryRiskRatio(nowYear);
+            //今日潮汐
+            queryTodayTide();
+            //低中高风险个数
+            queryPointRiskLevel();
+            //查询点位
+            queryPoints();
+        }
+
+        function queryXuncha(yearMonth){
+            $.ajax({
+                headers:{ authToken:token},
+                url:ctx+"/big/queryXuncha/"+yearMonth,
+                type:'get',
+                success:function(text){
+                    var data = text.data
+                    loadChartTwo(data);
+                    var sum = 0;
+                    data.forEach(element => {
+                        sum=sum+element.value;
+                    });
+                    $("#xunchaCount").html(sum);
+                }
+            })
+        }
+
+        function queryXunchaContent(){
+            $.ajax({
+                headers:{ authToken:token},
+                url:ctx+"/big/queryXunchaContent",
+                type:'get',
+                success:function(text){
+                    var data = text.data;
+                    var htmlText ="";
+                    data.forEach(element => {
+                        htmlText+=
+                        '<li><p style="width: 15%;">'+element.area+'</p>'+
+                            '<p style="width: 20%;">'+element.streetname+'</p>'+
+                            '<p style="width: 10%;">'+element.xunchaname+'</p>'+
+                            '<p style="width: 15%;">'+element.starttime+'</p>'+
+                            '<p style="width: 15%;">'+element.endtime+'</p>'+
+                            '<p style="width: 15%;">'+element.result+'</p>'+
+                            '<p style="width: 10%;"><a href="#" onclick="viewDetail('+JSON.stringify(element).replace(/"/g, '&quot;')+')">查看</a></p>'+
+                        '</li>';
+                    });
+                    $("#xunchaContent").html(htmlText);
+                }
+            })
+        }
+
+        function viewDetail(element){
+            clearDetailMap();
+            $('#detailWindow').css('display','block');
+                $("#detail_area").html(element.area)
+                $("#detail_streetname").html(element.streetname)
+                $("#detail_starttime").html(element.starttime)
+                $("#detail_endtime").html(element.endtime)
+                $("#detail_xunchaname").html(element.xunchaname)
+                $("#detail_result").html(element.result)
+
+            setTimeout(()=>{
+                //查询轨迹线
+                $.ajax({
+                    headers:{ authToken:token},
+                    url:ctx+"/dailyRecord/detail/"+element.id,
+                    type:'get',
+                    success:function(text){
+                        var data = text.data
+                        var list = [];
+                        for (var i=0;i<data.length;i++) {
+                            let lng = parseFloat(data[i].position.split(',')[0])
+                            let lat = parseFloat(data[i].position.split(',')[1])
+                            list.push({lng:lng,lat:lat})
+                        }
+                        setDetailContent(list);
+                    }
+                })
+            },500)
+    
+        }
+
+        function closeDetail(){
+            $('#detailWindow').css('display','none');
+            clearDetailMap();
+        }
+
+        function closePhoto(){
+            $('#photoWindow').css('display','none');
+        }
+
+        function closeCamera(){
+            $('#cameraWindow').css('display','none');
+        }
+
+        function queryAnfaCount(year){
+            $.ajax({
+                headers:{ authToken:token},
+                url:ctx+"/big/queryAnfaCount/"+year,
+                type:'get',
+                success:function(text){
+                    var data = text.data
+                    loadChartThree(data);
+                    var sum = 0;
+                    data.forEach(element => {
+                        sum=sum+element.num;
+                    });
+                    $("#anfaCount").html(sum)
+                }
+            })
+        }
+
+        function queryRiskCount(year){
+            $.ajax({
+                headers:{ authToken:token},
+                url:ctx+"/big/queryRiskCount/"+year,
+                type:'get',
+                success:function(text){
+                    var data = text.data
+                    $("#risk_1").html(data[0].num);
+                    $("#risk_2").html(data[0].finishnum);
+                }
+            })
+        }
+
+        function queryRiskRatio(year){
+            $.ajax({
+                headers:{ authToken:token},
+                url:ctx+"/big/queryRiskRatio/"+year,
+                type:'get',
+                success:function(text){
+                    var data = text.data
+                    loadChartFour(data);
+                }
+            })
+        }
+
+        function queryTodayTide(){
+            $.ajax({
+                headers:{ authToken:token},
+                url:ctx+"/tide/queryToday",
+                type:'get',
+                // dataType:'JSON',
+                success:function(text){
+                    var data = text.data
+                    $("#riseTime").html(data.riseTime)
+                    $("#riseTime2").html(data.riseTime2)
+                    $("#fallTime").html(data.fallTime)
+                    $("#fallTime2").html(data.fallTime2)
+                }
+            })
+        }
+
+        function queryPointRiskLevel(){
+            $.ajax({
+                headers:{ authToken:token},
+                url:ctx+"/big/queryPointRiskLevel",
+                type:'get',
+                success:function(text){
+                    var data = text.data
+                    $("#rise_low").html(data.low)
+                    $("#rise_middle").html(data.middle)
+                    $("#rise_high").html(data.high)
+                }
+            })
+        }
+
+        var pointList = [];
+        var lineList = [];
+        var cameraList = [];
+        function queryPoints(){
+            $.ajax({
+                headers:{ authToken:token},
+                url:ctx+"/big/queryApprovedPoints",
+                type:'get',
+                success:function(text){
+                    pointList = text.data.point
+                    lineList = text.data.line
+                    cameraList = text.data.camera
+                    pointList.forEach(element => {
+                        addMarkerByType(element)
+                    });
+                    lineList.forEach(element => {
+                        addMarkerLine(element)
+                    });
+                    initBatchList();
+                }
+            })
+        }
+
+        function addMarkerByType(element){
+            //获取经纬度
+            var positions = element.position.split(',');
+            var lng=positions[0];
+            var lat=positions[1];
+            //设置照片数组
+            if(element.photoId){
+                var photos = element.photoId.split(',');
+                element.photoList =[];
+                photos.forEach(ele=>{
+                    if(ele){
+                        element.photoList.push(ctx+'/file/downLoad/'+ele);
+                    }
+                })
+            }
+            
+            if(1==element.type){
+                addMarker1(lng,lat,element);
+            }else if(2==element.type){
+                addMarker2(lng,lat,element);
+            }else if(3==element.type){
+                addMarker3(lng,lat,element);
+            }else if(4==element.type){
+                addMarker4(lng,lat,element);
+            }else if(5==element.type){
+                addMarker5(lng,lat,element);
+            }else if(6==element.type){
+                addMarker6(lng,lat,element);
+            }
+        }
+
+        function addMarkerLine(element){
+            var startpositions = element.startPosition.split(',');
+            var endpositions = element.endPosition.split(',');
+            addPolyline(startpositions[0],startpositions[1],endpositions[0],endpositions[1],element);
+        }
+
+        
+        function addMarkerCamera(element){
+            //获取经纬度
+            var positions = element.position.split(',');
+            var lng=positions[0];
+            var lat=positions[1];
+            addCamera(lng,lat,element);
+        }
+
+        function filterPoint(type){
+            clearMaker();
+
+            if(0==type){
+                pointList.forEach(element => {
+                    addMarkerByType(element);
+                });
+                lineList.forEach(element => {
+                        addMarkerLine(element)
+                    });
+            }else if(1==type){
+                pointList.forEach(element => {
+                    if(1==element.type){
+                        var positions = element.position.split(',');
+                        var lng=positions[0];
+                        var lat=positions[1];
+                        addMarker1(lng,lat,element);
+                    }
+                });
+            }else if(2==type){
+                pointList.forEach(element => {
+                    if(2==element.type){
+                        var positions = element.position.split(',');
+                        var lng=positions[0];
+                        var lat=positions[1];
+                        addMarker2(lng,lat,element);
+                    }
+                });
+            }else if(3==type){
+                pointList.forEach(element => {
+                    if(3==element.type){
+                        var positions = element.position.split(',');
+                        var lng=positions[0];
+                        var lat=positions[1];
+                        addMarker3(lng,lat,element);
+                    }
+                });
+            }else if(4==type){
+                pointList.forEach(element => {
+                    if(4==element.type){
+                        var positions = element.position.split(',');
+                        var lng=positions[0];
+                        var lat=positions[1];
+                        addMarker4(lng,lat,element);
+                    }
+                });
+            }else if(5==type){
+                pointList.forEach(element => {
+                    if(5==element.type){
+                        var positions = element.position.split(',');
+                        var lng=positions[0];
+                        var lat=positions[1];
+                        addMarker5(lng,lat,element);
+                    }
+                });
+            }else if(6==type){
+                pointList.forEach(element => {
+                    if(6==element.type){
+                        var positions = element.position.split(',');
+                        var lng=positions[0];
+                        var lat=positions[1];
+                        addMarker6(lng,lat,element);
+                    }
+                });
+            }else if(7==type){
+                lineList.forEach(element => {
+                   
+                    addMarkerLine(element);
+                   
+                });
+            }else if(8==type){
+                cameraList.forEach(element => {
+                    addMarkerCamera(element);
+                });
+            }
+        }
+
+        function change2Point(name){
+            clearMaker();
+            pointList.forEach(element => {
+                if(name == element.name){
+                    addMarkerByType(element);
+                }
+                
+            });
+            lineList.forEach(element => {
+                if(name == element.name){
+                    addMarkerLine(element);
+                }
+            });
+            
+        }
+
+        // function setTodayTide(data) {
+        //     $("#riseTime").html(data.riseTime)
+        //     $("#riseTime2").html(data.riseTime2)
+        //     $("#fallTime").html(data.fallTime)
+        //     $("#fallTime2").html(data.fallTime2)
+        //     // console.log('获取到数据', data)
+        // }
+
+        
+        var pointOrLine = 0;
+        //点位情况
+        function changePoint1(val){
+
+                if(val == 0){
+                    pointOrLine=0;
+                    $("#point2_0").show();
+                    $("#point1_0").addClass("current");
+                    $("#point1_1").removeClass("current");
+                    changePoint2(0);
+                }else if(val == 1){
+                    pointOrLine=1;
+                    $("#point2_0").hide();
+                    $("#point2_1").addClass("current");
+                    $("#point1_1").addClass("current");
+                    $("#point1_0").removeClass("current");
+                    changePoint2(1);
+                }
+        }
+
+        //类型分布 区县分布
+        function changePoint2(val){
+            if(0==pointOrLine){
+                    if(val == 0){
+                    $("#point2_0").addClass("current")
+                    $("#point2_1").removeClass("current")
+                    queryPointGroupByType();
+                }else if(val == 1){
+                    $("#point2_1").addClass("current")
+                    $("#point2_0").removeClass("current")
+                    queryPointGroupByArea();
+                }
+            }else{
+                if(val == 0){
+                    $("#point2_0").addClass("current")
+                    $("#point2_1").removeClass("current")
+                    
+                }else if(val == 1){
+                    $("#point2_1").addClass("current")
+                    $("#point2_0").removeClass("current")
+                    queryLineGroupByArea();
+                }
+            }
+           
+        }
+
+        function queryPointGroupByType(){
+            $.ajax({
+                headers:{ authToken:token},
+                url:ctx+"/big/queryPointGroupByType",
+                type:'get',
+                // dataType:'JSON',
+                success:function(text){
+                    var data = text.data;
+                    loadChartOne(data);
+                    var sum = 0;
+                    data.forEach(element => {
+                        sum=sum+element.num;
+                    });
+                    $("#pointCount").html(sum)
+                }
+            })
+        }
+
+        function queryPointGroupByArea(){
+            $.ajax({
+                headers:{ authToken:token},
+                url:ctx+"/big/queryPointGroupByArea",
+                type:'get',
+                // dataType:'JSON',
+                success:function(text){
+                    var data = text.data;
+                    loadChartOne(data);
+                    var sum = 0;
+                    data.forEach(element => {
+                        sum=sum+element.num;
+                    });
+                    $("#pointCount").html(sum)
+                }
+            })
+        }
+
+        function queryLineGroupByArea(){
+            $.ajax({
+                headers:{ authToken:token},
+                url:ctx+"/big/queryLineGroupByArea",
+                type:'get',
+                // dataType:'JSON',
+                success:function(text){
+                    var data = text.data;
+                    loadChartOne(data);
+                    var sum = 0;
+                    data.forEach(element => {
+                        sum=sum+element.num;
+                    });
+                    $("#pointCount").html(sum)
+                }
+            })
+        }
+
+        function initBatchList(){
+            pointList.forEach(element => {
+                    // if(6==element.type){
+                    //     var positions = element.position.split(',');
+                    //     var lng=positions[0];
+                    //     var lat=positions[1];
+                    //     addMarker6(lng,lat,element);
+                    // }
+                    
+                    // var add_options = '<option value="'+element.id+'">'+element.name+'</option>';
+                    // $("#batch_list").append(add_options);
+
+                    var add_options = '<p>'+element.name+'</p>'; 
+                    $(".showItems").append(add_options);
+                    
+                });
+                $(".dropdown .showItems p").click(function(){
+                // console.log('准备跳---------')
+                $("#place").val($(this).text());
+                //跳转到对应点位
+                // console.log($(this).text())
+                change2Point($(this).text());
+                // $(this).parent().prev().text($(this).text());
+                $(this).parent().hide();
+            })
+        }
+
+        function onChange(){
+            // $(".showItems").hide();
+            // $(".showItems").empty();
+            // // console.log($(".showItems").html());
+            // pointList.forEach(element => {
+            //        if(element.name.indexOf($("#place").val())>0){
+            //         var add_options = '<p>'+element.name+'</p>'; 
+            //         $(".showItems").append(add_options);
+            //        }
+            //     });
+            //     setTimeout(()=>{
+            //         $(".showItems").show();
+            //     },500);
+                
+            
+        }
+
+        function watchCamera(gbcodes) {
+            var url = "../camera/camera.html?cameraCode=" + gbcodes;
+            window.open(url, "", "fullscreen=no,location=no,menubar=no,resizable=no,scrollbars=yes,status=no,titlebar=no,toolbar=no,width=" + (screen.width - 10) + ",height=" + (screen.height - 30));
+    }
+  
+
+        function clickPhoto(src){
+            $('#photoWindow').css('display','block');
+            $('#bigPhotoId').attr('src',src);
+        }
+
+       function getDateTime(){ 
+            var dateObj = new Date(); //表示当前系统时间的Date对象
+            var year = dateObj.getFullYear(); //当前系统时间的完整年份值
+            var month = dateObj.getMonth()+1; //当前系统时间的月份值
+            var date = dateObj.getDate(); //当前系统时间的月份中的日
+            var day = dateObj.getDay(); //当前系统时间中的星期值
+            var weeks = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+            var week = weeks[day]; //根据星期值，从数组中获取对应的星期字符串
+            var hours = dateObj.getHours();
+            var mimute = dateObj.getMinutes();
+            var seconds = dateObj.getSeconds();
+
+            $("#date").html("<label>"+year+"."+dateFilter(month)+"."+dateFilter(date)+"</label> "+ week + " <label>" + dateFilter(hours) + ":" + dateFilter(mimute) + ":" + dateFilter(seconds)+"</label>");
+        }
+
+        //获取当前年月
+        function getYearMonth(){ 
+            var dateObj = new Date(); //表示当前系统时间的Date对象
+            var year = dateObj.getFullYear(); //当前系统时间的完整年份值
+            var month = dateObj.getMonth()+1; //当前系统时间的月份值
+            return year+"-"+dateFilter(month);
+        }
+
+         //获取当前年月
+         function getYear(){ 
+            var dateObj = new Date(); //表示当前系统时间的Date对象
+            var year = dateObj.getFullYear(); //当前系统时间的完整年份值
+            return year;
+        }
+
+        // 年月日不满10位的前面补0
+        function dateFilter(date){
+            if(date < 10){return "0"+date;} 
+            return date;
+        }
+
+        $(function(){
+            getDateTime();
+            setInterval("getDateTime()",1000);
+            $('.dataListContent').myScroll({
+                speed: 40, 
+                rowHeight: 46
+            });
+            $(".dropdown").hover(function(){
+                $(this).find(".showItems").show();
+            },function(){
+                $(this).find(".showItems").hide();
+            })
+           
+        })
+   </script>
+</body>
+
+</html>

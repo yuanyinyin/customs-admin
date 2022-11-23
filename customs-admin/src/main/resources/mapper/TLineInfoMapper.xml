@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nteport.admin.mapper.TLineInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.nteport.admin.entity.TLineInfoEntity">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="startPosition" column="start_position" jdbcType="VARCHAR"/>
+            <result property="endPosition" column="end_position" jdbcType="VARCHAR"/>
+            <result property="memo" column="memo" jdbcType="VARCHAR"/>
+            <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="creatorName" column="creator_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,start_position,end_position,
+        memo,create_user,create_time,
+        update_user,update_time,creator_name
+    </sql>
+
+    <select id="queryLineGroupByArea" resultType="hashmap">
+        select t1.dicname name,ifnull(t2.num,0) num from t_big_dic t1 left join
+            (select area,count(1) num from t_line_info group by area ) t2  on t1.dicname=t2.area where t1.type='area'
+    </select>
+
+</mapper>

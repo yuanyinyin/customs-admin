@@ -1,0 +1,1 @@
+import{d,a as s,g as a,f as t}from"./vendor-78a6dd30.js";import e from"./baiduMap-78fde999.js";import"./index-30d780dc.js";const i=d({setup:d=>(d,i)=>(s(),a("div",null,[t(e,{style:{width:"1000px",height:"1000px"}})]))});export{i as default};

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+     * @FileDescription: t_pay表的Mapper
+     * @Author: Yang, Botao
+     * @Date: 2022-03.16
+     * @LastEditors:
+     * @LastEditTime:
+-->
+<mapper namespace="com.nteport.admin.mapper.UserMapper">
+    <!-- 筛选持有对应角色的用户 -->
+    <select id="selectUserList" parameterType="java.util.HashMap"
+            resultType="com.nteport.admin.entity.system.UserEntity">
+        select *
+        from t_user du inner join(t_role dr inner join t_user_role dur on dr.id = dur.role_id ) on du.id =
+        dur.user_id
+        <if test="roleCode != null">
+            where dr.role_code = #{roleCode,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <!-- 根据用户Id查询角色 -->
+    <select id="selectTagsById" parameterType="java.lang.Long" resultType="java.lang.String">
+        select t2.role_name from t_user_role t1 left join t_role t2 on t1 .role_id =t2.id
+        where 1=1
+        <if test="userId != null and userId != ''">
+            and user_id = #{userId,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <select id="selectDeptLeaderIdById" resultType="java.lang.Long" parameterType="java.lang.Long">
+        SELECT c.id from t_user a
+        join t_dept b on b.id = a.dept_id
+        join t_user c on c.id = b.leader_id
+        <if test="userId != null">
+            where a.id = #{userId,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <select id="selectAllUserAndDept" resultType="com.nteport.admin.entity.system.UserEntity">
+        select u.id,u.real_name,d.id dept_id,d.dept_name from t_user u left join t_dept d on u.dept_id=d.id where u.status='2' order by u.dept_id
+    </select>
+
+    <select id="queryRoleCodes" resultType="java.lang.String" parameterType="java.lang.Long">
+        select t2.role_code from t_role t2 where t2.id in (select t1.role_id from t_user_role t1
+        <if test="userId != null">
+            where t1.user_id = #{userId,jdbcType=BIGINT}
+        </if>
+        )
+    </select>
+
+    <select id="selectAdminByArea" resultType="com.nteport.admin.entity.system.UserEntity" parameterType="java.lang.Long">
+        select * from t_user u where u.id in (select r.user_id from t_user_role r where r.role_id=79) and u.dept_id in (select d.id from t_dept d
+        <if test="areaId != null">
+            where d.area_id= #{areaId,jdbcType=BIGINT}
+        </if>
+       )
+    </select>
+
+    <select id="selectManagerByDept" resultType="com.nteport.admin.entity.system.UserEntity" parameterType="java.lang.Long">
+        select * from t_user u where u.dept_id=#{deptId,jdbcType=BIGINT} and u.id in (select r.user_id from t_user_role r where r.role_id in (86,87,88))
+    </select>
+
+
+</mapper>
