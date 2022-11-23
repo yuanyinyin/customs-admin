@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+ * @FileDescription: t_user_role表的Mapper
+ * @Author: Yang, Botao
+ * @Date:2022-02-11 22w07
+ * @LastEditors: Yang, Botao
+ * @LastEditTime: 2022-02-14 22w08
+ -->
+<mapper namespace="com.nteport.admin.mapper.UserRoleMapper">
+
+    <!-- 树状显示用户角色关系-->
+    <select id="listTreeSq" resultType="java.lang.Long" parameterType="java.lang.Long">
+        select dur.role_id
+        from t_user_role dur left join t_role dr
+        on dur.role_id = dr.id
+        <if test="userId != null">
+            where dur.user_id = #{userId,jdbcType=BIGINT}
+        </if>
+        order by dur.role_id
+    </select>
+
+    <!-- 查询当前用户对应的角色 -->
+    <select id="getRolesByUserId" resultType="com.nteport.admin.entity.system.RoleEntity"
+            parameterType="java.lang.Long">
+        select *
+        from t_user_role dur left join t_role dr
+        on dur.role_id = dr.id
+        <if test="userId != null">
+            where dur.user_id = #{userId,jdbcType=BIGINT}
+        </if>
+        order by dur.role_id
+    </select>
+
+    <select id="getRoleIdsByUserId" resultType="Long" parameterType="Long">
+        select dr.id
+        from t_user_role dur left join t_role dr
+        on dur.role_id = dr.id
+        <if test="userId != null">
+            where dur.user_id = #{userId,jdbcType=BIGINT}
+        </if>
+        order by dur.role_id
+    </select>
+
+    <!-- 删除对应用户的所有’用户-角色关系‘ -->
+    <delete id="deleteByUserId" parameterType="java.lang.Long">
+        delete from t_user_role
+        where user_id = #{userId,jdbcType=BIGINT}
+    </delete>
+
+    <!-- 创建'用户-角色关系' -->
+    <insert id="insertSq" parameterType="com.nteport.admin.entity.system.UserRoleEntity">
+        insert into t_user_role (user_id, role_id, create_user, create_time)
+        values (
+        #{userId,jdbcType=BIGINT},#{roleId,jdbcType=BIGINT},#{createUser,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <select id="getRoleCodeByUserId" resultType="java.lang.String" parameterType="java.lang.Integer">
+        select role_code
+        from t_user_role dur left join t_role dr
+        on dur.role_id = dr.id
+        <if test="userId != null">
+            where dur.user_id = #{userId,jdbcType=INTEGER}
+        </if>
+        order by dur.role_id
+    </select>
+
+</mapper>

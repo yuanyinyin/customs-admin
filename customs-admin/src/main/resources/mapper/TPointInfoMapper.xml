@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nteport.admin.mapper.TPointInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.nteport.admin.entity.TPointInfoEntity">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="type" column="type" jdbcType="CHAR"/>
+            <result property="along" column="along" jdbcType="CHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="position" column="position" jdbcType="VARCHAR"/>
+            <result property="properties" column="properties" jdbcType="CHAR"/>
+            <result property="category" column="category" jdbcType="CHAR"/>
+            <result property="berthNum" column="berth_num" jdbcType="INTEGER"/>
+            <result property="crane" column="crane" jdbcType="CHAR"/>
+            <result property="maxTon" column="max_ton" jdbcType="INTEGER"/>
+            <result property="dockNum" column="dock_num" jdbcType="INTEGER"/>
+            <result property="whetherSail" column="whether_sail" jdbcType="CHAR"/>
+            <result property="averageBoats" column="average_boats" jdbcType="VARCHAR"/>
+            <result property="useFor" column="use_for" jdbcType="VARCHAR"/>
+            <result property="area" column="area" jdbcType="VARCHAR"/>
+            <result property="photoId" column="photo_id" jdbcType="VARCHAR"/>
+            <result property="riskLevel" column="risk_level" jdbcType="CHAR"/>
+            <result property="riskReason" column="risk_reason" jdbcType="VARCHAR"/>
+            <result property="manageMeasure" column="manage_measure" jdbcType="VARCHAR"/>
+            <result property="memo" column="memo" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="CHAR"/>
+            <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="creatorName" column="creator_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,type,along,
+        name,position,properties,
+        category,berth_num,crane,
+        max_ton,dock_num,whether_sail,
+        average_boats,use_for,area,
+        photo_id,risk_level,risk_reason,
+        manage_measure,memo,status,
+        create_user,create_time,update_user,
+        update_time,creator_name
+    </sql>
+
+    <select id="pointCount" resultType="hashmap">
+        SELECT count(1) value,
+			 CASE WHEN type = '1' THEN '码头'
+						WHEN type = '2' THEN '渔港'
+						WHEN type = '3' THEN '船闸'
+						WHEN type = '4' THEN '船舶临时停靠点'
+						WHEN type = '5' THEN '其他走私风险点'
+                        WHEN type = '6' THEN '走私案发点'
+        END name
+        FROM t_point_info WHERE status='2' GROUP BY type
+union
+        select count(1) value,
+               case when risk_level = '1' then '低风险'
+                    when risk_level = '2' then '中风险'
+                    when risk_level = '3' then '高风险'
+                   end name
+        from t_point_info where status='2' and type &lt;&gt; '6' GROUP BY risk_level
+    </select>
+
+    <select id="selectUpdateTop5" resultType="hashmap" parameterType="hashmap">
+        SELECT * from
+            (select t1.`name`,t1.creator_name as creatorName,t1.update_time as updateTime,'点位' as type,
+                case when t1.`status`='1' then '新增'
+                when t1.`status`='2' then '审核'
+                end `status`
+            from t_point_info t1
+            where 1=1
+            <if test="area_id != null">
+                and area_id = #{area_id,jdbcType=BIGINT}
+            </if>
+            <if test="street_id != null">
+                and street_id = #{street_id,jdbcType=BIGINT}
+            </if>
+            UNION all
+            select t2.`name`,t2.creator_name as creatorName,t2.update_time as updateTime,'岸线' as type,
+                case when t2.`status`='1' then '新增'
+                when t2.`status`='2' then '审核'
+                end `status`
+            from t_line_info t2
+            where 1=1
+            <if test="area_id != null">
+                and area_id = #{area_id,jdbcType=BIGINT}
+            </if>
+            <if test="street_id != null">
+                and street_id = #{street_id,jdbcType=BIGINT}
+            </if>
+                ) t
+        order by updateTime desc
+            limit 5
+    </select>
+
+    <select id="queryPointGroupByType" resultType="hashmap">
+        select t1.dicname name,ifnull(t2.num,0) num from t_big_dic t1 left join
+             (SELECT
+                  CASE WHEN
+                           type = '1' THEN
+                           '码头'
+                       WHEN type = '2' THEN
+                           '渔港'
+                       WHEN type = '3' THEN
+                           '船闸'
+                       WHEN type = '4' THEN
+                           '船舶临时停靠点'
+                       WHEN type = '5' THEN
+                           '其他走私风险点'
+                       WHEN type = '6' THEN
+                           '走私案发点' ELSE ''
+                      END typename,
+                  count( 1 ) num
+              FROM t_point_info
+              GROUP BY type order by type) t2 on t1.dicname=t2.typename where t1.type='point'
+    </select>
+
+    <select id="queryPointGroupByArea" resultType="hashmap">
+        select t1.dicname name,ifnull(t2.num,0) num from t_big_dic t1 left join
+             (SELECT area,
+                     count(1) num
+              FROM t_point_info
+              GROUP BY area) t2 on t1.dicname=t2.area where t1.type='area'
+    </select>
+
+    <select id="queryAnfaCount" resultType="hashmap" parameterType="java.lang.String">
+        select t1.dicname name,ifnull(t2.num,0) num from t_big_dic t1 left join
+           (select goodstype,count(1) num from t_point_info where DATE_FORMAT(create_time, '%Y')= #{year,jdbcType=VARCHAR} and type='6' group by goodstype) t2 on t1.diccode=t2.goodstype where t1.type='goodstype'
+    </select>
+
+    <select id="queryPointRiskLevel" resultType="hashmap">
+        select t1.dicname name,ifnull(t2.num,0) num from t_big_dic t1 left join
+           (select risk_level,count(1) num from t_point_info group by risk_level) t2 on t1.diccode=t2.risk_level where t1.type='risklevel'
+    </select>
+</mapper>

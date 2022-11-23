@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nteport.admin.mapper.TLoginLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.nteport.admin.entity.TLoginLogEntity">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+            <result property="deptId" column="dept_id" jdbcType="BIGINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+            <result property="creatorName" column="creator_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_name,dept_id,
+        create_time,create_user,update_time,
+        update_user,creator_name
+    </sql>
+
+    <select id="listPage" parameterType="hashmap" resultType="hashmap">
+        select aa.dept_name,aa.todayTimes,aa.monthTimes from (select dept_name,max(t.dept_id) dept_id,
+        count(case when DATE_FORMAT(create_time,'%Y-%m-%d') = DATE_FORMAT(sysdate(),'%Y-%m-%d') then 1 end) as todayTimes,
+        count(case when DATE_FORMAT(create_time,'%Y-%m') = DATE_FORMAT(sysdate(),'%Y-%m') then 1 end) as monthTimes
+        from
+        (select t1.user_name,t1.dept_id,t1.create_time,t2.dept_name from t_login_log t1
+        left join t_dept t2 on t1.dept_id = t2.id where t2.parent_id &lt;&gt; 260 and t2.parent_id &lt;&gt; 0 ) t
+        WHERE dept_name is not null
+        GROUP BY dept_name) aa order by aa.dept_id
+    </select>
+
+    <select id="count" resultType="long">
+        select count(1) from (select dept_id from t_login_log t1
+            left join t_dept t2 on t1.dept_id = t2.id
+        where DATE_FORMAT(t1.create_time,'%Y-%m') = DATE_FORMAT(sysdate(),'%Y-%m') and t1.dept_id is not null and t2.id is not null
+        GROUP BY dept_id) t
+    </select>
+</mapper>

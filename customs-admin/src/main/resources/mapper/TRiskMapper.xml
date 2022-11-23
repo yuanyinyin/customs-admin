@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nteport.admin.mapper.TRiskMapper">
+
+    <resultMap id="BaseResultMap" type="com.nteport.admin.entity.TRiskEntity">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="periodId" column="period_id" jdbcType="BIGINT"/>
+            <result property="trendsId" column="trends_id" jdbcType="BIGINT"/>
+            <result property="reportTime" column="report_time" jdbcType="VARCHAR"/>
+            <result property="type" column="type" jdbcType="CHAR"/>
+            <result property="situation" column="situation" jdbcType="VARCHAR"/>
+            <result property="photoId" column="photo_id" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="CHAR"/>
+            <result property="memo" column="memo" jdbcType="VARCHAR"/>
+            <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="creatorName" column="creator_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,period_id,trends_id,
+        report_time,type,situation,
+        place,photo_id,status,
+        memo,create_user,create_time,
+        update_user,update_time,creator_name
+    </sql>
+
+    <select id="count" resultType="hashmap">
+        select
+            count(case when DATE_FORMAT(t1.create_time,'%Y-%m') = DATE_FORMAT(sysdate(),'%Y-%m') then 1 end) as sum,
+            count(case when DATE_FORMAT(t1.create_time,'%Y-%m') = DATE_FORMAT(sysdate(),'%Y-%m') and t1.status='1' then 1 end) as solvedSum,
+            count(case when DATE_FORMAT(t1.create_time,'%Y-%m') = DATE_FORMAT(sysdate(),'%Y-%m') and t1.type='0' then 1 end) as normal,
+            count(case when DATE_FORMAT(t1.create_time,'%Y-%m') = DATE_FORMAT(sysdate(),'%Y-%m') and t1.status='1' and t1.type='0' then 1 end) as solvedNormal,
+            count(case when DATE_FORMAT(t1.create_time,'%Y-%m') = DATE_FORMAT(sysdate(),'%Y-%m') and t1.type='1' then 1 end) as major,
+            count(case when DATE_FORMAT(t1.create_time,'%Y-%m') = DATE_FORMAT(sysdate(),'%Y-%m') and t1.status='1' and t1.type='1' then 1 end) as solvedMajor,
+            t2.area from t_risk t1
+        left join t_point_info t2
+        on t1.point_id = t2.id
+        where t2.name is not null
+        group by t2.area
+    </select>
+
+    <select id="queryRiskCount" resultType="hashmap" parameterType="java.lang.String">
+        select count(1) num,IFNULL(sum(case when status='1' then 1 else 0 end),0) finishnum from t_risk where DATE_FORMAT( report_time, '%Y' )= #{year,jdbcType=VARCHAR}
+    </select>
+
+    <select id="queryRiskRatio" resultType="hashmap" parameterType="java.lang.String">
+        select t1.dicname name,ifnull(t2.num,0) value from t_big_dic t1 left join
+            (select CASE
+            WHEN
+            type = '0' THEN
+            '一般风险'
+            WHEN type = '1' THEN
+            '较大风险' ELSE ''
+            END typename,count(1) num from t_risk where DATE_FORMAT(report_time, '%Y')= #{year,jdbcType=VARCHAR} group by type) t2 on t1.dicname=t2.typename where t1.type='risk'
+    </select>
+
+</mapper>

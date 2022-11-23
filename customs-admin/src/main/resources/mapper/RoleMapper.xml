@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nteport.admin.mapper.RoleMapper">
+
+    <select id="listTreeSq" resultType="java.lang.Long" parameterType="java.lang.Long">
+        select drm.menu_id from t_role_menu drm
+        left join t_menu dm
+        on drm.menu_id = dm.id
+        <if test="roleId != null">
+            where drm.role_id = #{roleId,jdbcType=BIGINT}
+        </if>
+        order by drm.menu_id
+    </select>
+
+    <delete id="deleteByRoleId" parameterType="java.lang.Long">
+        delete from t_role_menu
+        where role_id = #{roleId,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insertSq" parameterType="com.nteport.admin.entity.system.RoleMenuEntity">
+        insert into t_role_menu (role_id, menu_id, create_user, create_time)
+        values (
+        #{roleId,jdbcType=INTEGER},#{menuId,jdbcType=BIGINT},#{createUser,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <select id="getRoleByUserId" parameterType="java.lang.Long" resultType="java.lang.String">
+        select role_code from t_role where id in
+        (select role_id from t_user_role where user_id = #{roleId,jdbcType=INTEGER})
+    </select>
+
+</mapper>
