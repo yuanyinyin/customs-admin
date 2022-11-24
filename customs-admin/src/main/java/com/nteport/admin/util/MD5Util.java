@@ -65,4 +65,9 @@ public class MD5Util {
         return DigestUtils.md5Hex(target);
     }
 
+    public static void main(String[] args) {
+        String pwd = "123";
+        System.out.println(MD5Util.md5(pwd));
+    }
+
 }

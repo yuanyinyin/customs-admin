@@ -69,7 +69,7 @@ public class RoleController {
      */
     @PostMapping("/update/{id}")
     @OpeLog(opeModule = "角色管理-角色编辑", opeType = OperationType.MODIFY, opeDesc = "角色编辑")
-    public ApiResponse update(@PathVariable(value = "id") Long id, @RequestBody String jsonString, @RequestHeader("authToken") String token) {
+    public ApiResponse update(@PathVariable(value = "id") String id, @RequestBody String jsonString, @RequestHeader("authToken") String token) {
         return roleService.updateRole(id, jsonString, token);
     }
 
@@ -81,7 +81,7 @@ public class RoleController {
      */
     @PostMapping("/delete/{id}")
     @OpeLog(opeModule = "角色管理-角色删除", opeType = OperationType.DELETE, opeDesc = "角色删除")
-    public ApiResponse delete(@PathVariable(value = "id") Long id) {
+    public ApiResponse delete(@PathVariable(value = "id") String id) {
         return roleService.deleteRole(id);
     }
 
@@ -92,7 +92,7 @@ public class RoleController {
      * @return
      */
     @GetMapping("/listTreeSq/{id}")
-    public ApiResponse listTreeSq(@PathVariable(value = "id") Long id) {
+    public ApiResponse listTreeSq(@PathVariable(value = "id") String id) {
         return roleService.listTreeSq(id);
     }
 
@@ -106,16 +106,16 @@ public class RoleController {
      */
     @PostMapping("/authorize/{id}")
     @OpeLog(opeModule = "角色管理-分配权限", opeType = OperationType.ADD, opeDesc = "角色授权")
-    public ApiResponse authorize(@PathVariable(value = "id") Long id, @RequestBody String jsonString, @RequestHeader("authToken") String token) {
+    public ApiResponse authorize(@PathVariable(value = "id") String id, @RequestBody String jsonString, @RequestHeader("authToken") String token) {
         return roleService.authorize(id, jsonString, token);
     }
 
     @PostMapping("/verifyCode")
     public ApiResponse verifyCode(@RequestParam Map<String, String> params) {
         String roleCode = params.get("roleCode");
-        Long roleId = null;
+        String roleId = null;
         if (null != params.get("roleId")) {
-            roleId = Long.parseLong(params.get("roleId"));
+            roleId = params.get("roleId");
         }
         return roleService.verifyCode(roleCode, roleId);
     }

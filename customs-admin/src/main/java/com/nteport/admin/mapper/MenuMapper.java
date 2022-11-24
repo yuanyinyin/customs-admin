@@ -14,8 +14,8 @@ public interface MenuMapper extends BaseMapper<MenuEntity> {
 
     List getMenu();
 
-    List getMenuByUser(Long userId);
+    List getMenuByUser(String userId);
 
-    void deleteByMenuId(Long menuId);
+    void deleteByMenuId(String menuId);
 
 }

@@ -18,16 +18,16 @@ public interface UserMapper extends BaseMapper<UserEntity> {
 
     List<UserEntity> selectUserList(HashMap params);
 
-    List<String> selectTagsById(Long userId);
+    List<String> selectTagsById(String userId);
 
-    Long selectDeptLeaderIdById(Long userId);
+    Long selectDeptLeaderIdById(String userId);
 
     List<UserEntity> selectAllUserAndDept();
 
-    List<String> queryRoleCodes(Long userId);
+    List<String> queryRoleCodes(String userId);
 
-    List<UserEntity> selectAdminByArea(Long areaId);
+    List<UserEntity> selectAdminByArea(String areaId);
 
-    List<UserEntity> selectManagerByDept(Long deptId);
+    List<UserEntity> selectManagerByDept(String deptId);
 
 }

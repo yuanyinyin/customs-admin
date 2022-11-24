@@ -10,58 +10,58 @@
 <mapper namespace="com.nteport.admin.mapper.UserRoleMapper">
 
     <!-- 树状显示用户角色关系-->
-    <select id="listTreeSq" resultType="java.lang.Long" parameterType="java.lang.Long">
+    <select id="listTreeSq" resultType="java.lang.String" parameterType="java.lang.String">
         select dur.role_id
         from t_user_role dur left join t_role dr
         on dur.role_id = dr.id
         <if test="userId != null">
-            where dur.user_id = #{userId,jdbcType=BIGINT}
+            where dur.user_id = #{userId,jdbcType=VARCHAR}
         </if>
         order by dur.role_id
     </select>
 
     <!-- 查询当前用户对应的角色 -->
     <select id="getRolesByUserId" resultType="com.nteport.admin.entity.system.RoleEntity"
-            parameterType="java.lang.Long">
+            parameterType="java.lang.String">
         select *
         from t_user_role dur left join t_role dr
         on dur.role_id = dr.id
         <if test="userId != null">
-            where dur.user_id = #{userId,jdbcType=BIGINT}
+            where dur.user_id = #{userId,jdbcType=VARCHAR}
         </if>
         order by dur.role_id
     </select>
 
-    <select id="getRoleIdsByUserId" resultType="Long" parameterType="Long">
+    <select id="getRoleIdsByUserId" resultType="String" parameterType="String">
         select dr.id
         from t_user_role dur left join t_role dr
         on dur.role_id = dr.id
         <if test="userId != null">
-            where dur.user_id = #{userId,jdbcType=BIGINT}
+            where dur.user_id = #{userId,jdbcType=VARCHAR}
         </if>
         order by dur.role_id
     </select>
 
     <!-- 删除对应用户的所有’用户-角色关系‘ -->
-    <delete id="deleteByUserId" parameterType="java.lang.Long">
+    <delete id="deleteByUserId" parameterType="java.lang.String">
         delete from t_user_role
-        where user_id = #{userId,jdbcType=BIGINT}
+        where user_id = #{userId,jdbcType=VARCHAR}
     </delete>
 
     <!-- 创建'用户-角色关系' -->
     <insert id="insertSq" parameterType="com.nteport.admin.entity.system.UserRoleEntity">
         insert into t_user_role (user_id, role_id, create_user, create_time)
         values (
-        #{userId,jdbcType=BIGINT},#{roleId,jdbcType=BIGINT},#{createUser,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP}
+        #{userId,jdbcType=VARCHAR},#{roleId,jdbcType=VARCHAR},#{createUser,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP}
         )
     </insert>
 
-    <select id="getRoleCodeByUserId" resultType="java.lang.String" parameterType="java.lang.Integer">
+    <select id="getRoleCodeByUserId" resultType="java.lang.String" parameterType="java.lang.String">
         select role_code
         from t_user_role dur left join t_role dr
         on dur.role_id = dr.id
         <if test="userId != null">
-            where dur.user_id = #{userId,jdbcType=INTEGER}
+            where dur.user_id = #{userId,jdbcType=VARCHAR}
         </if>
         order by dur.role_id
     </select>

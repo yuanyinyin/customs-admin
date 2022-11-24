@@ -14,7 +14,7 @@ import java.util.List;
 */
 @Repository
 public interface TDeptMapper extends BaseMapper<TDeptEntity> {
-    List<Long> queryAreaDept(Long id);
+    List<String> queryAreaDept(String id);
 }
 
 

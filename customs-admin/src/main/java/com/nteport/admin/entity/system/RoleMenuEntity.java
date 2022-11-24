@@ -11,13 +11,13 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("t_role_menu")
+@TableName("T_ROLE_MENU")
 public class RoleMenuEntity extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long roleId;
+    private String roleId;
 
-    private Long menuId;
+    private String menuId;
 
 }

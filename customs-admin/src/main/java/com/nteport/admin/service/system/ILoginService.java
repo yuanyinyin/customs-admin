@@ -30,7 +30,6 @@ public interface ILoginService {
 
     ApiResponse statLoginMobile();
 
-    ApiResponse personalCount(UserEntity user);
 
     ArrayList<String> queryRoleCodes(UserEntity user);
 }
