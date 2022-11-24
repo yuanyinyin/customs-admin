@@ -27,7 +27,7 @@ public class DeptController {
 
     @PostMapping("/delete/{id}")
     @OpeLog(opeModule = "部门管理-部门删除", opeType = OperationType.DELETE, opeDesc = "部门删除")
-    public ApiResponse delete(@PathVariable(value = "id") Long id) {
+    public ApiResponse delete(@PathVariable(value = "id") String id) {
         return deptService.removeDept(id);
     }
 
@@ -64,7 +64,7 @@ public class DeptController {
      * @return
      */
     @GetMapping("/getUserByDept/{id}")
-    public ApiResponse getUserByDept(@PathVariable Long id) {
+    public ApiResponse getUserByDept(@PathVariable String id) {
         return deptService.getUserByDept(id);
     }
 
@@ -72,7 +72,7 @@ public class DeptController {
      * 根据人员获取部门信息
      */
     @GetMapping("/getDeptById/{id}")
-    public ApiResponse getDeptById(@PathVariable Long id){
+    public ApiResponse getDeptById(@PathVariable String id){
         return deptService.getDeptById(id);
     }
 }

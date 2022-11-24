@@ -40,7 +40,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileEntity> impleme
      * fileUrl      文件地址]
      */
     @Override
-    public ApiResponse getFileList(Long id) {
+    public ApiResponse getFileList(String id) {
         ApiResponse response = new ApiResponse();
         QueryWrapper<FileEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("record_id", id);
@@ -56,7 +56,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileEntity> impleme
      * @return 附件id
      */
     @Override
-    public Long upload(String fileName, String path, String type, UserEntity user) {
+    public String upload(String fileName, String path, String type, UserEntity user) {
         FileEntity file = new FileEntity();
         file.setFileName(fileName);
         file.setType(type);
@@ -75,7 +75,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileEntity> impleme
      * @return 附件id
      */
     @Override
-    public Long upload(Long id, String fileName, String path, String type, UserEntity user) {
+    public String upload(String id, String fileName, String path, String type, UserEntity user) {
         FileEntity file = new FileEntity();
         file.setFileName(fileName);
         file.setRecordId(id);
@@ -112,7 +112,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileEntity> impleme
 //    }
 
     @Override
-    public ApiResponse deleteFile(Long id) {
+    public ApiResponse deleteFile(String id) {
         ApiResponse response = new ApiResponse();
         FileEntity fileEntity = fileMapper.selectById(id);
         if (fileEntity == null) {
@@ -123,7 +123,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileEntity> impleme
     }
 
     @Override
-    public ApiResponse getFile(Long id) {
+    public ApiResponse getFile(String id) {
         if (id == null) {
             return ApiResponse.fail(EnumCode.BAD_REQUEST);
         }
@@ -143,7 +143,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileEntity> impleme
      * @return 图片url
      */
     @Override
-    public String getImageUrl(Long fileId) {
+    public String getImageUrl(String fileId) {
         if (fileId == null) {
             return "";
         }

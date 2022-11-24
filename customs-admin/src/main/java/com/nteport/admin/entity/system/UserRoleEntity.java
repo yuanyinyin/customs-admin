@@ -12,13 +12,13 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("t_user_role")
+@TableName("T_USER_ROLE")
 public class UserRoleEntity extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long userId;
+    private String userId;
 
-    private Long roleId;
+    private String roleId;
 
 }

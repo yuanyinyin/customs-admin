@@ -55,7 +55,7 @@ public class FileController {
      * @return 状态码
      */
     @PostMapping("/upload/{id}")
-    public ApiResponse upload(@PathVariable Long id,
+    public ApiResponse upload(@PathVariable String id,
                               @RequestParam String type,
                               MultipartFile file,
                               UserEntity user){
@@ -76,7 +76,7 @@ public class FileController {
      *                     fileUrl      文件地址]
      */
     @GetMapping("/getFileList/{id}")
-    public ApiResponse getFileList(@PathVariable Long id){
+    public ApiResponse getFileList(@PathVariable String id){
         return fileService.getFileList(id);
     }
 
@@ -87,7 +87,7 @@ public class FileController {
      * @return 文件
      */
     @GetMapping("/downLoad/{id}")
-    public void downLoad(@PathVariable Long id, HttpServletResponse response){
+    public void downLoad(@PathVariable String id, HttpServletResponse response){
         try {
             FileEntity fileEntity = fileService.getById(id);
             minIOTool.download(fileEntity.getFileName(), fileEntity.getFileUrl(), response);
@@ -120,7 +120,7 @@ public class FileController {
      *                     fileUrl      文件地址]
      */
     @GetMapping("/getFile/{id}")
-    public ApiResponse getFile(@PathVariable Long id){
+    public ApiResponse getFile(@PathVariable String id){
         return fileService.getFile(id);
     }
 
@@ -144,7 +144,7 @@ public class FileController {
      * @return 状态码
      */
     @PostMapping("/delete/{id}")
-    public ApiResponse delete(@PathVariable Long id, HttpServletResponse response){
+    public ApiResponse delete(@PathVariable String id, HttpServletResponse response){
         System.out.println(fileService.getById(id).getFileName());
         System.out.println(fileService.getById(id).getFileUrl());
         minIOTool.remove(fileService.getById(id).getFileUrl());

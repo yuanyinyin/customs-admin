@@ -66,7 +66,7 @@ public class UserController {
      */
     @PostMapping("/update/{id}")
     @OpeLog(opeModule = "用户管理-用户编辑", opeType = OperationType.MODIFY, opeDesc = "用户编辑")
-    public ApiResponse update(@PathVariable(value = "id") Long id, @RequestBody String jsonString, UserEntity user) {
+    public ApiResponse update(@PathVariable(value = "id") String id, @RequestBody String jsonString, UserEntity user) {
         return userService.updateUser(id, jsonString, user);
     }
 
@@ -74,7 +74,7 @@ public class UserController {
      * 审核用户
      */
     @GetMapping("/audit/{id}")
-    public ApiResponse audit(@PathVariable(value = "id") Long id,UserEntity user){
+    public ApiResponse audit(@PathVariable(value = "id") String id,UserEntity user){
         return userService.audit(id,user);
     }
 
@@ -109,7 +109,7 @@ public class UserController {
      */
     @PostMapping("/delete/{id}")
     @OpeLog(opeModule = "用户管理-用户删除", opeType = OperationType.DELETE, opeDesc = "用户删除")
-    public ApiResponse delete(@PathVariable(value = "id") Long id) {
+    public ApiResponse delete(@PathVariable(value = "id") String id) {
         return userService.deleteUser(id);
     }
 
@@ -133,7 +133,7 @@ public class UserController {
      * @return 状态码
      */
     @PostMapping("/authorize/{id}")
-    public ApiResponse authorize(@PathVariable(value = "id") Long id, @RequestBody String jsonString, UserEntity user) {
+    public ApiResponse authorize(@PathVariable(value = "id") String id, @RequestBody String jsonString, UserEntity user) {
         return userService.authorize(id, jsonString, user);
     }
 
@@ -144,12 +144,12 @@ public class UserController {
      * @return 用户持有的角色集
      */
     @PostMapping("/listRoleTreeSq/{id}")
-    public ApiResponse listUserRoleTreeSq(@PathVariable(value = "id") Long id) {
+    public ApiResponse listUserRoleTreeSq(@PathVariable(value = "id") String id) {
         return userService.listUserRoleTreeSq(id);
     }
 
     @GetMapping("/{id}")
-    public ApiResponse getUser(@PathVariable(value = "id") Long id){
+    public ApiResponse getUser(@PathVariable(value = "id") String id){
         return ApiResponse.success(userService.getById(id));
     }
 
@@ -171,13 +171,13 @@ public class UserController {
 
     @PostMapping("/passUser/{id}")
     @OpeLog(opeModule = "用户管理-用户审核通过", opeType = OperationType.DELETE, opeDesc = "用户审核通过")
-    public ApiResponse passUser(@PathVariable(value = "id") Long id) {
+    public ApiResponse passUser(@PathVariable(value = "id") String id) {
         return userService.passUser(id);
     }
 
     @PostMapping("/notPassUser/{id}")
     @OpeLog(opeModule = "用户管理-用户审核不通过", opeType = OperationType.DELETE, opeDesc = "用户审核不通过")
-    public ApiResponse notPassUser(@PathVariable(value = "id") Long id) {
+    public ApiResponse notPassUser(@PathVariable(value = "id") String id) {
         return userService.notPassUser(id);
     }
 

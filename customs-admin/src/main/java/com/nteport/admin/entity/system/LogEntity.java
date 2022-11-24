@@ -11,7 +11,7 @@ import java.io.Serializable;
 /**
  * 日志实体
  */
-@TableName("t_log")
+@TableName("T_LOG")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "LogEntity对象", description = "日志表")

@@ -5,13 +5,13 @@
 <mapper namespace="com.nteport.admin.mapper.TLoginLogMapper">
 
     <resultMap id="BaseResultMap" type="com.nteport.admin.entity.TLoginLogEntity">
-            <id property="id" column="id" jdbcType="BIGINT"/>
+            <id property="id" column="id" jdbcType="VARCHAR"/>
             <result property="userName" column="user_name" jdbcType="VARCHAR"/>
-            <result property="deptId" column="dept_id" jdbcType="BIGINT"/>
+            <result property="deptId" column="dept_id" jdbcType="VARCHAR"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+            <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-            <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+            <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>
             <result property="creatorName" column="creator_name" jdbcType="VARCHAR"/>
     </resultMap>
 

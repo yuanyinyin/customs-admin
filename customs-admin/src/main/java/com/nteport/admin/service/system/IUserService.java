@@ -25,12 +25,12 @@ public interface IUserService extends IService<UserEntity> {
     /**
      * 修改用户
      */
-    ApiResponse updateUser(Long id, String jsonString, UserEntity user);
+    ApiResponse updateUser(String id, String jsonString, UserEntity user);
 
     /**
      * 审核用户
      */
-    ApiResponse audit(Long id,UserEntity user);
+    ApiResponse audit(String id,UserEntity user);
 
     /**
      * 校验用户密码
@@ -45,7 +45,7 @@ public interface IUserService extends IService<UserEntity> {
     /**
      * 删除用户
      */
-    ApiResponse deleteUser(Long id);
+    ApiResponse deleteUser(String id);
 
     /**
      * 校验新用户名可注册性
@@ -55,7 +55,7 @@ public interface IUserService extends IService<UserEntity> {
     /**
      * 获取操作者后转发请求给UserRoleService
      */
-    ApiResponse authorize(Long id, String jsonString, UserEntity user);
+    ApiResponse authorize(String id, String jsonString, UserEntity user);
 
     /**
      * 从操作者令牌获取操作者
@@ -65,7 +65,7 @@ public interface IUserService extends IService<UserEntity> {
     /**
      * 树状显示用户角色关系
      */
-    ApiResponse listUserRoleTreeSq(Long id);
+    ApiResponse listUserRoleTreeSq(String id);
 
     /**
      * 根据token或者openid获取用户信息
@@ -80,12 +80,12 @@ public interface IUserService extends IService<UserEntity> {
     /**
      * 用户审核通过
      */
-    ApiResponse passUser(Long id);
+    ApiResponse passUser(String id);
 
     /**
      * 用户审核不通过
      */
-    ApiResponse notPassUser(Long id);
+    ApiResponse notPassUser(String id);
 
     /**
      * app忘记密码

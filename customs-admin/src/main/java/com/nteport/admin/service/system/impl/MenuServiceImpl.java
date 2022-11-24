@@ -14,6 +14,7 @@ import com.nteport.admin.mapper.MenuMapper;
 import com.nteport.admin.mapper.UserMapper;
 import com.nteport.admin.service.system.IMenuService;
 import com.nteport.admin.service.system.IPageHelper;
+import com.nteport.admin.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,7 +109,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
     }
 
     @Override
-    public String getMenu(Long pid) {
+    public String getMenu(String pid) {
         StringBuffer sb = new StringBuffer();
         QueryWrapper<MenuEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("pid", pid);
@@ -147,11 +148,16 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         } else {
             menuList = menuMapper.getMenu();
         }
+
+        List<Map> menuListNew  = CommonUtil.transformUpperCase(menuList);
+
+
         //拼装返回
-        for (Map map : menuList) {
+        for (Map map : menuListNew) {
             List<Map> children = new ArrayList<>();
             map.put("id", String.valueOf(map.get("id")));
             map.put("children", children);
+            System.out.println(map.get("title"));
             map.put("text", map.get("title").toString());
             map.put("hidden", String.valueOf(map.get("hidden")).equals("0") ? true : false);
             if (0 == Integer.parseInt(String.valueOf(map.get("pid")))) {
@@ -159,13 +165,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
                 meta.put("title", map.get("title").toString());
                 meta.put("icon", map.get("icon").toString());
                 meta.put("roles", new ArrayList<>());
-                meta.put("noCache", String.valueOf(map.get("noCache")));
+                meta.put("noCache", String.valueOf(map.get("nocache")));
                 map.put("meta", meta);
                 result.add(map);
             }
         }
         for (Map map : result) {
-            recursiveTree(map, menuList);
+            recursiveTree(map, menuListNew);
         }
 
         response.fillMessage(result);
@@ -239,7 +245,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
      */
     @Transactional
     @Override
-    public ApiResponse updateMenu(Long id, String jsonString, String token) {
+    public ApiResponse updateMenu(String id, String jsonString, String token) {
         ApiResponse response = new ApiResponse();
         try {
             if (jsonString.equals("")) {
@@ -279,7 +285,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
      */
     @Transactional
     @Override
-    public ApiResponse deleteMenu(Long id) {
+    public ApiResponse deleteMenu(String id) {
         ApiResponse response = new ApiResponse();
         try {
             if (null == id) {

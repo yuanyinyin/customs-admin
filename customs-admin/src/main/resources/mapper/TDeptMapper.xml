@@ -6,13 +6,13 @@
 
     <resultMap id="BaseResultMap" type="com.nteport.admin.entity.TDeptEntity">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
+            <result property="parentId" column="parent_id" jdbcType="VARCHAR"/>
             <result property="ancestors" column="ancestors" jdbcType="VARCHAR"/>
             <result property="deptName" column="dept_name" jdbcType="VARCHAR"/>
             <result property="orderNum" column="order_num" jdbcType="INTEGER"/>
-            <result property="areaId" column="area_id" jdbcType="BIGINT"/>
+            <result property="areaId" column="area_id" jdbcType="VARCHAR"/>
             <result property="area" column="area" jdbcType="VARCHAR"/>
-            <result property="streetId" column="street_id" jdbcType="BIGINT"/>
+            <result property="streetId" column="street_id" jdbcType="VARCHAR"/>
             <result property="street" column="street" jdbcType="VARCHAR"/>
             <result property="phone" column="phone" jdbcType="VARCHAR"/>
             <result property="email" column="email" jdbcType="VARCHAR"/>
@@ -32,7 +32,7 @@
         update_user,update_time
     </sql>
 
-    <select id="queryAreaDept" resultType="java.lang.Long" parameterType="java.lang.Long">
-        select id from t_dept where area_id in (select t2.area_id from t_dept t2 where t2.id= #{id,jdbcType=BIGINT})
+    <select id="queryAreaDept" resultType="java.lang.String" parameterType="java.lang.String">
+        select id from t_dept where area_id in (select t2.area_id from t_dept t2 where t2.id= #{id,jdbcType=VARCHAR})
     </select>
 </mapper>

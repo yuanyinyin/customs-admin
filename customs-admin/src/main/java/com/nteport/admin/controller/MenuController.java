@@ -70,7 +70,7 @@ public class MenuController {
      */
     @PostMapping("/update/{id}")
     @OpeLog(opeModule = "菜单管理-菜单编辑", opeType = OperationType.MODIFY, opeDesc = "菜单编辑")
-    public ApiResponse update(@PathVariable(value = "id") Long id, @RequestBody String jsonString, @RequestHeader("authToken") String token) {
+    public ApiResponse update(@PathVariable(value = "id") String id, @RequestBody String jsonString, @RequestHeader("authToken") String token) {
         return menuService.updateMenu(id, jsonString, token);
     }
 
@@ -82,7 +82,7 @@ public class MenuController {
      */
     @PostMapping("/delete/{id}")
     @OpeLog(opeModule = "菜单管理-菜单删除", opeType = OperationType.DELETE, opeDesc = "菜单删除")
-    public ApiResponse delete(@PathVariable(value = "id") Long id) {
+    public ApiResponse delete(@PathVariable(value = "id") String id) {
         return menuService.deleteMenu(id);
     }
 }

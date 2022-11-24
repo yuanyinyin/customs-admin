@@ -7,7 +7,7 @@
         order by sort
     </select>
 
-    <select id="getMenuByUser" parameterType="java.lang.Long" resultType="hashMap">
+    <select id="getMenuByUser" parameterType="java.lang.String" resultType="hashMap">
         select * from t_menu a
         where exists (
         select b.menu_id from t_role_menu b
@@ -15,14 +15,14 @@
         select c.role_id from t_user_role c
         where c.role_id = b.role_id
         <if test="userId != -1">
-            and c.user_id = #{userId,jdbcType=BIGINT}
+            and c.user_id = #{userId,jdbcType=VARCHAR}
         </if>
         ))
         order by a.sort
     </select>
 
-    <delete id="deleteByMenuId" parameterType="java.lang.Long">
-        delete from t_role_menu where menu_id = #{menuId,jdbcType=BIGINT}
+    <delete id="deleteByMenuId" parameterType="java.lang.String">
+        delete from t_role_menu where menu_id = #{menuId,jdbcType=VARCHAR}
     </delete>
 
 </mapper>

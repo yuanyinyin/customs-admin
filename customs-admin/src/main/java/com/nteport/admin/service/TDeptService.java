@@ -25,7 +25,7 @@ public interface TDeptService extends IService<TDeptEntity> {
 
     ApiResponse updateDept(String jsonString, UserEntity user);
 
-    ApiResponse removeDept(Long id);
+    ApiResponse removeDept(String id);
 
     /**
      * app-获取除市打私办之外的子部门树
@@ -37,19 +37,19 @@ public interface TDeptService extends IService<TDeptEntity> {
      * app-根据部门获取人员
      * @return
      */
-    ApiResponse getUserByDept(Long id);
+    ApiResponse getUserByDept(String id);
 
-    ApiResponse getDeptById(Long id);
+    ApiResponse getDeptById(String id);
     /**
      * 根据部门ID 获取部门数据
      * @param id
      * @return
      */
-    TDeptEntity getDeptEntityById(Long id);
+    TDeptEntity getDeptEntityById(String id);
 
     /**
      * 根据部门id查询这个地区所有部门
      */
-    List<Long> queryAreaDept(Long id);
+    List<String> queryAreaDept(String id);
 
 }

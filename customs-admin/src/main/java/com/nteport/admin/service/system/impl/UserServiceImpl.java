@@ -78,7 +78,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         //根据登录人员区县过滤
         if(user.getRoleCodes().contains(ConstantUtil.ROLE_ADMIN) ||user.getRoleCodes().contains(ConstantUtil.ROLE_CITYADMIN)){
         }else if(user.getRoleCodes().contains(ConstantUtil.ROLE_QXDSBADMIN)){
-            List<Long> deptIds = deptService.queryAreaDept(user.getDeptId());
+            List<String> deptIds = deptService.queryAreaDept(user.getDeptId());
             queryWrapper.in("dept_id",deptIds);
         }
 
@@ -163,7 +163,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
      * @return 状态码
      */
     @Override
-    public ApiResponse updateUser(Long id, String jsonString, UserEntity user) {
+    public ApiResponse updateUser(String id, String jsonString, UserEntity user) {
         if (id == null || "".equals(jsonString) || user == null) {
             return ApiResponse.fail(EnumCode.BAD_REQUEST);
         }
@@ -190,7 +190,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
      * 审核用户
      */
     @Override
-    public ApiResponse audit(Long id, UserEntity user) {
+    public ApiResponse audit(String id, UserEntity user) {
         if(id == null || user == null){
             return ApiResponse.fail(EnumCode.BAD_REQUEST);
         }
@@ -280,7 +280,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
      */
     @Override
     @Transactional
-    public ApiResponse deleteUser(Long id) {
+    public ApiResponse deleteUser(String id) {
         if (id == null) {
             return ApiResponse.fail(EnumCode.BAD_REQUEST);
         }
@@ -324,7 +324,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         UserEntity user = userMapper.selectOne(queryWrapper);
         if (user == null) {
             return ApiResponse.success();
-        } else if (json.containsKey("id") && user.getId() == Long.parseLong(json.getString("id"))) {
+        } else if (json.containsKey("id") && user.getId().equals(json.getString("id"))) {
             // 数据库中查到的用户不为空，但传来的id和数据库中查到的用户相同，说明用户名和原用户名相同，可继续占用该用户名
             return ApiResponse.success();
         } else {
@@ -341,7 +341,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
      * @return 状态码
      */
     @Override
-    public ApiResponse authorize(Long id, String jsonString, UserEntity user) {
+    public ApiResponse authorize(String id, String jsonString, UserEntity user) {
         return userRoleService.authorize(id, jsonString, user);
     }
 
@@ -366,7 +366,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
      * @return 用户持有的角色集
      */
     @Override
-    public ApiResponse listUserRoleTreeSq(Long id) {
+    public ApiResponse listUserRoleTreeSq(String id) {
         return userRoleService.listUserRoleTreeSq(id);
     }
 
@@ -408,7 +408,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
 
     @Override
     @Transactional
-    public ApiResponse passUser(Long id) {
+    public ApiResponse passUser(String id) {
         if (id == null) {
             return ApiResponse.fail(EnumCode.BAD_REQUEST);
         }
@@ -433,7 +433,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
 
     @Override
     @Transactional
-    public ApiResponse notPassUser(Long id) {
+    public ApiResponse notPassUser(String id) {
         if (id == null) {
             return ApiResponse.fail(EnumCode.BAD_REQUEST);
         }
@@ -501,12 +501,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
     @Override
     public ApiResponse selectAllUserAndDept() {
         //部门id-人员数组 Map
-        HashMap<Long,List> map = new HashMap();
+        HashMap<String,List> map = new HashMap();
         //查询所有人员
         List<UserEntity> userList = userMapper.selectAllUserAndDept();
         //根据部门id 分组人员
         for(UserEntity userEntity:userList){
-            Long deptId = userEntity.getDeptId();
+            String deptId = userEntity.getDeptId();
             List list = map.get(deptId);
             if(null!=list){
                 list.add(userEntity);
@@ -526,7 +526,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         return ApiResponse.success(deptList);
     }
 
-    private void putUser2Dept(List<TDeptEntity> list,HashMap<Long,List> map){
+    private void putUser2Dept(List<TDeptEntity> list,HashMap<String,List> map){
         for(TDeptEntity deptEntity:list){
             //有子部门继续迭代
             if(deptEntity.getChildren().size()>0){

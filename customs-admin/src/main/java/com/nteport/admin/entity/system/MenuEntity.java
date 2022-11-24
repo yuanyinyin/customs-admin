@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("t_menu")
+@TableName("T_MENU")
 @ApiModel(value = "菜单对象", description = "菜单表")
 public class MenuEntity extends BaseEntity implements Serializable {
 
@@ -21,7 +21,7 @@ public class MenuEntity extends BaseEntity implements Serializable {
     /**
      * 父级菜单id
      */
-    private Long pid;
+    private String pid;
 
     /**
      * 菜单名称（英文）
