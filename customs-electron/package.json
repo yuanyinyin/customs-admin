@@ -104,6 +104,7 @@
   "author": "wallace5303, Inc <530353222@qq.com>",
   "license": "Apache",
   "devDependencies": {
+    "amqplib": "^0.10.3",
     "debug": "^4.3.3",
     "electron": "^13.6.9",
     "electron-builder": "^23.1.0",

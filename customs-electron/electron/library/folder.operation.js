@@ -28,6 +28,15 @@ function _copy(src, dist) {
     }
   })
 }
+//单个文件复制文件
+function _copyFile(srcFilePath, dist,fileName) {
+    var _src = srcFilePath;
+    var _dist = dist+"\\"+fileName;
+    var stat = fs.statSync(_src)
+    if (stat.isFile()) {// 判断是文件还是目录
+      fs.writeFileSync(_dist, fs.readFileSync(_src));
+    }
+}
 
 /*
  * 复制（包括目录、子目录，及其中的文件)
@@ -42,6 +51,16 @@ function copyDir(src, dist) {
   }
   // console.log("_copy start")
   _copy(src, dist);
+}
+//单个文件复制文件
+function copyFile(srcFilePath, dist,fileName) {
+  var b = fs.existsSync(dist)
+  if (!b) {
+    // console.log("mk dist = ", dist)
+    mkdirsSync(dist);//创建目录
+  }
+  // console.log("_copy start")
+  _copyFile(srcFilePath, dist,fileName);
 }
 
 
@@ -104,6 +123,16 @@ var _delDir = function (path) {
   }
 }
 
+// 删除文件
+var _delFile = function (path) {
+  if (fs.existsSync(path)) {
+    var stat = fs.statSync(path);
+    if (stat.isFile()) {// 判断是文件还是目录
+      fs.unlinkSync(path);
+    }
+  }
+}
+
 
 /**
  * 获取传入路径的所有路径
@@ -153,7 +182,9 @@ function findSync(startPath) {
 
 exports.foperator = {
   copy: copyDir,
+  copyFile:copyFile,
   delete: _delDir,
+  deleteFile:_delFile,
   getPaths: _getPaths,
   findSync: findSync,
   create: _createConstruction
