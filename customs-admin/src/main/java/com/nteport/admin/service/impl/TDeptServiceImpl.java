@@ -58,8 +58,8 @@ public class TDeptServiceImpl extends ServiceImpl<TDeptMapper, TDeptEntity>
             TDeptEntity entity = JSON.parseObject(jsonString,TDeptEntity.class);
             entity.createTimeStamp(user);
             String ancestors = entity.getParentId().toString();
-            Long parentId = entity.getParentId();
-            while (parentId != 0L){
+            String parentId = entity.getParentId();
+            while (StringUtils.isNotBlank(parentId) ){
                 QueryWrapper<TDeptEntity> queryWrapper = new QueryWrapper<>();
                 queryWrapper.eq("id",parentId);
                 TDeptEntity parentEntity = deptMapper.selectOne(queryWrapper);
@@ -108,7 +108,7 @@ public class TDeptServiceImpl extends ServiceImpl<TDeptMapper, TDeptEntity>
     }
 
     @Override
-    public ApiResponse removeDept(Long id) {
+    public ApiResponse removeDept(String id) {
         ApiResponse response = new ApiResponse();
         if(id == null){
             return response.fillMessage(EnumCode.BAD_REQUEST);
@@ -162,7 +162,7 @@ public class TDeptServiceImpl extends ServiceImpl<TDeptMapper, TDeptEntity>
     }
 
     @Override
-    public ApiResponse getUserByDept(Long id){
+    public ApiResponse getUserByDept(String id){
         QueryWrapper<UserEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("dept_id",id);
         //已审核
@@ -171,7 +171,7 @@ public class TDeptServiceImpl extends ServiceImpl<TDeptMapper, TDeptEntity>
     }
 
     @Override
-    public ApiResponse getDeptById(Long id) {
+    public ApiResponse getDeptById(String id) {
         ApiResponse response = new ApiResponse();
         try {
             if(id == null){
@@ -186,7 +186,7 @@ public class TDeptServiceImpl extends ServiceImpl<TDeptMapper, TDeptEntity>
     }
 
     @Override
-    public TDeptEntity getDeptEntityById(Long id) {
+    public TDeptEntity getDeptEntityById(String id) {
         QueryWrapper<TDeptEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id", id);
         queryWrapper.eq("status", "0");
@@ -199,7 +199,7 @@ public class TDeptServiceImpl extends ServiceImpl<TDeptMapper, TDeptEntity>
     }
 
     @Override
-    public List<Long> queryAreaDept(Long id) {
+    public List<String> queryAreaDept(String id) {
         return deptMapper.queryAreaDept(id);
     }
 
@@ -211,7 +211,7 @@ public class TDeptServiceImpl extends ServiceImpl<TDeptMapper, TDeptEntity>
     public List<TDeptEntity> buildDeptTree(List<TDeptEntity> depts)
     {
         List<TDeptEntity> returnList = new ArrayList<TDeptEntity>();
-        List<Long> tempList = new ArrayList<Long>();
+        List<String> tempList = new ArrayList<String>();
         for (TDeptEntity dept : depts)
         {
             tempList.add(dept.getId());
@@ -262,7 +262,7 @@ public class TDeptServiceImpl extends ServiceImpl<TDeptMapper, TDeptEntity>
         while (it.hasNext())
         {
             TDeptEntity n =  it.next();
-            if (null!=n.getParentId() && n.getParentId().longValue() == t.getId().longValue())
+            if ( StringUtils.isNotBlank(n.getParentId())  && n.getParentId().equals(t.getId()) )
             {
                 tlist.add(n);
             }

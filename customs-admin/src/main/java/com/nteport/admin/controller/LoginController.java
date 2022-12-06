@@ -140,9 +140,6 @@ public class LoginController {
         return loginService.statLoginMobile();
     }
 
-    @GetMapping("/personalCount")
-    public ApiResponse personalCount(UserEntity user){
-        return loginService.personalCount(user);
-    }
+
 
 }

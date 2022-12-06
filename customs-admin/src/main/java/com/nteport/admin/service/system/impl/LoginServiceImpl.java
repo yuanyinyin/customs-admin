@@ -5,17 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.nteport.admin.dto.LoginDataMobileDTO;
 import com.nteport.admin.dto.LoginDataMobileSeriesDTO;
-import com.nteport.admin.entity.TAppVersionEntity;
-import com.nteport.admin.entity.TDailyRecordEntity;
 import com.nteport.admin.entity.TLoginLogEntity;
 import com.nteport.admin.entity.system.ApiResponse;
 import com.nteport.admin.entity.system.EnumCode;
 import com.nteport.admin.entity.system.UserEntity;
-import com.nteport.admin.mapper.TDailyRecordMapper;
 import com.nteport.admin.mapper.TLoginLogMapper;
 import com.nteport.admin.mapper.UserMapper;
 import com.nteport.admin.service.FeignMessageService;
-import com.nteport.admin.service.TAppVersionService;
 import com.nteport.admin.service.system.ILoginService;
 import com.nteport.admin.util.MD5Util;
 import com.nteport.admin.util.RedisUtils;
@@ -35,8 +31,7 @@ public class LoginServiceImpl implements ILoginService {
     private UserMapper userMapper;
     @Autowired
     private TLoginLogMapper tLoginLogMapper;
-    @Autowired
-    private TDailyRecordMapper tDailyRecordMapper;
+
 
     @Autowired
     private FeignMessageService feignMessageService;
@@ -47,8 +42,7 @@ public class LoginServiceImpl implements ILoginService {
     @Value("${sms_verify_code}")
     private String smsVerifyCode;
 
-    @Autowired
-    private TAppVersionService appVersionService;
+
 
     /**
      * 登陆验证
@@ -67,8 +61,8 @@ public class LoginServiceImpl implements ILoginService {
         }
 
         QueryWrapper<UserEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_name", userName);
-        queryWrapper.eq("user_password", MD5Util.md5(password));
+        queryWrapper.eq("USER_NAME", userName);
+        queryWrapper.eq("USER_PASSWORD", MD5Util.md5(password));
         try {
             UserEntity user = userMapper.selectOne(queryWrapper);
             if (user != null) {
@@ -98,12 +92,7 @@ public class LoginServiceImpl implements ILoginService {
     @Override
     public ApiResponse mobileLogin(String jsonString) {
         JSONObject object = JSONObject.parseObject(jsonString);
-        //先检查版本
-        String versionCode = object.get("versionCode").toString();
-        boolean flag = this.checkVeersionCode(versionCode);
-        if(flag){
-            return ApiResponse.fail("APP版本需要更新,请重新打开并进行更新");
-        }
+
 
         String userName = object.get("userName").toString();
         if (userName == null) {
@@ -145,16 +134,7 @@ public class LoginServiceImpl implements ILoginService {
         }
     }
 
-    private boolean checkVeersionCode(String nowVersion){
-        QueryWrapper<TAppVersionEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("is_new","1");
-        TAppVersionEntity entity = appVersionService.getOne(queryWrapper);
-        if(nowVersion.equals(entity.getVersion())){
-            return false;
-        }else{
-            return true;
-        }
-    }
+
 
     /**
      * App自动登录
@@ -277,25 +257,7 @@ public class LoginServiceImpl implements ILoginService {
         }
     }
 
-    @Override
-    public ApiResponse personalCount(UserEntity user){
-        //查询当月登录次数
-        QueryWrapper<TLoginLogEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("DATE_FORMAT(create_time,'%Y-%m')",LocalDate.now().toString().substring(0,7));
-        queryWrapper.eq("user_name",user.getUserName());
-        Long count = tLoginLogMapper.selectCount(queryWrapper);
 
-        //查询当月每日巡次数
-        QueryWrapper<TDailyRecordEntity> queryWrapper2 = new QueryWrapper<>();
-        queryWrapper2.eq("DATE_FORMAT(create_time,'%Y-%m')",LocalDate.now().toString().substring(0,7));
-        queryWrapper2.eq("create_user",user.getId());
-        Long count2 = tDailyRecordMapper.selectCount(queryWrapper2);
-
-        HashMap map = new HashMap();
-        map.put("personnalLogin",count);
-        map.put("personnalDaily",count2);
-        return ApiResponse.success(map);
-    }
 
     @Override
     public ArrayList<String> queryRoleCodes(UserEntity user){

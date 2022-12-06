@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("t_role")
+@TableName("T_ROLE")
 public class RoleEntity extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

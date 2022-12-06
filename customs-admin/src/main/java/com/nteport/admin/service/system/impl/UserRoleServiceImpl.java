@@ -34,7 +34,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRoleEnt
     @Override
     @Transactional
     @OpeLog(opeModule = "用户角色管理-UserRoleService", opeType = OperationType.MODIFY, opeDesc = "分配角色")
-    public ApiResponse authorize(Long userId, String jsonString, UserEntity user) {
+    public ApiResponse authorize(String userId, String jsonString, UserEntity user) {
         if ("".equals(jsonString) || user == null) {
             return ApiResponse.fail(EnumCode.BAD_REQUEST);
         }
@@ -52,7 +52,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRoleEnt
             for (String s : roleArr) {
                 UserRoleEntity userRoleEntity = new UserRoleEntity();
                 userRoleEntity.setUserId(userId);
-                userRoleEntity.setRoleId(Long.parseLong(s));
+                userRoleEntity.setRoleId(s);
                 userRoleEntity.createTimeStamp(user);
                 userRoleMapper.insertSq(userRoleEntity);
             }
@@ -72,7 +72,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRoleEnt
      * @return 用户持有的角色集
      */
     @Override
-    public ApiResponse listUserRoleTreeSq(Long id) {
+    public ApiResponse listUserRoleTreeSq(String id) {
         return ApiResponse.success(userRoleMapper.listTreeSq(id));
     }
 
@@ -83,7 +83,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRoleEnt
      * @return List 对应用户的role列表
      */
     @Override
-    public List<RoleEntity> getRoles(Long userId) {
+    public List<RoleEntity> getRoles(String userId) {
         return userRoleMapper.getRolesByUserId(userId);
     }
 
@@ -94,7 +94,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRoleEnt
      */
     @Override
     @Transactional
-    public void deleteUserRoleByUserId(Long userId) {
+    public void deleteUserRoleByUserId(String userId) {
         userRoleMapper.deleteByUserId(userId);
     }
 

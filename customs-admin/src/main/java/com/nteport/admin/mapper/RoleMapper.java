@@ -13,9 +13,9 @@ import java.util.List;
 @Repository
 public interface RoleMapper extends BaseMapper<RoleEntity> {
 
-    List<Long> listTreeSq(Long roleId);
+    List<Long> listTreeSq(String roleId);
 
-    int deleteByRoleId(Long roleId);
+    int deleteByRoleId(String roleId);
 
     int insertSq(RoleMenuEntity roleMenuEntity);
 

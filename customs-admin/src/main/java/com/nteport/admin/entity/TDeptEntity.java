@@ -18,7 +18,7 @@ import lombok.EqualsAndHashCode;
  * @TableName t_dept
  */
 @EqualsAndHashCode(callSuper = true)
-@TableName(value ="t_dept")
+@TableName(value ="T_DEPT")
 @Data
 public class TDeptEntity extends BaseEntity implements Serializable {
 
@@ -28,7 +28,7 @@ public class TDeptEntity extends BaseEntity implements Serializable {
     /**
      * 父部门id
      */
-    private Long parentId;
+    private String parentId;
 
     /**
      * 祖级列表
@@ -45,16 +45,16 @@ public class TDeptEntity extends BaseEntity implements Serializable {
      */
     private Integer orderNum;
 
-    private Long areaId;
+    private String areaId;
     private String area;
 
     private String street;
-    private Long streetId;
+    private String streetId;
 
     /**
      * 负责人
      */
-    private Long leaderId;
+    private String leaderId;
 
     /**
      * 联系电话
@@ -118,7 +118,7 @@ public class TDeptEntity extends BaseEntity implements Serializable {
     }
 
     @Override
-    public void setId(Long id) {
+    public void setId(String id) {
         super.setId(id);
         this.value="dept"+id;
     }

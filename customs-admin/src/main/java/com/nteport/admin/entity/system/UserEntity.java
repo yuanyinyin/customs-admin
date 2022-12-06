@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
  * 用户实体
  */
 
-@TableName("t_user")
+@TableName("T_USER")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value = "用户对象", description = "用户表")
@@ -27,7 +27,7 @@ public class UserEntity extends BaseEntity implements Serializable {
 
     private String userName;
 
-    private Long deptId;
+    private String deptId;
 
     @TableField(exist = false)
     private String deptName;
@@ -61,7 +61,7 @@ public class UserEntity extends BaseEntity implements Serializable {
      * 为了前端构造树标签
      */
     @TableField(exist = false)
-    private Long value;
+    private String value;
 
     //角色编码数组
     @TableField(exist = false)
@@ -80,7 +80,7 @@ public class UserEntity extends BaseEntity implements Serializable {
     }
 
     @Override
-    public void setId(Long id) {
+    public void setId(String id) {
         super.setId(id);
         this.value=id;
     }

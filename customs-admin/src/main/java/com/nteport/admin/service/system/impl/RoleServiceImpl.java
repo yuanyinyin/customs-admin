@@ -156,7 +156,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
      */
     @Transactional
     @Override
-    public ApiResponse updateRole(Long id, String jsonString, String token) {
+    public ApiResponse updateRole(String id, String jsonString, String token) {
         ApiResponse response = new ApiResponse();
         try {
             if (jsonString.equals("") || token.equals("")) {
@@ -196,7 +196,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
      */
     @Transactional
     @Override
-    public ApiResponse deleteRole(Long id) {
+    public ApiResponse deleteRole(String id) {
         ApiResponse response = new ApiResponse();
         try {
             if (null == id) {
@@ -216,14 +216,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
     }
 
     @Override
-    public ApiResponse listTreeSq(Long roleId) {
+    public ApiResponse listTreeSq(String roleId) {
         ApiResponse response = new ApiResponse();
         return response.fillMessage(roleMapper.listTreeSq(roleId));
     }
 
     @Transactional
     @Override
-    public ApiResponse authorize(Long roleId, String jsonString, String token) {
+    public ApiResponse authorize(String roleId, String jsonString, String token) {
         ApiResponse response = new ApiResponse();
         try {
             QueryWrapper<UserEntity> queryUser = new QueryWrapper<>();
@@ -237,7 +237,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
             for (int i = 0; i < menuArr.length; i++) {
                 RoleMenuEntity roleMenuEntity = new RoleMenuEntity();
                 roleMenuEntity.setRoleId(roleId);
-                roleMenuEntity.setMenuId(Long.parseLong(menuArr[i]));
+                roleMenuEntity.setMenuId(menuArr[i]);
                 roleMapper.insertSq(roleMenuEntity);
             }
         } catch (Exception e) {
@@ -249,7 +249,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
     }
 
     @Override
-    public ApiResponse verifyCode(String roleCode, Long roleId) {
+    public ApiResponse verifyCode(String roleCode, String roleId) {
         ApiResponse response = new ApiResponse();
         QueryWrapper<RoleEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("role_code", roleCode);

@@ -13,13 +13,13 @@ import java.util.List;
 @Repository
 public interface UserRoleMapper extends BaseMapper<UserRoleEntity> {
 
-    List<Long> listTreeSq(Long roleId);
+    List<Long> listTreeSq(String roleId);
 
-    List<RoleEntity> getRolesByUserId(Long userId);
+    List<RoleEntity> getRolesByUserId(String userId);
 
-    int deleteByUserId(Long userId);
+    int deleteByUserId(String userId);
 
     int insertSq(UserRoleEntity userRoleEntity);
 
-    List<Long> getRoleIdsByUserId(Long userId);
+    List<Long> getRoleIdsByUserId(String userId);
 }

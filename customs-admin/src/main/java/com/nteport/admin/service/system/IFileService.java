@@ -26,7 +26,7 @@ public interface IFileService extends IService<FileEntity> {
      *                     fileName     文件名称,
      *                     fileUrl      文件地址]
      */
-    ApiResponse getFileList(Long id);
+    ApiResponse getFileList(String id);
 
     /**
      * 数据库中储存文件记录
@@ -34,7 +34,7 @@ public interface IFileService extends IService<FileEntity> {
      * @param user 上传者
      * @return 附件id
      */
-    Long upload(String fileName, String path, String type, UserEntity user);
+    String upload(String fileName, String path, String type, UserEntity user);
 
     /**
      * 数据库中储存文件记录
@@ -43,7 +43,7 @@ public interface IFileService extends IService<FileEntity> {
      * @param user 上传者
      * @return 附件id
      */
-    Long upload(Long id, String fileName, String path, String type, UserEntity user);
+    String upload(String id, String fileName, String path, String type, UserEntity user);
 
     /**
      * 獲取合同附件
@@ -52,14 +52,14 @@ public interface IFileService extends IService<FileEntity> {
      */
 //    ApiResponse getContractFile(Long id);
 
-    ApiResponse deleteFile(Long id);
+    ApiResponse deleteFile(String id);
 
     /**
      * <p>通过文件id查找文件</p>
      * @param id
      * @return
      */
-    ApiResponse getFile(Long id);
+    ApiResponse getFile(String id);
 
-    String getImageUrl(Long fileId);
+    String getImageUrl(String fileId);
 }

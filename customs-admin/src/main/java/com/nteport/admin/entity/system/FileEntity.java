@@ -16,14 +16,14 @@ import java.io.Serializable;
  * @since 2022-03-08
  */
 @Data
-@TableName("db_file")
+@TableName("DB_FILE")
 @ApiModel(value = "FileEntity对象", description = "附件表")
 public class FileEntity extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("关联主表id")
-    private Long recordId;
+    private String recordId;
 
     @ApiModelProperty("类型: 1-?? 2-??")
     private String type;

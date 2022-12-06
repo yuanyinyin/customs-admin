@@ -15,15 +15,15 @@ public interface IRoleService extends IService<RoleEntity> {
 
     ApiResponse createRole(String jsonString, String token);
 
-    ApiResponse updateRole(Long id, String jsonString, String token);
+    ApiResponse updateRole(String id, String jsonString, String token);
 
-    ApiResponse deleteRole(Long id);
+    ApiResponse deleteRole(String id);
 
-    ApiResponse listTreeSq(Long roleId);
+    ApiResponse listTreeSq(String roleId);
 
-    ApiResponse authorize(Long roleId, String jsonString, String token);
+    ApiResponse authorize(String roleId, String jsonString, String token);
 
-    ApiResponse verifyCode(String roleCode, Long roleId);
+    ApiResponse verifyCode(String roleCode, String roleId);
 
     ApiResponse canUseWeek(UserEntity user);
 
