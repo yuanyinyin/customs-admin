@@ -3,7 +3,7 @@ package com.nteport.admin.entity.system;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.nteport.admin.config.MyLocalDateTimeTypeHandler;
+//import com.nteport.admin.config.MyLocalDateTimeTypeHandler;
 import lombok.Data;
 import lombok.NonNull;
 import org.apache.ibatis.annotations.Result;

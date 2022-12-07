@@ -48,8 +48,8 @@
 import {dialogTy} from '~/dialog' //引入变量类型
 import {PropType} from 'vue'
 import {getDept} from "@/api/dept";
-import {getArea} from "@/api/area";
-import {getStreetByArea} from "@/api/street";
+// import {getArea} from "@/api/area";
+// import {getStreetByArea} from "@/api/street";
 
 const propsDept = {
   multiple: false,
@@ -93,9 +93,9 @@ const openFun = () => {
     allDept.value = deptBack
   }))
 
-  getArea().then((response=>{
-    areaOptions.value = response.data
-  }))
+  // getArea().then((response=>{
+  //   areaOptions.value = response.data
+  // }))
 
 }
 
@@ -121,9 +121,9 @@ const resetForm = () => {
 }
 
 const setStreet=(val) => {
-  getStreetByArea(val).then((response=>{
-    streetOptions.value = response.data
-  }))
+  // getStreetByArea(val).then((response=>{
+  //   streetOptions.value = response.data
+  // }))
 }
 
 </script>

@@ -138,5 +138,6 @@ $RECYCLE.BIN/
 # Created by .ignore support plugin (hsz.mobi)
 
 node_modules
-*/dist
+**/dist/**
 customs/package-lock.json
+
