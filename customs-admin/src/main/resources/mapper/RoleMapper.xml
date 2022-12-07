@@ -18,8 +18,8 @@
     </delete>
 
     <insert id="insertSq" parameterType="com.nteport.admin.entity.system.RoleMenuEntity">
-        insert into t_role_menu (role_id, menu_id, create_user, create_time)
-        values (
+        insert into t_role_menu (id,role_id, menu_id, create_user, create_time)
+        values (#{id,jdbcType=VARCHAR},
         #{roleId,jdbcType=VARCHAR},#{menuId,jdbcType=VARCHAR},#{createUser,jdbcType=VARCHAR},
         #{createTime,jdbcType=TIMESTAMP}
         )
