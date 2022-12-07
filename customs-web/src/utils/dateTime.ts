@@ -252,3 +252,24 @@ export function parseYear(time) {
     return year
   }
 }
+
+
+export function isObject(value) {
+  const valueType = typeof value
+  return (valueType !== null && typeof value === 'object' || typeof value === 'function' )
+}
+
+
+export function deepClone(originValue) {
+  // 如果不是对象类型则直接将当前值返回
+  if (!(isObject(originValue))) return originValue
+
+  const newObject = {}
+  for (const key in originValue) {
+    newObject[key] = deepClone(originValue[key])
+  }
+
+  return newObject
+}
+
+ 

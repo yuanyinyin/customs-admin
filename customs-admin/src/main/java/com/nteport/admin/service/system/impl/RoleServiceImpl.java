@@ -3,6 +3,8 @@ package com.nteport.admin.service.system.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
+import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -19,6 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +37,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
 
     @Autowired
     private TDeptMapper deptMapper;
+
 
     /**
      * 获取角色列表，带分页
@@ -221,7 +226,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
         return response.fillMessage(roleMapper.listTreeSq(roleId));
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public ApiResponse authorize(String roleId, String jsonString, String token) {
         ApiResponse response = new ApiResponse();
@@ -234,10 +239,15 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
             JSONObject jsonObject = JSONObject.parseObject(jsonString);
             String menuIds = jsonObject.getString("menuIds");
             String[] menuArr = menuIds.split(",");
+            IdentifierGenerator identifierGenerator = new DefaultIdentifierGenerator();
+
             for (int i = 0; i < menuArr.length; i++) {
                 RoleMenuEntity roleMenuEntity = new RoleMenuEntity();
+                roleMenuEntity.setId(identifierGenerator.nextId(new Object()).toString());
                 roleMenuEntity.setRoleId(roleId);
                 roleMenuEntity.setMenuId(menuArr[i]);
+                roleMenuEntity.setCreateUser(user.getId());
+                roleMenuEntity.setCreateTime(LocalDateTime.now());
                 roleMapper.insertSq(roleMenuEntity);
             }
         } catch (Exception e) {

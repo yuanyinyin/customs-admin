@@ -6,6 +6,7 @@ import com.nteport.admin.entity.system.UserEntity;
 import com.nteport.admin.mapper.UserMapper;
 import com.nteport.admin.service.system.ITokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,7 +14,8 @@ import java.util.ArrayList;
 /**
  * 用户管理服务
  */
-@Service
+@Service()
+@Primary
 public class TokenServiceImpl extends ServiceImpl<UserMapper, UserEntity> implements ITokenService {
 
     @Autowired
