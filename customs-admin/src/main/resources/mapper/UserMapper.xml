@@ -42,11 +42,16 @@
     </select>
 
     <select id="queryRoleCodes" resultType="java.lang.String" parameterType="java.lang.String">
-        select t2.role_code from t_role t2 where t2.id in (select t1.role_id from t_user_role t1
+
+        select t2.role_code from t_role t2
+        join  t_user_role t1  on t1.role_id =  t2.id
+         where  1=1
         <if test="userId != null">
-            where t1.user_id = #{userId,jdbcType=VARCHAR}
+               and  t1.user_id = #{userId,jdbcType=VARCHAR}
         </if>
-        )
+
+
+
     </select>
 
     <select id="selectAdminByArea" resultType="com.nteport.admin.entity.system.UserEntity" parameterType="java.lang.String">
