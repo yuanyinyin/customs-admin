@@ -50,15 +50,21 @@
                     <el-input  v-model="formData.purporgcodeValue" />
                   </el-form-item>
                 </el-col>
-                <el-col :span="10" class="_el_col">
+                <el-col :span="6" class="_el_col">
                   <el-form-item label="关联号码及理由:">
                     <el-input  v-model="formData.correlationno" />
                   </el-form-item>
                 </el-col>
 
-                 <el-col :span="8" class="_el_col" :push="1">
+                 <el-col :span="5" class="_el_col" :push="2">
                     <el-input  v-model="formData.correlationreasonflagValue" />
                 </el-col>
+
+                   <el-col :span="3" class="_el_col" :push="3">
+                   <el-button type="primary" @click="usePersionWin()" >使用人</el-button>
+                   </el-col>
+
+
               </el-row>
 
 
@@ -73,11 +79,16 @@
                     <el-input  v-model="formData.specdeclflagValue" />
                   </el-form-item>
                 </el-col>
-                <el-col :span="12" class="_el_col">
+                <el-col :span="5" class="_el_col">
                   <el-form-item label="所需单证:">
                     <el-input  v-model="formData.sxdz" />
                   </el-form-item>
                 </el-col>
+
+
+                  <el-col :span="3" class="_el_col" :push="3">
+                   <el-button type="primary" @click="jyjySbysWin()" >检验检疫签证申报要素</el-button>
+                   </el-col>
               </el-row>
 
 
@@ -87,6 +98,22 @@
 
 
     </el-form>
+
+     <dialogUsePersionWin ref="dialogBussinessOptRef" 
+       :dialog-good="dialogUsePersionWinData"
+       
+       :head-id="currentId"
+        />
+
+          <dialogJyjySbysWin ref="dialogJyjySbysWinRef" 
+       :dialog-good="dialogJyjySbysWinData"
+       :form-data="formJyjySbysWin"
+       :head-id="currentId"
+        />
+
+
+
+
 
   </div>
 </template>
@@ -98,21 +125,22 @@ import {ElMessage, ElMessageBox} from "element-plus";
 import type {UploadFile} from 'element-plus/es/components/upload/src/upload.type'
 import {Link} from '@element-plus/icons-vue'
 
+import DialogUsePersionWin from './dialogUsePersionWin.vue'
+let formUsePersionWin = ref({})
+const dialogUsePersionWinData: Ref<dialogTy> = ref({})
+const currentId = ref<string>('')
+
+
+import DialogJyjySbysWin from './dialogJyjySbysWin.vue'
+let formJyjySbysWin = ref({})
+const dialogJyjySbysWinData: Ref<dialogTy> = ref({})
+
 
 
 
 // 组件属性
 const props = defineProps({
-  current: {
-    type: Object,
-    default: null,
-    require: false
-  },
-  currentId: {
-    type: Number,
-    default: null,
-    require: false
-  },
+  
    formData: {
     require: true,
     default: null,
@@ -120,21 +148,42 @@ const props = defineProps({
   }
   
 })
-// const formData = ref({
-//   reimburseSubArr: [],
-//   payAmountNumber: 0,
-//   payAmountCapital: '零元整',
-//   applyStatus: 'store',
-//   saveFiles: {
-//     reimburseFile: []
-//   },
-//   audit: {
-//     signatureId: 0,
-//     status: '',
-//     reason: ''
-//   }
-// })
+ 
 const formRef = ref<InstanceType<typeof ElForm>>()
+
+
+
+const usePersionWin = () => {
+  console.log(999)
+  console.log( props.formData)
+  const headid =   props.formData.id ;
+    // console.log(promiseitmes)
+    const firstIsYes = false
+    if(headid){           
+      currentId.value = headid;
+    }
+    dialogUsePersionWinData.value = {
+    show: true,
+    title: '使用人',
+    
+  }
+
+}
+
+
+const jyjySbysWin = () => {
+   formJyjySbysWin.value =   props.formData ;
+    // console.log(promiseitmes)
+    const firstIsYes = false
+    
+    dialogJyjySbysWinData.value = {
+    show: true,
+    title: '检验检疫申报要素',
+    
+  }
+
+}
+
 
 
 

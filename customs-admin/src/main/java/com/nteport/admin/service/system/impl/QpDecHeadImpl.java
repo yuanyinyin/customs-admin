@@ -148,6 +148,19 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
         decListQueryWrapper.eq("headid", headId);
         List<QpDecList>  qpDecLists =  qpDecListService.list(decListQueryWrapper);
         if(!CollectionUtils.isEmpty(qpDecLists)){
+            Collections.sort(qpDecLists, new Comparator<QpDecList>() {
+                public int compare(QpDecList arg0, QpDecList arg1) {
+                    int hits0 = arg0.getGno() == null ? 0 : Integer.parseInt(arg0.getGno());
+                    int hits1 = arg1.getGno() == null ? 0 : Integer.parseInt(arg1.getGno());
+                    if (hits1 < hits0) {
+                        return 1;
+                    } else if (hits1 == hits0) {
+                        return 0;
+                    } else {
+                        return -1;
+                    }
+                }
+            });
             qpDecHeadDto.setQpDecLists(qpDecLists);
         }
 
@@ -156,6 +169,13 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
         qpDecContainerQueryWrapper.eq("headid", headId);
         List<QpDecContainer>  qpDecContainerList =  qpDecContainerService.list(qpDecContainerQueryWrapper);
         if(!CollectionUtils.isEmpty(qpDecContainerList)) {
+            if(qpDecContainerList.size()>8){
+                Collections.sort(qpDecContainerList, new Comparator<QpDecContainer>() {
+                    public int compare(QpDecContainer arg0, QpDecContainer arg1) {
+                        return arg0.getContainerid().compareTo(arg1.getContainerid());
+                    }
+                });
+            }
             qpDecHeadDto.setQpDecContainerList(qpDecContainerList);
         }
 
