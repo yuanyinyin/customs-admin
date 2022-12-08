@@ -3,6 +3,8 @@ package com.nteport.admin.util;
 
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class CommonUtil {
@@ -42,9 +44,15 @@ public class CommonUtil {
         return resultlist;
     }
 
+    public static LocalDateTime string2LocalDateTime(String str,String pattern){
+        pattern=str.isEmpty()?"yyyy-MM-dd HH:mm:ss":pattern;
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(pattern);
+        return LocalDateTime.parse(str,df);
+    }
 
-
-
-
+    public static LocalDateTime string2LocalDateTime1(String str,String pattern){
+        if (!str.isEmpty())return string2LocalDateTime(str.substring(0,str.length()-2),pattern);
+        return null;
+    }
 
 }

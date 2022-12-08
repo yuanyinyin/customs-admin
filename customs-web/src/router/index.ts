@@ -37,11 +37,11 @@ const consRoutes: RouterTy = [
         component: () => import('@/views/error-page/401.vue'),
         hidden: true
     },
-    {
-      path: '/dp',
-      component: () => import('@/views/screen/index.vue'),
-      hidden: true
-    },
+    // {
+    //   path: '/dp',
+    //   component: () => import('@/views/screen/index.vue'),
+    //   hidden: true
+    // },
     // {
     //     path: '/big',
     //     component: () => import('@/views/screen/big/big.vue'),

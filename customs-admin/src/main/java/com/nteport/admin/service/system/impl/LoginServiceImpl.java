@@ -9,10 +9,13 @@ import com.nteport.admin.entity.TLoginLogEntity;
 import com.nteport.admin.entity.system.ApiResponse;
 import com.nteport.admin.entity.system.EnumCode;
 import com.nteport.admin.entity.system.UserEntity;
+import com.nteport.admin.mapper.NtPtlMapper;
 import com.nteport.admin.mapper.TLoginLogMapper;
 import com.nteport.admin.mapper.UserMapper;
 import com.nteport.admin.service.FeignMessageService;
 import com.nteport.admin.service.system.ILoginService;
+import com.nteport.admin.util.CommonUtil;
+import com.nteport.admin.util.LoginUtil;
 import com.nteport.admin.util.MD5Util;
 import com.nteport.admin.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +36,8 @@ public class LoginServiceImpl implements ILoginService {
     private UserMapper userMapper;
     @Autowired
     private TLoginLogMapper tLoginLogMapper;
+    @Autowired
+    private NtPtlMapper ntPtlMapper;
 
 
     @Autowired
@@ -65,12 +72,23 @@ public class LoginServiceImpl implements ILoginService {
         queryWrapper.eq("USER_PASSWORD", MD5Util.md5(password));
         try {
             UserEntity user = userMapper.selectOne(queryWrapper);
+            /*add by panh for 登录验证从核心库读取*/
+            if(LoginUtil.useNtPtlLogin){
+                Map ntPtl_userinfo=ntPtlMapper.selectUser(userName,MD5Util.md5(password).toUpperCase());
+                user =LoginUtil.ptlUser2UserEntity(ntPtl_userinfo);
+            }
+            /*end*/
             if (user != null) {
                 if(!"2".equals(user.getStatus())){
                     return ApiResponse.fail("该用户待审核中，审核通过后即可登录");
                 }
                 user.setToken(UUID.randomUUID().toString());
                 userMapper.updateById(user);
+                /*add by panh for 登录验证从核心库读取*/
+                if(LoginUtil.useNtPtlLogin){
+                    ntPtlMapper.updateTokenById(user.getId(),user.getToken());
+                }
+                /*end*/
 
                 //登录成功变插入登录日志
                 TLoginLogEntity logEntity = new TLoginLogEntity();

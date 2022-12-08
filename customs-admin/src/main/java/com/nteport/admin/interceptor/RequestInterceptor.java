@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.nteport.admin.entity.system.ApiResponse;
 import com.nteport.admin.entity.system.EnumCode;
 import com.nteport.admin.entity.system.UserEntity;
+import com.nteport.admin.mapper.NtPtlMapper;
 import com.nteport.admin.mapper.UserMapper;
+import com.nteport.admin.util.LoginUtil;
+import com.nteport.admin.util.MD5Util;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -13,6 +16,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.util.Map;
 
 /**
  * 拦截器，每次请求判断token是否有效
@@ -23,6 +27,8 @@ public class RequestInterceptor implements HandlerInterceptor {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private NtPtlMapper ntPtlMapper;
 
     private String urls[] = {
             "/login/validate",
@@ -88,6 +94,12 @@ public class RequestInterceptor implements HandlerInterceptor {
             }
 
             UserEntity userEntity = userMapper.selectOne(queryWrapper);
+            /*add by panh for 登录验证从核心库读取*/
+            if(LoginUtil.useNtPtlLogin){
+                Map ntPtl_userinfo=ntPtlMapper.selectUserByToken(token);
+                userEntity =LoginUtil.ptlUser2UserEntity(ntPtl_userinfo);
+            }
+            /*end*/
 
             //todo 增加userEntity为空校验
 

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nteport.admin.mapper.NtPtlMapper">
+
+    <select id="selectUser" parameterType="java.lang.String" resultType="hashMap">
+        select * from USER_BASEINFO@NT_PTL t
+        where t.username=#{username,jdbcType=VARCHAR} and t.password=#{password,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectUserByToken" parameterType="java.lang.String" resultType="hashMap">
+        select * from USER_BASEINFO@NT_PTL t
+        where t.token=#{token,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectDept" parameterType="java.lang.String" resultType="hashMap">
+        select t.ORG_NAME_CN from ORG_BASEINFO@NT_PTL t
+        where t.id=#{depId,jdbcType=VARCHAR}
+    </select>
+
+    <update id="updateTokenById" parameterType="java.lang.String">
+        update USER_BASEINFO@NT_PTL t set t.token=#{token,jdbcType=VARCHAR}  where t.id=#{id,jdbcType=VARCHAR}
+    </update>
+
+    <select id="queryRoleCodes" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT T2.ROLE_ID FROM ROLE_EMPLOYEE@NSW T2 WHERE T2.EMPLOYEE_ID = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getMenuByUser" parameterType="java.lang.String" resultType="hashMap">
+        select
+            r.id,
+            r.FATHER pid,
+            r.NAME name,
+            r.ABLE_URL path,
+            r.WORK_SRC component,
+            r.NAME title,
+            r.IMAGE_URL icon,
+            r.RIGHT_INDX sort,
+            '1' hidden,
+            r.IS_FATHER has_children,
+            '' permissions,
+            case when r.IS_FATHER='1' then 'noRedirect' else '' end redirect,
+            case when r.IS_FATHER='1' then '1' else '2' end type,
+            case when r.IS_FATHER='1' then '1' else '' end always_show,
+            case when r.IS_FATHER='1' then '0' else '' end nocache,
+            case when r.IS_FATHER='1' then '1' else '' end action
+        from RIGHT@NSW r
+        where 1 = 1
+          and r.webid = 'WMB'
+          and r.id in (SELECT T.RIGHT_ID
+            FROM ROLE_RIGHT@NSW T
+            WHERE T.ROLE_ID IN (SELECT T2.ROLE_ID
+            FROM ROLE_EMPLOYEE@NSW T2
+            WHERE T2.EMPLOYEE_ID = #{userId,jdbcType=VARCHAR})
+            )
+          and r.LEV = '前台'
+          and r.FATHER!='-1'
+        order by  r.right_indx desc
+    </select>
+</mapper>

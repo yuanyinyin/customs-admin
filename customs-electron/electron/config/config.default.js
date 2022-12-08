@@ -72,7 +72,10 @@ module.exports = (appInfo) => {
   /* 远程web地址 (可选) */
   config.remoteUrl = {
     enable: true, // 是否启用
-    url: 'http://localhost:8080' // Any web url
+    // url: 'http://localhost:8080' // Any web url
+    url: 'http://172.16.22.26:9030/customs' // 外贸帮web页面
+    // url: 'http://localhost:7003/customs/' // 外贸帮web页面
+    // url: 'http://www.nteport.com/customs/' // 外贸帮web页面
   };
 
   /* 内置socket服务 */
