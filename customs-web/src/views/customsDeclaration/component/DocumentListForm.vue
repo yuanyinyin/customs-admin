@@ -1,19 +1,19 @@
 <template>
   <div class="finance scroll-y pb-100">
-    <el-table v-model:data="tableData" v-loading="loading" stripe style="width: 100%">
+    <el-table  height="240" v-model:data="tableData" v-loading="loading" stripe style="width: 100%">
           <el-table-column type="selection" align="center" width="50" />
           <el-table-column type="index" label="序号" align="center" width="55">
             <template #default="scope">
               <span>{{  scope.$index + 1 }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="entryid" label="单证代码" align="center">
+          <el-table-column prop="docucode" label="单证代码" align="center">
           </el-table-column>
-          <el-table-column prop="tradename" label="单证编号" align="center">
+          <el-table-column prop="certcode" label="单证编号" align="center">
           </el-table-column>
-           <el-table-column prop="entryid" label="随附单证代码" align="center">
+           <el-table-column prop="sfdzcode" label="随附单证代码" align="center">
           </el-table-column>
-          <el-table-column prop="tradename" label="随附单证编号" align="center">
+          <el-table-column prop="certcode" label="随附单证编号" align="center">
           </el-table-column>
           
         </el-table>
@@ -55,25 +55,25 @@ import {ElMessage, ElMessageBox} from "element-plus";
 import type {UploadFile} from 'element-plus/es/components/upload/src/upload.type'
 import {Link} from '@element-plus/icons-vue'
 
-const tableData: any = ref(null)
-
+// const tableData: any = ref(null)
+let formDataRecord = ref({})//这是相对自由点的写法，不定义类型
 
 // 组件属性
 const props = defineProps({
-  current: {
-    type: Object,
+  // current: {
+  //   type: Object,
+  //   default: null,
+  //   require: false
+  // },
+  // currentId: {
+  //   type: Number,
+  //   default: null,
+  //   require: false
+  // },
+tableData: {
+    require: false,
     default: null,
-    require: false
-  },
-  currentId: {
-    type: Number,
-    default: null,
-    require: false
-  },
-  formData: {
-    require: true,
-    default: null,
-    type: Object
+    type: Array
   }
  
 })
