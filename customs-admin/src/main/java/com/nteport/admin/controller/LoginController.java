@@ -9,9 +9,13 @@ import com.nteport.admin.entity.system.UserEntity;
 import com.nteport.admin.service.TDeptService;
 import com.nteport.admin.service.system.ILoginService;
 import com.nteport.admin.service.system.IMenuService;
+import com.nteport.admin.service.system.INtPtlService;
 import com.nteport.admin.service.system.OpeLog;
+import com.nteport.admin.util.LoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * @author ZZQ
@@ -28,6 +32,8 @@ public class LoginController {
 
     @Autowired
     private TDeptService deptService;
+    @Autowired
+    private INtPtlService ntPtlService;
 
     /**
      * 登陆验证
@@ -82,10 +88,25 @@ public class LoginController {
         }
         if(null!=user.getDeptId()){
             TDeptEntity dept = deptService.getById(user.getDeptId());
-            user.setDeptName(dept.getDeptName());
+            if (dept!=null){
+                user.setDeptName(dept.getDeptName());
+            }
+            /*add by panh for 登录验证从核心库读取*/
+            if(LoginUtil.useNtPtlLogin){
+                Map ntptl_dept=ntPtlService.selectDept(user.getDeptId());
+                if (ntptl_dept!=null){
+                    user.setDeptName(ntptl_dept.get("ORG_NAME_CN").toString());
+                }
+            }
+            /*end*/
         }
         //角色
         user.setRoleCodes(loginService.queryRoleCodes(user));
+        /*add by panh for 登录验证从核心库读取  包含菜单权限*/
+        if(LoginUtil.useNtPtlLogin){
+            user.setRoleCodes(ntPtlService.queryRoleCodes(user.getId()));
+        }
+        /*end*/
         return ApiResponse.success(JSONObject.toJSON(user));
     }
 
