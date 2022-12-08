@@ -308,10 +308,16 @@
                   </el-form-item>
                 </el-col>
                 
-                <el-col :span="18" class="_el_col">
+                <el-col :span="11" class="_el_col">
                   <el-form-item label="备注:">
                    <el-input  v-model="formData.notes" />
                   </el-form-item>
+                </el-col>
+
+                <el-col :span="5" class="_el_col" :push="2">
+                  
+                   <el-button type="primary" @click="otherThing()" >其他事项确认</el-button>
+                  
                 </el-col>
               </el-row>
 
@@ -325,6 +331,14 @@
                    <el-input  v-model="formData.markno" />
                   </el-form-item>
                 </el-col>
+
+                <el-col :span="5" class="_el_col" :push="1">
+                  
+                   <el-button type="primary" @click="bussinessOpt()" >业务选项</el-button>
+                 
+                </el-col>
+
+
               </el-row>
 
 
@@ -347,32 +361,23 @@
               <el-tab-pane label="商品列表" name="good">
                 <GoodListForm ref="GoodListFormRef"  :table-data="formDataGood"/>
               </el-tab-pane>
-              <el-tab-pane label="集装箱详情" name="container">
+              <el-tab-pane label="集装箱详情" name="container" >
             <ContainerListForm
-              ref="ContainerListFormRef"
+              ref="ContainerListFormRef" :table-data="formDataContainer"
             />
           </el-tab-pane>
 
           <el-tab-pane label="单证信息" name="document">
             <DocumentListForm
-              ref="DocumentListFormRef"
+              ref="DocumentListFormRef" :table-data="formDataDocument"
             />
           </el-tab-pane>
 
            <el-tab-pane label="备案详情" name="record">
             <RecordForm
-              ref="RecordFormRef"
+              ref="RecordFormRef"  :form-data="formDataRecord"
             />
               </el-tab-pane>
-
-
-              <!-- 
-          
-          <el-tab-pane label="备案详情" name="record">
-            <PayRecord
-              ref="PayRecordRef"
-            />
-              </el-tab-pane>-->
             </el-tabs>
           </el-col>
         </el-row>
@@ -382,6 +387,23 @@
     <!-- <el-footer height="30px">&copy;究极死胖兽 2019</el-footer> -->
     <!-- <el-footer >&copy;究极死胖兽 2019</el-footer> -->
   </el-container>
+
+   <DialogOtherThing ref="dialogOtherThingRef" 
+       :dialog-good="dialogOtherThingData"
+       :form-data="formOtherThing"
+        />
+
+
+ <DialogBussinessOpt ref="dialogBussinessOptRef" 
+       :dialog-good="dialogBussinessOptData"
+       :form-data="formBussinessOpt"
+        />
+
+
+
+
+
+
 
   <!-- </div> -->
 </template>
@@ -395,6 +417,12 @@ import RecordForm from './component/RecordForm.vue'
 import {showOne } from "@/api/qpDec";
 
 
+
+
+
+
+
+
 const route = useRoute()
 
 const store = useStore()
@@ -406,7 +434,24 @@ const currentId = ref<number>(0)
 // table显示角色数组
 const formData: any = ref({})
 let formDataExtra = ref({})//这是相对自由点的写法，不定义类型
-let formDataGood = ref({})//这是相对自由点的写法，不定义类型
+let formDataGood = ref()//这是相对自由点的写法，不定义类型
+let formDataContainer = ref()//这是相对自由点的写法，不定义类型
+let formDataDocument = ref()//这是相对自由点的写法，不定义类型
+let formDataRecord = ref({})//这是相对自由点的写法，不定义类型
+
+
+//ONE
+import DialogOtherThing from './component/dialogOtherThing.vue'
+let formOtherThing = ref({})
+const dialogOtherThingData: Ref<dialogTy> = ref({})
+
+
+import DialogBussinessOpt from './component/dialogBussinessOpt.vue'
+let formBussinessOpt = ref({})
+const dialogBussinessOptData: Ref<dialogTy> = ref({})
+
+
+
 const activeName = ref('extra')
 onMounted(() => {
   nextTick(() => {
@@ -419,6 +464,66 @@ onMounted(() => {
     // }
   })
 })
+
+
+const otherThing = () => {
+  // console.log(123)
+  // console.log(formData)
+    const promiseitmes =   formData.value.promiseitmes ;
+    // console.log(promiseitmes)
+    const firstIsYes = false
+    if(promiseitmes){
+        var vsArr = promiseitmes.split("");
+            for(var i = 0; i < vsArr.length; i++){
+                if (vsArr[i] !="1" || vsArr[i] !="0"){
+                    vsArr[i] = "9";
+                }
+                if (i ==0 && vsArr[i] == "0") {
+                    firstIsYes=true;
+                }
+            }
+            if (firstIsYes) {
+                vsArr[1] = "0";  
+            }
+            var obj = {data1 : vsArr[0] 
+                       ,data2: vsArr[1] 
+                       ,data3: vsArr[2]
+              };
+              formOtherThing.value = obj;
+    }
+    dialogOtherThingData.value = {
+    show: true,
+    title: '其他事项确认',
+    
+  }
+
+
+}
+
+const bussinessOpt = (headId) => {
+  const entrytype =   formData.value.entrytype ;
+    // console.log(promiseitmes)
+    const firstIsYes = false
+    if(entrytype){
+      var obj = {}
+            if(entrytype == "M"){
+               obj.checkList = ['1','4','5']
+            }else {
+               obj.checkList = ['1','2']
+            }
+           
+            formBussinessOpt.value = obj;
+    }
+    dialogBussinessOptData.value = {
+    show: true,
+    title: '业务事项',
+    
+  }
+
+}
+
+
+
 
 // 获取角色列表
 const getData = (headId) => {
@@ -434,9 +539,12 @@ const getData = (headId) => {
         //  console.log(dataT.trafmodeValue)
         //  console.log(dataT.agentcode)
          formDataExtra.value  = dataT;
-         console.log(888)
-         console.log(dataT.qpDecLists)
-        //  formDataGood.value = dataT.qpDecLists
+        //  console.log(888)
+        //  console.log(dataT.qpDecLists)
+         formDataGood.value = dataT.qpDecLists
+         formDataContainer.value = dataT.qpDecContainerList
+         formDataDocument.value = dataT.qpDecLicenseDocuList
+         formDataRecord.value = dataT.qpDecFreeTxt
       } else {
         ElMessage({ message: res.message, type: 'error' })
       }
@@ -507,7 +615,7 @@ const dialogData: Ref<dialogTy> = ref({}) //ts的规范写法，定义变量的�
    overflow: auto;
 }
 ._row2{
-  //  height: 300px !important;
+  //  height: 260px !important;
    overflow: auto;
 }
 .el-col {

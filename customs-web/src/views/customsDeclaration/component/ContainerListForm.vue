@@ -1,23 +1,23 @@
 <template>
   <div class="finance scroll-y pb-100">
-    <el-table v-model:data="tableData" v-loading="loading" stripe style="width: 100%">
+    <el-table  height="240" v-model:data="tableData" v-loading="loading" stripe style="width: 100%">
           <el-table-column type="selection" align="center" width="50" />
           <el-table-column type="index" label="序号" align="center" width="55">
             <template #default="scope">
               <span>{{  scope.$index + 1 }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="entryid" label="集装箱号" align="center">
+          <el-table-column prop="containerid" label="集装箱号" align="center">
           </el-table-column>
-          <el-table-column prop="tradename" label="集装箱规格" align="center">
+          <el-table-column prop="containermdValue" label="集装箱规格" align="center">
           </el-table-column>
-           <el-table-column prop="manualno" label="拼箱标识" align="center">
-          </el-table-column>
+           <!-- <el-table-column prop="manualno" label="拼箱标识" align="center">
+          </el-table-column> -->
 
-           <el-table-column prop="entryid" label="自重(KG)" align="center">
+           <el-table-column prop="containerwt" label="自重(KG)" align="center">
           </el-table-column>
-          <el-table-column prop="tradename" label="商品项号关系" align="center">
-          </el-table-column>
+          <!-- <el-table-column prop="tradename" label="商品项号关系" align="center">
+          </el-table-column> -->
           
 
 
@@ -88,25 +88,25 @@ import {ElMessage, ElMessageBox} from "element-plus";
 import type {UploadFile} from 'element-plus/es/components/upload/src/upload.type'
 import {Link} from '@element-plus/icons-vue'
 
-const tableData: any = ref(null)
+// const tableData: any = ref(null)
 
 
 // 组件属性
 const props = defineProps({
-  current: {
-    type: Object,
+  // current: {
+  //   type: Object,
+  //   default: null,
+  //   require: false
+  // },
+  // currentId: {
+  //   type: Number,
+  //   default: null,
+  //   require: false
+  // },
+  tableData: {
+    require: false,
     default: null,
-    require: false
-  },
-  currentId: {
-    type: Number,
-    default: null,
-    require: false
-  },
-  formData: {
-    require: true,
-    default: null,
-    type: Object
+    type: Array
   }
  
 })

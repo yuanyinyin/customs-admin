@@ -160,7 +160,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
             System.out.println(map.get("title"));
             map.put("text", map.get("title").toString());
             map.put("hidden", String.valueOf(map.get("hidden")).equals("0") ? true : false);
-            if (0 == Integer.parseInt(String.valueOf(map.get("pid")))) {
+            if ("0".equals(String.valueOf(map.get("pid"))) ) {
                 Map<String, Object> meta = new HashMap();
                 meta.put("title", map.get("title").toString());
                 meta.put("icon", map.get("icon").toString());
