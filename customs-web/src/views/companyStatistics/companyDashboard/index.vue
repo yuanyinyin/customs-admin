@@ -1,0 +1,582 @@
+<template>
+    <div class="scroll-y">
+      <div class="dashboard-container">
+  
+        <el-row>
+          <el-col :span="24">
+             <el-card :body-style="{padding:'10px'}">
+              <div class="notice">
+                <div class="notice-title">
+                  <el-tag
+                      type="danger"
+                      effect="plain"
+                    >
+                      <svg-icon class="el-input__icon" class-name="notice-icon" icon-class="wm-notice"/> 
+                      <span class="notice-text">通知</span>
+                  </el-tag>
+                </div>
+  
+                <div class="notice-list">
+                  <vue3-seamless-scroll :list="noticeList" class="notice-scroll" :step="0.8" hover="true" direction="left" :limitMoveNum="3" singleLine="true" >
+                    <div class="item" v-for="(item, index) in noticeList" :key="index">
+                      <el-link type="primary">{{ item.title }}</el-link>
+                    </div>
+                  </vue3-seamless-scroll>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+  
+        
+        <el-row :gutter="10">
+          <el-col :sm="12" :md="6">
+            <el-card class="card-item" :body-style="{padding:'15px'}">
+              <div class="card-info">
+                <dl>
+                  <dt>
+                    <span class="data">45,535</span>
+                    <span class="red">-12.32%</span>
+                  </dt>
+                  <dd>今日同步单量</dd>
+                </dl>
+                <div class="card-icon">
+                  <img  src="@/assets/main/icons/icon1.png" />
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+  
+          <el-col :sm="12" :md="6">
+            <el-card class="card-item" :body-style="{padding:'15px'}">
+              <div class="card-info">
+                <dl>
+                  <dt>
+                    <span class="data">45,535</span>
+                    <span class="red">-12.32%</span>
+                  </dt>
+                  <dd>当月数据同步数量</dd>
+                </dl>
+                <div class="card-icon">
+                  <img  src="@/assets/main/icons/icon2.png" />
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+  
+          <el-col :sm="12" :md="6">
+            <el-card class="card-item" :body-style="{padding:'15px'}">
+              <div class="card-info">
+                <dl>
+                  <dt>
+                    <span class="data">45,535</span>
+                    <span class="green">+12.32%</span>
+                  </dt>
+                  <dd>当年数据同步数量</dd>
+                </dl>
+                <div class="card-icon">
+                  <img  src="@/assets/main/icons/icon3.png" />
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+  
+          <el-col :sm="12" :md="6">
+            <el-card class="card-item" :body-style="{padding:'15px'}">
+              <div class="card-info">
+                <dl>
+                  <dt>
+                    <span class="data">45,535</span>
+                    <span class="green">+12.32%</span>
+                  </dt>
+                  <dd>累计同步报关单数量</dd>
+                </dl>
+                <div class="card-icon">
+                  <img  src="@/assets/main/icons/icon4.png" />
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+  
+        <el-row :gutter="10">
+          <el-col :span="24">
+            <div class="page-title">
+              <h3>总体进出口情况</h3>
+              <div>
+                <el-date-picker
+                  v-model="dateRange"
+                  type="monthrange"
+                  style="width:200px"
+                  unlink-panels
+                  range-separator="-"
+                  start-placeholder="开始月份"
+                  end-placeholder="结束月份"
+                  size="small"
+                  format="YYYY-MM"
+                  value-format="YYYY-MM"
+                />
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+  
+        <el-row :gutter="10">
+          <el-col :sm="12" :md="12" :lg="6">
+            <el-card class="card-item" :body-style="{padding:'15px',height:'100%'}">
+              <div class="inout-info">
+                <div class="inout-item">
+                  <div class="inout-tit">
+                    <img src="@/assets/main/icons/icon5.png" alt="">
+                    <span>进口单量</span>
+                  </div>
+                  <div class="inout-con">
+                    <span class="data">45,535</span>
+                    <span class="unit">票</span>
+                  </div>
+                </div>
+                <div class="inout-item">
+                  <div class="inout-tit">
+                    <img src="@/assets/main/icons/icon7.png" alt="">
+                    <span>货值</span>
+                  </div>
+                  <div class="inout-con">
+                    <span class="data">1345,535</span>
+                    <span class="unit">万元</span>
+                  </div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :sm="12" :md="12" :lg="6">
+            <el-card class="card-item" :body-style="{padding:'15px',height:'100%'}">
+              <div class="inout-info">
+                <div class="inout-item">
+                  <div class="inout-tit">
+                    <img src="@/assets/main/icons/icon6.png" alt="">
+                    <span>出口单量</span>
+                  </div>
+                  <div class="inout-con">
+                    <span class="data">45,535</span>
+                    <span class="unit">票</span>
+                  </div>
+                </div>
+                <div class="inout-item">
+                  <div class="inout-tit">
+                    <img src="@/assets/main/icons/icon7.png" alt="">
+                    <span>货值</span>
+                  </div>
+                  <div class="inout-con">
+                    <span class="data">1345,535</span>
+                    <span class="unit">万元</span>
+                  </div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col  :md="24" :lg="12">
+            <el-card class="card-item" :body-style="{padding:'15px',height:'100%'}" >
+              <div class="statistics">
+                <div class="statistics-item">
+                  <pie-chart summary="汇总" unit="单" :colors="['#DE6BFF','#FFD26F']" title="进出口单量占比" :list="listOne" />
+                </div>
+                <div class="statistics-item">
+                  <pie-chart summary="汇总" unit="单" :colors="['#DE6BFF','#FFD26F']" title="进出口货值占比" :list="listTwo" />
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+  
+  
+        <el-row :gutter="10">
+          <el-col :span="24">
+            <div class="page-title">
+              <h3>近一年报关单数据情况</h3>
+              <div>
+                <el-date-picker
+                  v-model="listQueryCustomsData"
+                  type="monthrange"
+                  style="width:200px"
+                  unlink-panels
+                  range-separator="-"
+                  start-placeholder="开始月份"
+                  end-placeholder="结束月份"
+                  size="small"
+                  format="YYYY-MM"
+                  value-format="YYYY-MM"
+                  @change="onSearchCustomsData"
+                />
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+  
+        <el-row :gutter="10">
+          <el-col :span="24">
+            <el-card class="card-item" :body-style="{padding:'15px'}" >
+              <template #header>
+                <div class="card-header">
+                  <el-tabs v-model="activeName" class="nav-tabs" @tab-change="switchReport">
+                    <el-tab-pane label="单 量" name="first"></el-tab-pane>
+                    <el-tab-pane label="货 值" name="second"></el-tab-pane>
+                  </el-tabs>
+                </div>
+              </template>
+              <div v-if="activeName == 'first'" class="nav-report">
+                <line-chart :list="listThree" />
+              </div>
+              <div v-if="activeName == 'second'" class="nav-report">
+                <line-chart :list="listFour" />
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+  
+        <el-row :gutter="10">
+          <el-col :span="24">
+            <div class="page-title">
+              <h3>近一年申报商品货值TOP10</h3>
+            </div>
+          </el-col>
+        </el-row>
+  
+        <el-row :gutter="10">
+          <el-col :sm="24" :md="14">
+            <el-card class="card-item" :body-style="{padding:'15px',height:'100%'}" >
+              <template #header>
+                <div class="inout-header">
+                  <el-tabs v-model="activeIndex" class="nav-tabs" @tab-change="switchInOut">
+                    <el-tab-pane label="进口" name="first"></el-tab-pane>
+                    <el-tab-pane label="出口" name="second"></el-tab-pane>
+                  </el-tabs>
+                  <div>
+                    <el-date-picker
+                      v-model="listQueryTopGoods.applyDate"
+                      type="monthrange"
+                      style="width:200px"
+                      unlink-panels
+                      range-separator="-"
+                      start-placeholder="开始月份"
+                      end-placeholder="结束月份"
+                      size="small"
+                      format="YYYY-MM"
+                      value-format="YYYY-MM"
+                      @change="onSearchTopGoods"
+                    />
+                  </div>
+                </div>
+              </template>
+              <div v-if="activeIndex == 'first'">
+                <el-table :data="tableDataOne" style="width: 100%" size="small" :show-header="false">
+                  <el-table-column type="index" :index="index" />
+                  <el-table-column prop="GNAME" show-overflow-tooltip />
+                  <el-table-column prop="RMB" width="120" align="right">
+                    <template #default="scope">￥{{ scope.row.RMB || 0 }}</template>
+                  </el-table-column>
+                </el-table>
+              </div>
+              <div v-if="activeIndex == 'second'">
+                <el-table :data="tableDataTwo" style="width: 100%" size="small" :show-header="false">
+                  <el-table-column type="index" :index="index" />
+                  <el-table-column prop="GNAME" show-overflow-tooltip />
+                  <el-table-column prop="RMB" width="120" align="right">
+                    <template #default="scope">￥{{ scope.row.RMB || 0 }}</template>
+                  </el-table-column>
+                </el-table>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :sm="24" :md="10">
+             <el-card class="card-item" :body-style="{padding:'15px',height:'100%'}" >
+              <template #header>
+                <div class="inout-header">
+                  <div class="card-title">查验率</div>
+                  <div>
+                    <el-date-picker
+                      v-model="listQueryInspectRate.applyDateInspectRate"
+                      type="monthrange"
+                      style="width:200px"
+                      unlink-panels
+                      range-separator="-"
+                      start-placeholder="开始月份"
+                      end-placeholder="结束月份"
+                      size="small"
+                      format="YYYY-MM"
+                      value-format="YYYY-MM"
+                      @change="onSearchInspectRate"
+                    />
+                  </div>
+                </div>
+              </template>
+              <div class="report-box">
+                <pie-chart unit="次" :colors="['#2C9AD5','#FFD26F']" :list="listFive" v-if="flagInpspectRate"/>
+              </div>
+             </el-card>
+          </el-col>
+        </el-row>
+  
+  
+      </div>
+    </div>
+  </template>
+  
+  <script lang="ts" setup>
+  import type { TabsPaneContext } from 'element-plus'
+  import { Vue3SeamlessScroll } from "vue3-seamless-scroll";
+  import PieChart from '../components/PieChart/index';
+  import LineChart from '../components/LineChart/index';
+  import { ElMessageBox, ElMessage } from 'element-plus'
+  import { parseDateWithoutDay} from '@/utils/dateTime'
+import { fa } from 'element-plus/es/locale';
+
+
+  const store = useStore()
+  //模拟数据
+  const noticeList = reactive([
+    {
+      title: '南通跨境电商迎来实质性利好'
+    },
+    {
+      title: '关于建设“南通跨境电子商务综合试验区”的一点思考'
+    },
+    {
+      title: '总值超三千亿，同比增长13.2% 前10月南通外贸进出口数据出炉'
+    },
+    {
+      title: '南通电子口岸组织党员干部观看党的二十大开幕盛况'
+    },
+    {
+      title: 'RCEP生效6个月 ，海安市签发RCEP原产地证书164份'
+    }
+  ])
+  
+  const listOne = reactive([
+    { value: 800, name: '已完成' },
+    { value: 560, name: '进行中' }
+  ])
+  
+  const listTwo = reactive([
+    { value: 500, name: '已完成' },
+    { value: 33, name: '进行中' }
+  ])
+  
+  const listThree = reactive([
+    { 
+      title: '进口单量', 
+      data: [300,200,100,200,400,600,900,1000,1200,900,800,500],
+      colors:['rgba(31,223,55,0)','#26C6DA']
+    },
+    { 
+      title: '出口单量', 
+      data: [158,680,1100,460,720,500,620,760,960,680,1200,600],
+      colors:['rgba(49,171,227,0)','#1E88E5']
+    },
+  ])
+  
+  const listFour = reactive([
+    { 
+      title: '进口货值', 
+      data: [80,120,60,78,90,18,96,45,55,36,16,80],
+      colors:['rgba(31,223,55,0)','rgba(31,223,55,1)']
+    },
+    { 
+      title: '出口货值', 
+      data: [22,82,49,46,12,55,44,33,96,49,66,28],
+      colors:['rgba(49,171,227,0)','rgba(49,171,227,1)']
+    },
+  ])
+  
+  const listFive = ref([])
+  const flagInpspectRate = ref(false)
+
+
+  //查验率
+  const onSearchInspectRate = () => {
+ alert(11)
+ console.log(123,listQueryInspectRate)
+    if(listQueryInspectRate.applyDateInspectRate?.length==0||listQueryInspectRate.applyDateInspectRate==null){
+        ElMessage({ message: '请填写统计起始日期', type: 'error' })
+        return;
+    }
+    let startDate1=  listQueryInspectRate.applyDateInspectRate?.length>0 ?listQueryInspectRate.applyDateInspectRate[0]:"" ;
+    let endDate1=  listQueryInspectRate.applyDateInspectRate?.length>0 ?listQueryInspectRate.applyDateInspectRate[1]:"";
+    if(startDate1.substr(0, startDate1.length - 3)!=endDate1.substr(0, startDate1.length - 3)){
+        ElMessage({ message: '查验率查询     统计起始日期应为同一年份', type: 'error' })
+        return;
+    }
+    initInspectRate();
+}
+//商品top10
+  const onSearchTopGoods = () => {
+    if(listQueryTopGoods.applyDate?.length==0){
+        ElMessage({ message: '申报商品货值TOP10查询     请填写统计起始日期', type: 'error' })
+        return;
+    }
+    let startDate1=  listQueryTopGoods.applyDate?.length>0 ?listQueryTopGoods.applyDate[0]:"" ;
+    let endDate1=  listQueryTopGoods.applyDate?.length>0 ?listQueryTopGoods.applyDate[1]:"";
+    if(startDate1.substr(0, startDate1.length - 3)!=endDate1.substr(0, startDate1.length - 3)){
+        ElMessage({ message: '申报商品货值TOP10查询     统计起始日期应为同一年份', type: 'error' })
+        return;
+    }
+    if(activeIndex.value=='first'){
+        initTopGoods('I'); 
+     }else{
+        initTopGoods('E'); 
+     }
+}
+//商品top10
+  const tableDataOne: any = ref(null)
+  const tableDataTwo: any = ref(null)
+    
+  const dateRange = ref('')
+  const dateRangeTwo = ref('')
+  const dateRangeThree = ref('')
+
+  const activeName = ref('first')
+  //报关单
+  const switchReport = (tab: TabsPaneContext, event: Event) => {
+    console.log(tab, event)
+    if(activeName.value=='first'){
+        initCustomsDataNumb(); 
+     }else{
+        initCustomsDataSum(); 
+     }
+  }
+//报关单
+const listQueryCustomsData = reactive({
+ 
+ applyDateCustomsData: [], 
+})
+//查验率
+const listQueryInspectRate = reactive({
+ 
+ applyDateInspectRate: [], 
+})
+
+//商品货值top10
+const listQueryTopGoods = reactive({
+ 
+ applyDate: [], 
+})
+  //商品top10
+  const activeIndex = ref('first')
+  const switchInOut = (tab: TabsPaneContext, event: Event) => {
+    console.log(tab, event)
+     if(activeIndex.value=='first'){
+        initTopGoods('I'); 
+     }else{
+        initTopGoods('E'); 
+     }
+     
+  }
+  //单量以及货值
+  const initCustomsDataNumb = () => {
+    const end = new Date();
+    const start = new Date(new Date().getFullYear(), 0);
+    
+    listQueryCustomsData.applyDateCustomsData[0]=parseDateWithoutDay(start)
+    listQueryCustomsData.applyDateCustomsData[1]=parseDateWithoutDay(end)
+    getInspectRateDash();
+}
+  //查验率
+  const initInspectRate = () => {
+    const end = new Date();
+    const start = new Date(new Date().getFullYear(), 0);
+    
+    listQueryInspectRate.applyDateInspectRate[0]=parseDateWithoutDay(start)
+    listQueryInspectRate.applyDateInspectRate[1]=parseDateWithoutDay(end)
+    getInspectRateDash();
+}
+ 
+  const initTopGoods = (inittype) => {
+    const end = new Date();
+    const start = new Date(new Date().getFullYear(), 0);
+    listQueryTopGoods.applyDate[0]=parseDateWithoutDay(start)
+    listQueryTopGoods.applyDate[1]=parseDateWithoutDay(end)
+    //异步，加入延迟
+    setTimeout(function () {
+    try {
+        getTopGoods(inittype)
+    } catch (e) {
+    }
+
+    }, 500)
+}
+const getInspectRateDash = () => {
+    let startDate1=  listQueryTopGoods.applyDate?.length>0 ?listQueryTopGoods.applyDate[0]:"" ;
+    let endDate1=  listQueryTopGoods.applyDate?.length>0 ?listQueryTopGoods.applyDate[1]:"";
+    let params={
+      startDate: startDate1,
+      endDate: endDate1,
+      qyFlag:'1'
+    } 
+  store
+    .dispatch('companyStatistics/getInspectRateDash',params)
+    .then((response) => {
+        console.log(111,response.rs)
+        let data = response.rs 
+        if(data) {
+            for(let i=0;i<data.length;i++) {
+                let subJson = {}
+                subJson.name = data[i].NAME
+                subJson.value = parseInt(data[i].VALUE)
+                console.log(subJson)
+                listFive.value.push(subJson)
+                console.log(listFive)
+            }
+        }
+        flagInpspectRate.value = true
+
+    })
+    .catch((response) => {})
+}
+const getTopGoods = (inittype) => {
+    let startDate1=  listQueryTopGoods.applyDate?.length>0 ?listQueryTopGoods.applyDate[0]:"" ;
+    let endDate1=  listQueryTopGoods.applyDate?.length>0 ?listQueryTopGoods.applyDate[1]:"";
+    let params={
+      startDate: startDate1,
+      endDate: endDate1,
+      ieFlag:inittype,
+      qyFlag:'1'
+    }
+  store
+    .dispatch('companyStatistics/getTopGoods',params)
+    .then((response) => {
+        if(inittype=='I'){
+            tableDataOne.value = response.rs
+        }else if(inittype=='E'){
+            tableDataTwo.value= response.rs
+        }
+
+    })
+    .catch((response) => {})
+}
+onMounted(() => {
+    //报关单
+    initCustomsDataNumb();
+    //商品top10
+    initTopGoods('I');
+    //查验率
+    initInspectRate()
+})
+  </script>
+  
+  <style lang="scss" scoped>
+@import '@/styles/wm.scss';
+  </style>
+  
+  <style scoped>
+    .card-item >>> .el-card__header{
+      padding: 0px !important;
+    }
+  
+    .nav-tabs >>> .el-tabs__header{
+      margin: 0;
+    }
+  
+    .nav-tabs >>>  .el-tabs__nav-wrap::after{
+      height: 0;
+    }
+  </style>
+  
