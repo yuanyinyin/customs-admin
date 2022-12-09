@@ -74,7 +74,7 @@ public class NoticeInfo implements Serializable {
 
     private String content;
 
-
+	@TableField("NOTICE_USER_ID")
     private String noticeUserId;
 
 

@@ -31,13 +31,13 @@
 
       <br>
 
-        <el-form
+      <el-form
       ref="formRef"
       :model="formData"
       label-width="210px"
       :label-position="labelPosition"
       class="demo-ruleForm ml-3"
-    >
+     >
               <el-row>
                 <el-col :span="24" class="_el_col">
                   <el-form-item label="境内收发货人名称(外文):">

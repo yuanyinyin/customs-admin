@@ -471,7 +471,7 @@ const otherThing = () => {
   // console.log(formData)
     const promiseitmes =   formData.value.promiseitmes ;
     // console.log(promiseitmes)
-    const firstIsYes = false
+    var firstIsYes = false
     if(promiseitmes){
         var vsArr = promiseitmes.split("");
             for(var i = 0; i < vsArr.length; i++){
