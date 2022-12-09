@@ -18,9 +18,7 @@ import com.nteport.admin.service.*;
 import com.nteport.admin.service.system.IPageHelper;
 import com.nteport.admin.service.system.IUserRoleService;
 import com.nteport.admin.service.system.IUserService;
-import com.nteport.admin.util.ConstantUtil;
-import com.nteport.admin.util.MD5Util;
-import com.nteport.admin.util.RedisUtils;
+import com.nteport.admin.util.*;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.CollectionUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -53,6 +55,8 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
     private IQpDecFreeTxtService qpDecFreeTxtService;
     @Autowired
     private IQpDecContainerService qpDecContainerService;
+
+    SimpleDateFormat simformat = new SimpleDateFormat("yyMMddhhmmss");
 
 
     /**
@@ -197,5 +201,72 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
 
         return ApiResponse.success(qpDecHeadDto);
     }
+
+
+    @Override
+    public void exportExcel(Map<String, String> params, HttpServletRequest request ,HttpServletResponse response) {
+        try {
+            //设置excel表头
+            HashMap param = new HashMap<>();
+            List<HashMap<String ,Object>> lists = qpDecHeadMapper.exportExcel(param);
+            DecHeadDownBySXXFExcelHelper decHeadDownExcelHelper = new DecHeadDownBySXXFExcelHelper();
+            decHeadDownExcelHelper.init(request);
+            List<ExportHeads> exportHeads = decHeadDownExcelHelper.getExportRalation(params.get("ieFlag"), request);
+            decHeadDownExcelHelper.setTitle(params.get("ieFlag"),exportHeads);
+            decHeadDownExcelHelper.setHeader(params.get("ieFlag"));
+//            decHeadDownExcelHelper.setDateContent(startTime,endTime);
+//            decHeadDownExcelHelper.setColumnContent(lists,exportHeads,export_isMerge);
+            decHeadDownExcelHelper.setColumnContent(lists,exportHeads,"T");
+            decHeadDownExcelHelper.writeToExcel();  //
+            decHeadDownExcelHelper.closeInputStream();  //释放资源
+
+            if (decHeadDownExcelHelper.wb != null) {
+                // 下载
+                InputStream fis = new BufferedInputStream(new FileInputStream(decHeadDownExcelHelper.newFile));
+                byte[] buffer = new byte[fis.available()];
+                fis.read(buffer);
+                fis.close();
+                response.reset();
+                response.setContentType("text/html;charset=UTF-8");
+                OutputStream toClient = new BufferedOutputStream(
+                        response.getOutputStream());
+                response.setContentType("application/ms-excel");
+                String newName = URLEncoder.encode(
+                        "报关单导出" + simformat.format(new Date()) + ".xlsx",
+                        "UTF-8");
+                response.addHeader("Content-Disposition",
+                        "attachment;filename=\"" + newName + "\"");
+                response.addHeader("Content-Length", "" + decHeadDownExcelHelper.newFile.length());
+                toClient.write(buffer);
+                toClient.flush();
+                toClient.close();
+            }
+
+
+
+
+            //填入值
+//            List<List<String>> dataList = new ArrayList<>();
+////            for (int i = 0; i < list.size(); i++) {
+////                List<String> stringList = new ArrayList<>();
+////                stringList.add(list.get(i).getYearAndMonth());
+////                stringList.add(String.format("%.5f",list.get(i).getContractAmount()));
+////                stringList.add(String.format("%.5f",list.get(i).getInvoiceAmount()));
+////                stringList.add(String.format("%.5f",list.get(i).getWithdrawalFunds()));
+////                stringList.add(String.format("%.5f",list.get(i).getMonthlyIncome()));
+////                stringList.add(String.format("%.5f",list.get(i).getMonthlyProfit()));
+////                stringList.add(String.format("%.5f",list.get(i).getCurrentProfitMargin()));
+////                stringList.add(String.format("%.5f",list.get(i).getMonthCashFlow()));
+////                dataList.add(stringList);
+////            }
+//            ExcelUtil.exportExcel(response, "报关单导出.xlsx", titleList, dataList, 5000);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+
+
 }
 

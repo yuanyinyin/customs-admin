@@ -73,17 +73,7 @@
           </el-pagination>
         </div>
       </el-card>
-    <!-- <dialog-roles
-        :dialog-roles="dialogData"
-        :form-data="formData"
-        @handleSubmitAdd="handleSubmitAdd"
-        @handleSubmitEdit="handleSubmitEdit"
-    />
-    <PermissionsDialog
-        :permissions-dialog="permissionsDialog"
-        ref="menu"
-        @giveRules='giveRules'
-    /> -->
+    
       <DialogDetail ref="dialogDetailRef" 
        :dialog-detail="dialogDetailData"
        :form-data="formDetail"
@@ -97,8 +87,7 @@
 import {Plus} from '@element-plus/icons-vue'
 import {Search} from '@element-plus/icons-vue'
 import {dialogTy} from '~/dialog'
-import DialogRoles from './dialogRoles.vue'
-import PermissionsDialog from './dialogPermission.vue'
+
 import {Ref} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {parseTime} from '@/utils/dateTime'
