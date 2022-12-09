@@ -56,7 +56,6 @@ import type {UploadFile} from 'element-plus/es/components/upload/src/upload.type
 import {Link} from '@element-plus/icons-vue'
 
 // const tableData: any = ref(null)
-let formDataRecord = ref({})//这是相对自由点的写法，不定义类型
 
 // 组件属性
 const props = defineProps({
