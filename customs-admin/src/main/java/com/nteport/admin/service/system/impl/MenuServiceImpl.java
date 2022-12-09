@@ -11,10 +11,12 @@ import com.nteport.admin.entity.system.EnumCode;
 import com.nteport.admin.entity.system.MenuEntity;
 import com.nteport.admin.entity.system.UserEntity;
 import com.nteport.admin.mapper.MenuMapper;
+import com.nteport.admin.mapper.NtPtlMapper;
 import com.nteport.admin.mapper.UserMapper;
 import com.nteport.admin.service.system.IMenuService;
 import com.nteport.admin.service.system.IPageHelper;
 import com.nteport.admin.util.CommonUtil;
+import com.nteport.admin.util.LoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
 
     @Autowired
     private MenuMapper menuMapper;
+
+    @Autowired
+    private NtPtlMapper ntPtlMapper;
 
     /**
      * 获取菜单列表，带分页
@@ -144,7 +149,38 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         if (!"".equals(token)) {
             queryWrapper.eq("token", token);
             UserEntity userEntity = userMapper.selectOne(queryWrapper);
+            /*add by panh for 登录验证从核心库读取*/
+            if(LoginUtil.useNtPtlLogin){
+                Map ntPtl_userinfo=ntPtlMapper.selectUserByToken(token);
+                userEntity =LoginUtil.ptlUser2UserEntity(ntPtl_userinfo);
+            }
+            /*end*/
             menuList = menuMapper.getMenuByUser(userEntity.getId());
+            /*add by panh for 登录验证从核心库读取*/
+            if(LoginUtil.useNtPtlLogin){
+                /*
+                 "PATH" -> "/countSystemStatistics"
+                "NOCACHE" -> "0"
+                "CREATE_USER" -> "1"
+                "UPDATE_USER" -> "1"
+                "HAS_CHILDREN" -> "1"
+                "PID" -> "0"
+                "HIDDEN" -> "1"
+                "UPDATE_TIME" -> {Timestamp@14128} "2021-11-25 00:00:00.0"
+                "ACTION" -> "1"
+                "ALWAYS_SHOW" -> "1"
+                "SORT" -> "96"
+                "COMPONENT" -> "Layout"
+                "TITLE" -> "数据统计其他相关"
+                "ID" -> "28"
+                "ICON" -> "Menu"
+                "CREATE_TIME" -> {Timestamp@14136} "2021-11-25 00:00:00.0"
+                "TYPE" -> "1"
+                "REDIRECT" -> "noRedirect"
+                 */
+                menuList = ntPtlMapper.getMenuByUser(userEntity.getId());
+            }
+            /*end*/
         } else {
             menuList = menuMapper.getMenu();
         }
@@ -160,7 +196,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
             System.out.println(map.get("title"));
             map.put("text", map.get("title").toString());
             map.put("hidden", String.valueOf(map.get("hidden")).equals("0") ? true : false);
-            if (0 == Integer.parseInt(String.valueOf(map.get("pid")))) {
+//            if (0 == Integer.parseInt(String.valueOf(map.get("pid")))) {
+            if ("0".equals(String.valueOf(map.get("pid")))) {
                 Map<String, Object> meta = new HashMap();
                 meta.put("title", map.get("title").toString());
                 meta.put("icon", map.get("icon").toString());
@@ -169,6 +206,19 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
                 map.put("meta", meta);
                 result.add(map);
             }
+            /*add by panh for 登录验证从核心库读取*/
+            if(LoginUtil.useNtPtlLogin){
+                if (LoginUtil.menu_root_id.equals(String.valueOf(map.get("pid")))) {
+                    Map<String, Object> meta = new HashMap();
+                    meta.put("title", map.get("title").toString());
+                    meta.put("icon", map.get("icon").toString());
+                    meta.put("roles", new ArrayList<>());
+                    meta.put("noCache", String.valueOf(map.get("nocache")));
+                    map.put("meta", meta);
+                    result.add(map);
+                }
+            }
+            /*end*/
         }
         for (Map map : result) {
             recursiveTree(map, menuListNew);

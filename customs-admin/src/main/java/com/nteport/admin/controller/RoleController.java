@@ -106,7 +106,8 @@ public class RoleController {
      */
     @PostMapping("/authorize/{id}")
     @OpeLog(opeModule = "角色管理-分配权限", opeType = OperationType.ADD, opeDesc = "角色授权")
-    public ApiResponse authorize(@PathVariable(value = "id") String id, @RequestBody String jsonString, @RequestHeader("authToken") String token) {
+    public ApiResponse authorize(@PathVariable(value = "id") String id, @RequestBody String jsonString, @RequestHeader("authToken") String token)
+    throws  Exception {
         return roleService.authorize(id, jsonString, token);
     }
 
