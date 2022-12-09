@@ -41,7 +41,7 @@
               <span class="filter-item">
                 <el-button type="success" :icon="Search" @click="handleFilter">查询</el-button>
                 <el-button type="primary" :icon="Plus" @click="exportExcel">导出</el-button>
-                <el-button type="primary" :icon="Plus" @click="handleFilter">打印</el-button>
+                <!-- <el-button type="primary" :icon="Plus" @click="handleFilter">打印</el-button> -->
               </span>
               </el-form-item>
             </el-form>
@@ -224,9 +224,19 @@ const getRoles = () => {
       })
 }
 
+import {exportHead } from "@/api/qpDec";
 
-const exportExcel = (year) => {
-  exportMajorProcess(year).then(res => {
+
+const exportExcel = () => {
+  //todo 
+  let params = Object.assign(deepClone(listQuery._rawValue),
+           {
+             startTime: parseTime(listQuery._rawValue.declarationData?.length > 0 ? listQuery._rawValue.declarationData[0] : ""),
+             endTime: parseTime(listQuery._rawValue.declarationData?.length > 1 ? listQuery._rawValue.declarationData[1] : "")
+             }
+             )
+  // exportHead({ieFlag:"I"}).then(res => {
+    exportHead(params).then(res => {
     let blob = new Blob([res.data], {type: 'application/octet-stream'});
     let url = URL.createObjectURL(blob);
     const link = document.createElement('a'); //创建a标签

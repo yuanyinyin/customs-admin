@@ -18,7 +18,7 @@ const router = useRouter()
 onMounted(() => {
     timer.value = setInterval(async () => {
     handleCurrentChange();
-    }, 300000);
+    }, 3000000);
   });
 
 onUnmounted(() => {
