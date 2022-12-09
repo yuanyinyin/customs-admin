@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nteport.admin.mapper.statistics.ImportantCompanyMapper">
+    <select id="queryCompanyList" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT * FROM
+        (
+        SELECT A.*, ROWNUM RN
+        FROM (SELECT
+        a.ID ,
+        a.ORG_NAME_CN ,
+        a.AREA_NAME ,
+        a.REMARK ,
+        b.CUSTOM_NO
+        FROM
+        ORG_BASEINFO a
+        LEFT JOIN ORG_MOREINFO b ON
+        b.ORG_ID = a.ID
+        AND NOT EXISTS (SELECT 1 FROM IMPORTANT_COMPANY c WHERE c.ORG_ID = a.ID)
+        where 1=1
+        <if test="orgName != null and orgName != ''" >
+            and a.ORG_NAME_CN like  CONCAT('%',#{orgName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="customNo != null and customNo != ''" >
+            and b.CUSTOM_NO like '%'||#{customNo , jdbcType=VARCHAR }||'%'
+        </if>
+        order by a.update_date desc) A
+        WHERE ROWNUM &lt;= #{pageSize,jdbcType=BIGINT}
+        )
+        WHERE RN &gt;= #{current,jdbcType=BIGINT}
+    </select>
+    <select id="queryCompanyListCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        select count(*)
+        FROM
+        ORG_BASEINFO a
+        LEFT JOIN ORG_MOREINFO b ON
+        b.ORG_ID = a.ID
+        AND NOT EXISTS (
+        SELECT
+        1
+        FROM
+        IMPORTANT_COMPANY c
+        WHERE
+        c.ORG_ID = a.ID)
+        where 1=1
+        <if test="orgName != null and orgName != ''" >
+            and a.ORG_NAME_CN like  CONCAT('%',#{orgName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="customNo != null and customNo != ''" >
+            and b.CUSTOM_NO like  CONCAT('%',#{customNo,jdbcType=VARCHAR},'%')
+        </if>
+    </select>
+</mapper>

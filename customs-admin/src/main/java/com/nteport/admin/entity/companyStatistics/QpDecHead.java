@@ -547,4 +547,12 @@ public class QpDecHead implements Serializable {
     @TableField("CUSTOMSTATE")
     private String customstate;
 
+    @TableField("CUSTOMTOTALRMB")
+    private String customTotalRmb;
+
+    @TableField("CUSTOMTOTALUSD")
+    private String customTotalUsd;
+
+    @TableField("CHECKTIME")
+    private String checkTime;
 }

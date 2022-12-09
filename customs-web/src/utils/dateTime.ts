@@ -251,4 +251,33 @@ export function parseYear(time) {
     // 拼接
     return year
   }
+  
+}
+export function parseDateWithoutDay(time) {
+  if (time) {
+    const date = new Date(time)
+    const year = date.getFullYear()
+    /* 在日期格式中，月份是从0开始的，因此要加0
+     * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+     * */
+    const month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+    // 拼接
+    return year + '-' + month
+  } else {
+    return ''
+  }
+}
+export function parseDateWithoutDayNew(time) {
+  if (time) {
+    const date = new Date(time)
+    const year = date.getFullYear()
+    /* 在日期格式中，月份是从0开始的，因此要加0
+     * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+     * */
+    const month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+    // 拼接
+    return year + ''+ month
+  } else {
+    return ''
+  }
 }
