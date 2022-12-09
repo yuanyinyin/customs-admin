@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.nteport.admin.mapper.statistics.QpDecHeadMapper">
+<mapper namespace="com.nteport.admin.mapper.statistics.QpDecHeadStatisticsMapper">
 
     <!-- 报关单量统计 -->
     <select id="queryImOrExCustomsData" resultType="java.util.HashMap" parameterType="java.util.HashMap">

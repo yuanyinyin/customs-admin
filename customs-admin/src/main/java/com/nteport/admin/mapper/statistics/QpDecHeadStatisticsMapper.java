@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Repository
-public interface QpDecHeadMapper extends BaseMapper<QpDecHead> {
+public interface QpDecHeadStatisticsMapper extends BaseMapper<QpDecHead> {
 
     List  queryImOrExCustomsData(HashMap hashMap);
     List  queryTransportMode(HashMap hashMap);

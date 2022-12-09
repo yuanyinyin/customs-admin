@@ -6,7 +6,7 @@ import com.nteport.admin.entity.companyStatistics.QpDecHead;
 import com.nteport.admin.entity.system.ApiResponse;
 import com.nteport.admin.entity.system.EnumCode;
 import com.nteport.admin.entity.system.UserEntity;
-import com.nteport.admin.mapper.statistics.QpDecHeadMapper;
+import com.nteport.admin.mapper.statistics.QpDecHeadStatisticsMapper;
 import com.nteport.admin.service.companyStatistics.IQpDecHeadService;
 
 
@@ -20,10 +20,10 @@ import java.util.*;
 
 
 @Service
-public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead>
+public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper, QpDecHead>
         implements IQpDecHeadService {
     @Autowired
-    private QpDecHeadMapper qpDecHeadMapper;
+    private QpDecHeadStatisticsMapper qpDecHeadMapper;
 
 
     @Override
