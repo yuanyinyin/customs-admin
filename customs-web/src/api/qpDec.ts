@@ -97,5 +97,19 @@ export function listUser(data: ObjTy) {
  
 
 
+export function exportHead(data: ObjTy){
+   return request({
+     url:`/qpDecHead/exportExcel`,
+     data,
+     method:'get',
+     isParams: true,
+     bfLoading: true,
+     isDownLoadFile:true,
+     isAlertErrorMsg: true
+   })
+}
+
+
+
  
 
