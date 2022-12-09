@@ -5,6 +5,8 @@ import com.nteport.admin.entity.QpDecHead;
 import com.nteport.admin.entity.system.ApiResponse;
 import com.nteport.admin.entity.system.UserEntity;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 public interface IQpDecHeadService extends IService<QpDecHead> {
@@ -20,7 +22,7 @@ public interface IQpDecHeadService extends IService<QpDecHead> {
     ApiResponse showOne(String headId, UserEntity user);
 
 
-
+    void exportExcel(Map<String, String> params, HttpServletRequest request , HttpServletResponse response) ;
 
 
 

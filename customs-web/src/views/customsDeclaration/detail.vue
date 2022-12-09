@@ -456,12 +456,12 @@ const activeName = ref('extra')
 onMounted(() => {
   nextTick(() => {
     //跳转直接进行审批详情页
-    // if (route.query.headId) {
-    //   console.log(666)
-    //   console.log(route.query.headId)
-      // getData(route.query.headId);
-      getData("4028b881827b43cd01827b4b0bd40e38");
-    // }
+    if (route.query.headId) {
+      console.log(666)
+      console.log(route.query.headId)
+      getData(route.query.headId);
+      // getData("4028b881827b43cd01827b4b0bd40e38");
+    }
   })
 })
 
@@ -611,7 +611,7 @@ const dialogData: Ref<dialogTy> = ref({}) //ts的规范写法，定义变量的�
   height: 8px !important;
 }
 ._row1{
-   height: 510px !important;
+   height: 520px !important;
    overflow: auto;
 }
 ._row2{
