@@ -77,5 +77,27 @@ export function statLogin(){
     isAlertErrorMsg: true
   })
 }
+//查询用户信息
+export function getNtPtlLoginUser(){
+  return request({
+    url: `/login/getNtPtlLoginUser`,
+    // data,
+    method: 'post',
+    bfLoading: true,
+    // isParams: true,
+    isAlertErrorMsg: true
+  })
+}
+//查询企业信息
+export function getNtPtlLoginDep(){
+  return request({
+    url: `/login/getNtPtlLoginDep`,
+    // data,
+    method: 'post',
+    bfLoading: true,
+    // isParams: true,
+    isAlertErrorMsg: true
+  })
+}
 
 

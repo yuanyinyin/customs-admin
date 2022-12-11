@@ -38,6 +38,12 @@
       <el-button :loading="loading" type="primary" class="login-btn" size="default" @click.prevent="handleLogin">
         登 录
       </el-button>
+      <el-button :loading="loading" type="primary" class="login-btn" size="default" @click.prevent="goRegister" style="margin-left:0px;">
+        注 册
+      </el-button>
+<!--      <a @click="goRegister">-->
+<!--        去注册-->
+<!--      </a>-->
     </el-form>
   </div>
 </template>
@@ -132,6 +138,11 @@ let showPwd = () => {
   nextTick(() => {
     refPassword.value.focus()
   })
+}
+
+
+let goRegister = () => {
+  router.push({path: '/registerAgree' || '/', query: state.otherQuery})
 }
 </script>
 

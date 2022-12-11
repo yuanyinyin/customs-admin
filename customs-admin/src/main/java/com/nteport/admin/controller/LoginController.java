@@ -163,4 +163,38 @@ public class LoginController {
 
 
 
+    /**
+     * 获取用户信息
+     *
+     * @param user 用户
+     * @return
+     */
+    @PostMapping("/getNtPtlLoginUser")
+    public ApiResponse getNtPtlLoginUser(UserEntity user) {
+        return ApiResponse.success(JSONObject.toJSON(user));
+    }
+
+    /**
+     * 获取企业信息
+     *
+     * @param user 用户
+     * @return
+     */
+    @PostMapping("/getNtPtlLoginDep")
+    public ApiResponse getNtPtlLoginDep(UserEntity user) {
+        Map ntptl_dept=ntPtlService.selectDept(user.getDeptId());
+        return ApiResponse.success(JSONObject.toJSON(ntptl_dept));
+    }
+
+    /**
+     * 注册企业用户
+     *
+     * @param user 用户
+     * @return
+     */
+    @PostMapping("/registerDepUser")
+    public ApiResponse registerDepUser(@RequestBody String jsonString,UserEntity user) {
+        Map ntptl_dept=ntPtlService.selectDept(user.getDeptId());
+        return ApiResponse.success(JSONObject.toJSON(ntptl_dept));
+    }
 }

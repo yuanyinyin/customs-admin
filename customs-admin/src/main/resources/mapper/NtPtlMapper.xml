@@ -13,7 +13,7 @@
     </select>
 
     <select id="selectDept" parameterType="java.lang.String" resultType="hashMap">
-        select t.ORG_NAME_CN from ORG_BASEINFO@NT_PTL t
+        select ID,ORG_NAME_CN,UNION_NO,AREA_NAME from ORG_BASEINFO@NT_PTL t
         where t.id=#{depId,jdbcType=VARCHAR}
     </select>
 
@@ -56,4 +56,23 @@
           and r.FATHER!='-1'
         order by  r.right_indx desc
     </select>
+    <update id="updateUser" parameterType="com.nteport.admin.entity.system.UserEntity">
+        update USER_BASEINFO@NT_PTL t set t.PASSWORD=#{userPassword,jdbcType=VARCHAR},t.REALNAME=#{realName,jdbcType=VARCHAR},t.MOBILE=#{telephone,jdbcType=VARCHAR}  where t.id=#{id,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertOrgBaseInfo" parameterType="hashmap">
+        update USER_BASEINFO@NT_PTL t set t.PASSWORD=#{userPassword,jdbcType=VARCHAR},t.REALNAME=#{realName,jdbcType=VARCHAR},t.MOBILE=#{telephone,jdbcType=VARCHAR}  where t.id=#{id,jdbcType=VARCHAR}
+    </insert>
+
+    <insert id="insertOrgMoreInfo" parameterType="hashmap">
+        update USER_BASEINFO@NT_PTL t set t.PASSWORD=#{userPassword,jdbcType=VARCHAR},t.REALNAME=#{realName,jdbcType=VARCHAR},t.MOBILE=#{telephone,jdbcType=VARCHAR}  where t.id=#{id,jdbcType=VARCHAR}
+    </insert>
+
+    <insert id="insertUserBaseInfo" parameterType="hashmap">
+        update USER_BASEINFO@NT_PTL t set t.PASSWORD=#{userPassword,jdbcType=VARCHAR},t.REALNAME=#{realName,jdbcType=VARCHAR},t.MOBILE=#{telephone,jdbcType=VARCHAR}  where t.id=#{id,jdbcType=VARCHAR}
+    </insert>
+
+    <insert id="insertUserMoreInfo" parameterType="hashmap">
+        update USER_BASEINFO@NT_PTL t set t.PASSWORD=#{userPassword,jdbcType=VARCHAR},t.REALNAME=#{realName,jdbcType=VARCHAR},t.MOBILE=#{telephone,jdbcType=VARCHAR}  where t.id=#{id,jdbcType=VARCHAR}
+    </insert>
 </mapper>
