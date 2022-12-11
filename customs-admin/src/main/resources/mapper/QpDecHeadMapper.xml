@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nteport.admin.mapper.QpDecHeadMapper">
+
+
+    <select id="exportExcel" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT
+            tt.sfdzs,
+            h.spDecSeqNo,
+            h.seqNo,
+            h.iePort_value,
+            h.trafName,
+            h.voyNo,
+            nvl( h.feeCurr_value, '' ) || '/' || nvl( h.feeRate, '' ) || '/' || nvl( h.feeMark_value, '' ) AS feeRate,
+            nvl( h.insurCurr_value, '' ) || '/' || nvl( h.insurRate, '' ) || '/' || nvl( h.insurMark_value, '' ) AS insurRate,
+            nvl( h.otherCurr_value, '' ) || '/' || nvl( h.otherRate, '' ) || '/' || nvl( h.otherMark_value, '' ) AS otherRate,
+            h.otherRate,
+            h.distinatePort_value,
+            h.entyPortCode_value,
+            h.despPortCode_value,
+            h.noteS,
+            l.gno,
+            l.gmodel,
+            l.firstQty,
+            l.firstUnit_value,
+            l.secondQty,
+            l.secondUnit_value,
+            h.agentName,
+            h.customMaster_value,
+            h.ieflag,
+            h.entryid,
+            h.declarationData,
+            h.custype,
+            h.iedate,
+            h.billno,
+            h.tradename,
+            h.contrno,
+            l.gname,
+            l.codets,
+            h.transMode_value,
+            h.manualNo,
+            l.originCountry_value,
+            l.destinationCountry_value,
+            l.gqty,
+            l.gunit_value,
+            l.declPrice,
+            l.decltotal,
+            l.tradecurr_value,
+            l.contrItem,
+            h.customStateName,
+            h.tradeMode_value,
+            h.cutMode_value,
+            h.packNo,
+            h.trafMode_value,
+            h.tradeAreaCode_value,
+            h.tradeCountry_value,
+            h.grossWet,
+            h.netWt,
+            CASE
+
+                WHEN h.buss_zbzj = '1' THEN
+                    '是' ELSE '否'
+                END AS buss_zbzj,
+            CASE
+
+                WHEN SUBSTR( h.promiseitmes, 1, 1 ) = '0' THEN
+                    '否'
+                WHEN SUBSTR( h.promiseitmes, 1, 1 ) = '1' THEN
+                    '是'
+                WHEN SUBSTR( h.promiseitmes, 1, 1 ) = '9' THEN
+                    '无'
+                END AS TSGXQR,
+            CASE
+
+                WHEN SUBSTR( h.promiseitmes, 2, 1 ) = '0' THEN
+                    '否'
+                WHEN SUBSTR( h.promiseitmes, 2, 1 ) = '1' THEN
+                    '是'
+                WHEN SUBSTR( h.promiseitmes, 2, 1 ) = '9' THEN
+                    '无'
+                END AS JGYXQR,
+            CASE
+
+                WHEN SUBSTR( h.promiseitmes, 3, 1 ) = '0' THEN
+                    '否'
+                WHEN SUBSTR( h.promiseitmes, 3, 1 ) = '1' THEN
+                    '是'
+                WHEN SUBSTR( h.promiseitmes, 3, 1 ) = '9' THEN
+                    '无'
+                END AS ZFTQ,
+            h.wraptype_value,
+            h.OVERSEASCONSIGNORENAME,
+            h.goodsPlace,
+            h.ownerName,
+            h.licenseNo,
+            l.districtCode_value,
+            l.dutyMode_value  ,
+            decode( ( SELECT ttt.inspmonitorcond FROM dichscode ttt WHERE ttt.hscode = l.codets ), '', '否', '是' ) sffj,
+            qft.relid,
+            qft.relmanno
+        FROM
+            QP_DecHead h
+                LEFT JOIN QP_declist l ON h.id = l.headid
+                LEFT JOIN (
+                SELECT
+                    listagg ( t.certcode || ':' || t.docucode_value, ',' ) WITHIN GROUP ( ORDER BY t.headid ) sfdzs,  t.headid
+                FROM
+                    QP_DECLICENSEDOCU t
+                GROUP BY
+                    t.headid
+            ) tt ON tt.headid = h.id
+                LEFT JOIN qp_decfreetxt qft ON qft.id = h.decfreetxtid
+        WHERE
+            1 = 1
+
+        <if test="ieFlag != null and ieFlag != ''" >
+            and h.ieFlag =  #{ieFlag,jdbcType=VARCHAR}
+        </if>
+
+        <if test="entryId != null and entryId != ''" >
+            and h.entryId like  CONCAT('%',#{entryId,jdbcType=VARCHAR},'%')
+        </if>
+
+        <if test="startTime != null and startTime != ''" >
+            and h.declarationdata  >= #{startTime,jdbcType=VARCHAR}
+        </if>
+
+        <if test="endTime != null and endTime != ''" >
+            and h.declarationdata  <![CDATA[ <= ]]>  #{endTime,jdbcType=VARCHAR}
+        </if>
+
+
+
+
+        order by h.declarationData desc,h.entryId desc,to_number(l.gno)
+
+
+
+
+    </select>
+
+</mapper>

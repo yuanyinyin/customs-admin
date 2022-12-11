@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -61,6 +63,18 @@ public class QPDecHeadController {
 
         return qpDecHeadService.showOne(headId, user);
     }
+
+
+
+    /**
+     * 导出excel
+     */
+    @GetMapping("/exportExcel")
+    public void exportExcel(@RequestParam Map<String, String> params, HttpServletRequest request, HttpServletResponse response){
+        qpDecHeadService.exportExcel(params,request,response);
+    }
+
+
 
 
 

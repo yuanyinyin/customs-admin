@@ -5,6 +5,8 @@ import com.nteport.admin.entity.NoticeInfo;
 import com.nteport.admin.entity.QpDecUser;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 用户接口
  *
@@ -14,5 +16,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NoticeInfoMapper extends BaseMapper<NoticeInfo> {
 
+
+
+    int updateByIds(List<String> ids);
 
 }

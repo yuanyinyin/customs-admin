@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户接口
@@ -17,5 +18,6 @@ import java.util.List;
 @Repository
 public interface QpDecHeadMapper extends BaseMapper<QpDecHead> {
 
+    List<HashMap<String,Object>>  exportExcel(HashMap params);
 
 }

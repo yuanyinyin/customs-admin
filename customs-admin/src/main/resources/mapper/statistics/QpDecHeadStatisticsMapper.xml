@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nteport.admin.mapper.statistics.QpDecHeadStatisticsMapper">
+
+    <!-- 报关单量统计 -->
+    <select id="queryImOrExCustomsData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select to_char( count(1)) numb,substr(d.declarationData,0,6) as mon
+        from qp_dechead d where 1=1 and d.isdelete !='1'
+        <if test="qyFlag != null and qyFlag != ''" >
+            and d.orgid = #{orgid,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata is not null
+        group by substr(d.declarationData,0,6)
+        order by mon
+    </select>
+<!--    进出口运输方式-->
+    <select id="queryTransportMode" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select count(d.trafmode_value) as numb,d.trafmode_value traf
+        from qp_dechead d where 1=1 and d.isdelete !='1'
+        and d.orgid= #{orgid,jdbcType=VARCHAR}
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;=#{endDate,jdbcType=VARCHAR}
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        group by d.trafmode_value
+    </select>
+<!--    进出口岸统计-->
+    <select id="portStatistic" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select d.trafmode_value traf,d.ieport_value ieport,d.custommaster_value custom,count(d.custommaster_value) numb
+        from qp_dechead d where 1=1 and d.isdelete !='1'
+        and d.orgid= #{orgid,jdbcType=VARCHAR}
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;=#{endDate,jdbcType=VARCHAR}
+        and d.trafmode_value= #{trafMode,jdbcType=VARCHAR}
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        group by d.trafmode_value,d.ieport_value,d.custommaster_value
+        order by d.ieport_value
+    </select>
+<!--    贸易方式统计-->
+    <select id="queryTradeMode" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select * from(
+        select count(1) numb,d.trademode_value  trademode
+        from  qp_dechead d where 1=1
+        and d.orgid = #{orgid,jdbcType=VARCHAR}
+        and d.isdelete != '1'
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and d.trademode_value is not null
+        group by d.trademode_value)
+        order by numb desc
+    </select>
+    <!--报关货值统计-->
+    <select id="queryGoodsTotal1" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select mon,currency,rate,sum(val) numb,round(sum(val)*rate,2) rmb from(
+        select substr(d.declarationData,0,6) as mon,s.TRADECURR_VALUE  currency,s.CURRENTRATE  rate,s.DECLTOTAL  val
+        from QP_DECLIST s
+        left join  qp_dechead d
+        on s.HEADID=d.id
+        where 1=1
+        and d.orgid = #{orgid,jdbcType=VARCHAR}
+        and d.isdelete != '1'
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        )
+        group by mon,currency,rate
+        order by mon ASC
+    </select>
+    <select id="queryGoodsTotal2" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select mon,sum(RMB) RMB from(select mon,currency,rate,sum(val) numb,round(sum(val)*rate,2) rmb from(
+        select substr(d.declarationData,0,6) as mon,s.TRADECURR_VALUE  currency,NVL(s.CURRENTRATE ,1)  rate,s.DECLTOTAL  val
+        from QP_DECLIST s
+        left join  qp_dechead d
+        on s.HEADID=d.id
+        where 1=1
+        and d.orgid = #{orgid,jdbcType=VARCHAR}
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        )
+        group by mon,currency,rate
+        order by mon ASC
+        )
+        group by mon
+        order by mon asc
+
+    </select>
+    <select id="queryTopGoods" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select * from(SELECT codeTS,gname,currency,rate,sum(val) numb,round(sum(val)*rate,2) rmb FROM (SELECT s.codeTS codeTS,s.gname gname,s.TRADECURR_VALUE  currency,NVL(s.CURRENTRATE ,1)  rate,s.DECLTOTAL  val FROM QP_DECLIST s LEFT JOIN QP_DECHEAD d ON s.HEADID=d.ID
+        WHERE 1=1
+        <if test="qyFlag != null and qyFlag != ''" >
+            and d.orgid = #{orgid,jdbcType=VARCHAR}
+        </if>
+        and d.isdelete != '1'
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and s.codeTS IS NOT NULL)
+        group by codeTS,gname,currency,rate
+        order by rmb desc)
+        where rownum &lt;=10
+    </select>
+    <select id="queryTopFrequency" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select * from(
+        select  count(1) as numb, s.codeTS codeTS,s.gname gname
+        from QP_DECHEAD d
+        LEFT JOIN QP_DECLIST S
+        ON d.ID=s.headId
+        WHERE 1=1
+        and d.orgid = #{orgid,jdbcType=VARCHAR}
+        and d.isdelete != '1'
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and s.codeTS is not null
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        group by codeTS,gname
+        order by numb desc)
+        where rownum &lt;= 10
+    </select>
+<!--    管理端-->
+<!--    区域量总和、货值总和、货量总和统计-->
+    <select id="queryAreaList" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT s.AREA_CODE,s.AREA_NAME FROM ORG_BASEINFO s
+        where 1=1
+        AND EXISTS(SELECT 1 FROM QP_DECHEAD d WHERE d.ORGID=s.id AND d.ISDELETE !='1'
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        )
+        and s.AREA_CODE is not null
+        group by s.AREA_CODE,s.AREA_NAME
+        order by s.AREA_CODE
+    </select>
+<!--    报关单量-->
+    <select id="queryCustomsData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select to_char( count(1)) numb,s.AREA_CODE  from ORG_BASEINFO   s
+        LEFT JOIN QP_DECHEAD d
+        on s.ID = d.ORGID
+        where d.ISDELETE !='1'
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        GROUP BY s.AREA_CODE
+    </select>
+<!--    货值-->
+    <select id="queryCustomsTotalData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select d.CUSTOMTOTALRMB  from ORG_BASEINFO   s
+        LEFT JOIN QP_DECHEAD d
+        on s.ID = d.ORGID
+        where d.ISDELETE !='1'
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and s.AREA_CODE= #{areaCode,jdbcType=VARCHAR}
+    </select>
+    <!--    净重-->
+    <select id="queryNetWtData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select d.CUSTOMTOTALRMB  from ORG_BASEINFO   s
+        LEFT JOIN QP_DECHEAD d
+        on s.ID = d.ORGID
+        where d.ISDELETE !='1'
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and s.AREA_CODE= #{areaCode,jdbcType=VARCHAR}
+    </select>
+    <select id="queryGrossWtData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select d.CUSTOMTOTALRMB  from ORG_BASEINFO   s
+        LEFT JOIN QP_DECHEAD d
+        on s.ID = d.ORGID
+        where d.ISDELETE !='1'
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and s.AREA_CODE= #{areaCode,jdbcType=VARCHAR}
+    </select>
+    <select id="queryAreaData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT DISTINCT s.AREA_CODE areaCode,s.AREA_NAME areaName,
+        to_char( count(1)) numb,to_char(sum(d.CUSTOMTOTALRMB)) sumTotalRmb,to_char(sum(d.CUSTOMTOTALUSD)) sumTotalUsd,
+        to_char(sum(d.NETWT)) sumNetWt,
+        to_char(sum(d.GROSSWET)) sumGrossWet FROM ORG_BASEINFO s
+        LEFT JOIN QP_DECHEAD d
+        on s.ID = d.ORGID
+        where 1=1
+        AND EXISTS(SELECT 1 FROM QP_DECHEAD d WHERE d.ORGID=s.id AND d.ISDELETE !='1'
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+            )
+        and s.AREA_CODE is not null
+        group by s.AREA_CODE,s.AREA_NAME
+        order by s.AREA_CODE
+    </select>
+    <select id="queryAreaDataByCode" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select to_char( count(1)) numb,to_char( count(1)) numb,to_char(sum(d.CUSTOMTOTALRMB)) sumTotalRmb,to_char(sum(d.CUSTOMTOTALUSD)) sumTotalUsd,
+        to_char(sum(d.NETWT)) sumNetWt,
+        to_char(sum(d.GROSSWET)) sumGrossWet,
+        substr(d.declarationData,0,6) as mon FROM QP_DECHEAD d
+        LEFT JOIN ORG_BASEINFO s
+        on s.ID = d.ORGID
+        where 1=1
+        and d.ISDELETE !='1'
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and s.AREA_CODE =#{areaCode,jdbcType=VARCHAR}
+        and d.declarationdata is not null
+        group by substr(d.declarationData,0,6)
+        order by mon
+    </select>
+<!--  查验率统计-->
+    <select id="queryInspectRate" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select to_char( count(1)) numb,substr(d.declarationData,0,6) as mon
+        from qp_dechead d where 1=1 and d.isdelete !='1'
+        <if test="qyFlag != null and qyFlag != ''" >
+            and d.orgid = #{orgid,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata is not null
+        group by substr(d.declarationData,0,6)
+        order by mon
+    </select>
+    <select id="queryInspectRateCheck" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select to_char( count(1)) numbchecked,substr(d.declarationData,0,6) as mon
+        from qp_dechead d where 1=1 and d.isdelete !='1'
+        and d.orgid= #{orgid,jdbcType=VARCHAR}
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and
+        substr(d.declarationData,0,6)= #{mon,jdbcType=VARCHAR}
+        and d.declarationdata is not null
+        AND d.CHECKTIME is  null
+        group by substr(d.declarationData,0,6)
+        order by mon
+    </select>
+    <select id="queryGoodsData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT codeTS,
+        gname  ,sum(rmb)rmb FROM(
+        select * from(SELECT codeTS,gname,currency,rate,sum(val) numb,round(sum(val)*rate,2) rmb FROM (
+        SELECT s.codeTS codeTS,s.gname gname,s.TRADECURR_VALUE  currency,NVL(s.CURRENTRATE ,1)  rate,s.DECLTOTAL  val FROM QP_DECLIST s LEFT JOIN QP_DECHEAD d ON s.HEADID=d.ID
+        WHERE 1=1
+        and d.isdelete != '1'
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and s.codeTS IS NOT NULL)
+        group by codeTS,gname,currency,rate
+        order by rmb desc))
+        GROUP BY  codeTS,
+        gname
+    </select>
+    <select id="queryGoodsDataByGNAME" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+
+        SELECT s.gno,
+        s.codeTS codeTS,
+        s.gname gname,s.ciqName,s.contrItem,s.gmodel,s.ORIGINCOUNTRY_VALUE ,s.DESTINATIONCOUNTRY_VALUE,s.gqty,s.DECLPRICE,
+        s.TRADECURR_VALUE ,s.DECLTOTAL ,round(s.DECLTOTAL*NVL(s.CURRENTRATE,1)) rmb,s.dutyMode_value
+        FROM
+        QP_DECLIST s LEFT JOIN QP_DECHEAD d  ON s.HEADID=d.ID
+        WHERE 1=1
+        and d.isdelete != '1'
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and s.codeTS IS NOT NULL
+        and d.declarationdata is not null
+        and s.gname =#{gname,jdbcType=VARCHAR}
+        order by gno asc
+    </select>
+    <select id="queryGoodsDataDetail" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select * from(SELECT mon,codeTS,gname,currency,rate,sum(val) numb,round(sum(val)*rate,2) rmb FROM (
+        SELECT substr(d.declarationData,0,6) mon,s.codeTS codeTS,s.gname gname,s.TRADECURR_VALUE  currency,NVL(s.CURRENTRATE ,1)  rate,s.DECLTOTAL  val FROM QP_DECLIST s LEFT JOIN QP_DECHEAD d ON s.HEADID=d.ID
+        WHERE 1=1
+        and d.isdelete != '1'
+        <if test="ieFlag != null and ieFlag != ''" >
+            and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and d.declarationdata is not null
+        and s.codeTS IS NOT NULL
+        and s.gname =#{gname,jdbcType=VARCHAR}
+        and s.codeTS =#{codeTS,jdbcType=VARCHAR}
+            )
+        group by mon,codeTS,gname,currency,rate
+        order by rmb desc)
+    </select>
+    <select id="queryKeyCompanyDataList" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT * FROM
+            (
+                SELECT A.*, ROWNUM RN
+                FROM (SELECT s.ORG_NAME ,s.org_id orgid,nvl(a.numbI,0)numbI,nvl(b.numbE,0)numbE, nvl(a.customtotalrmbI,0)customtotalrmbI,nvl(a.customtotalusdI,0)customtotalusdI, nvl(b.customtotalrmbE,0)customtotalrmbE,nvl(b.customtotalusdE ,0)customtotalusdE
+        FROM IMPORTANT_COMPANY s
+        LEFT JOIN
+        (SELECT d1.orgId ,to_char( count(1)) numbI,round(sum(d1.customtotalrmb),2)customtotalrmbI,round(sum(d1.customtotalusd),2)customtotalusdI FROM QP_DECHEAD d1
+        WHERE 1=1
+        and d1.isdelete != '1'
+        and d1.ieFlag= 'I'
+        and d1.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d1.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and d1.declarationdata is not null
+        <if test="keyCompanyFlag != null and keyCompanyFlag != ''" >
+            and exists (select 1 from IMPORTANT_COMPANY where ORG_ID=d1.orgId)
+        </if>
+        GROUP BY d1.orgId)a ON a.orgId =s.org_id
+        LEFT JOIN
+        (SELECT d1.orgId ,to_char( count(1)) numbE,round(sum(d1.customtotalrmb),2)customtotalrmbE,round(sum(d1.customtotalusd),2)customtotalusdE FROM QP_DECHEAD d1
+        WHERE 1=1
+        and d1.isdelete != '1'
+        and d1.ieFlag= 'E'
+        and d1.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d1.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and d1.declarationdata is not null
+        GROUP BY d1.orgId  )b ON b.orgId =s.org_id order by customtotalrmbI desc,customtotalrmbE desc,numbI desc,numbE desc) A
+                WHERE ROWNUM &lt;= #{pageSize,jdbcType=BIGINT}
+            )
+        WHERE RN &gt;= #{current,jdbcType=BIGINT}
+    </select>
+    <select id="queryKeyCompanyDataListCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        select count(*) from (
+        SELECT s.ORG_NAME  FROM IMPORTANT_COMPANY s
+        LEFT JOIN
+        (SELECT d1.orgId ,to_char( count(1)) numbI,round(sum(d1.customtotalrmb),2)customtotalrmbI,round(sum(d1.customtotalusd),2)customtotalusdI FROM QP_DECHEAD d1
+        WHERE 1=1
+        and d1.isdelete != '1'
+        and d1.ieFlag= 'I'
+        and d1.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d1.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and d1.declarationdata is not null
+        <if test="keyCompanyFlag != null and keyCompanyFlag != ''" >
+            and exists (select 1 from IMPORTANT_COMPANY where ORG_ID=d1.orgId)
+        </if>
+       GROUP BY d1.orgId)a ON a.orgId =s.org_id
+       LEFT JOIN
+      (SELECT d1.orgId ,to_char( count(1)) numbE,round(sum(d1.customtotalrmb),2)customtotalrmbE,round(sum(d1.customtotalusd),2)customtotalusdE FROM QP_DECHEAD d1
+       WHERE 1=1
+        and d1.isdelete != '1'
+        and d1.ieFlag= 'E'
+        and d1.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d1.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and d1.declarationdata is not null
+        <if test="keyCompanyFlag != null and keyCompanyFlag != ''" >
+            and exists (select 1 from IMPORTANT_COMPANY where ORG_ID=d1.orgId)
+        </if>
+       GROUP BY d1.orgId)b ON b.orgId =s.org_id
+         )
+    </select>
+    <select id="queryKeyCompanyDataSum" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+    select sum(A.numbI) numbISum,sum(A.numbE) numbESum,
+    sum(A.customtotalrmbI) customtotalrmbISum,sum(A.customtotalusdI)customtotalusdISum,sum(A.customtotalrmbE) customtotalrmbESum,sum(A.customtotalusdE)customtotalusdESum
+    from (
+        SELECT s.ORG_NAME ,s.org_id orgid,a.numbI,b.numbE, nvl(a.customtotalrmbI,0)customtotalrmbI,nvl(a.customtotalusdI,0)customtotalusdI, nvl(b.customtotalrmbE,0)customtotalrmbE,nvl(b.customtotalusdE ,0)customtotalusdE
+    FROM IMPORTANT_COMPANY s
+    LEFT JOIN
+    (SELECT d1.orgId ,to_char( count(1)) numbI,round(sum(d1.customtotalrmb),2)customtotalrmbI,round(sum(d1.customtotalusd),2)customtotalusdI FROM QP_DECHEAD d1
+    WHERE 1=1
+    and d1.isdelete != '1'
+    and d1.ieFlag= 'I'
+    and d1.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+    and d1.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+    and d1.declarationdata is not null
+    <if test="keyCompanyFlag != null and keyCompanyFlag != ''" >
+        and exists (select 1 from IMPORTANT_COMPANY where ORG_ID=s.org_id)
+    </if>
+    GROUP BY d1.orgId)a ON a.orgId =s.org_id
+    LEFT JOIN
+    (SELECT d1.orgId ,to_char( count(1)) numbE,round(sum(d1.customtotalrmb),2)customtotalrmbE,round(sum(d1.customtotalusd),2)customtotalusdE FROM QP_DECHEAD d1
+    WHERE 1=1
+    and d1.isdelete != '1'
+    and d1.ieFlag= 'E'
+    and d1.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+    and d1.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+    and d1.declarationdata is not null
+    <if test="keyCompanyFlag != null and keyCompanyFlag != ''" >
+        and exists (select 1 from IMPORTANT_COMPANY where ORG_ID=s.org_id)
+    </if>
+    GROUP BY d1.orgId)b ON b.orgId =s.org_id order by orgid
+        )A
+    </select>
+    <select id="queryKeyCompanyDataByCode" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT a1.mon  ,nvl(a.numbI,0)numbI ,
+        nvl(a.customtotalrmbI,0)customtotalrmbI  , nvl(a.customtotalusdI,0)customtotalusdI ,nvl(b.numbE,0)numbE  , nvl(b.customtotalrmbE,0)customtotalrmbE ,nvl( b.customtotalusdE,0)customtotalusdE FROM
+        ( SELECT substr(d.declarationData,0,6)as mon
+        FROM QP_DECHEAD d    WHERE  1=1
+        AND d.ORGID=#{orgId,jdbcType=VARCHAR}
+        and d.isdelete != '1'
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and d.declarationdata is not null
+        group by substr(d.declarationData,0,6)
+        order by mon) a1  LEFT JOIN
+        (
+        SELECT substr(d1.declarationData,0,6)as mon1,
+        d1.orgId ,
+        to_char( count(1)) numbI,
+        round(sum(d1.customtotalrmb),
+        2)customtotalrmbI,
+        round(sum(d1.customtotalusd),
+        2)customtotalusdI
+        FROM
+        QP_DECHEAD d1
+        WHERE
+        1=1
+        and d1.isdelete != '1'
+        and d1.ieFlag= 'I'
+        and d1.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d1.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and d1.declarationdata is not null
+        AND d1.ORGID=#{orgId,jdbcType=VARCHAR}
+        GROUP BY
+        substr(d1.declarationData,0,6),d1.orgId
+        )a
+        ON a.mon1  =a1.mon
+        LEFT JOIN
+        (
+        SELECT
+        substr(d1.declarationData,0,6)as mon1,
+        d1.orgId ,
+        to_char( count(1)) numbE,
+        round(sum(d1.customtotalrmb),
+        2)customtotalrmbE,
+        round(sum(d1.customtotalusd),
+        2)customtotalusdE
+        FROM
+        QP_DECHEAD d1
+        WHERE
+        1=1
+        and d1.isdelete != '1'
+        and d1.ieFlag= 'E'
+        and d1.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d1.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and d1.declarationdata is not null
+        AND d1.ORGID=#{orgId,jdbcType=VARCHAR}
+        GROUP BY
+        substr(d1.declarationData,0,6),d1.orgId
+        )b
+        ON b.mon1  =a1.mon
+        order by a1.mon
+    </select>
+    <select id="queryInspectRateDash" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select to_char( count(1)) value,case d.IEFLAG  when 'I' then '进口'
+        when 'E' then '出口'
+        END AS name
+        from qp_dechead d where 1=1
+        and d.isdelete != '1'
+        <if test="qyFlag != null and qyFlag != ''" >
+            and d.orgid = #{orgid,jdbcType=VARCHAR}
+        </if>
+        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
+        and d.declarationdata&lt;= #{endDate,jdbcType=VARCHAR}
+        and d.declarationdata is not null
+        AND d.CHECKTIME is not  null
+        group by d.IEFLAG
+    </select>
+</mapper>

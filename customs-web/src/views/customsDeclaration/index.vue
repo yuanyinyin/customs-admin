@@ -40,8 +40,8 @@
               <el-form-item>
               <span class="filter-item">
                 <el-button type="success" :icon="Search" @click="handleFilter">查询</el-button>
-                <el-button type="primary" :icon="Plus" @click="handleFilter">导出</el-button>
-                <el-button type="primary" :icon="Plus" @click="handleFilter">打印</el-button>
+                <el-button type="primary" :icon="Plus" @click="exportExcel">导出</el-button>
+                <!-- <el-button type="primary" :icon="Plus" @click="handleFilter">打印</el-button> -->
               </span>
               </el-form-item>
             </el-form>
@@ -54,17 +54,19 @@
           
 
         </template>
-        <el-table v-model:data="tableData" v-loading="loading" stripe style="width: 100%">
+        <el-table :data="tableData" v-loading="loading"  row-key="id" lazy  fit stripe style="width: 100%">
           <el-table-column type="selection" align="center" width="50" />
           <el-table-column type="index" label="序号" align="center" width="55">
             <template #default="scope">
               <span>{{ (listQuery.page - 1) * listQuery.limit + scope.$index + 1 }}</span>
             </template>
           </el-table-column>
+         <el-table-column v-if="false" prop="id" label="idd" ></el-table-column>
+
           <el-table-column prop="entryid" label="报关单号" align="center">
             <template  #default="scope">
                 
-                 <a class="text_self_blue" href="javascript:;" @click="goDetail(scope.row.id)">{{scope.row.id}}</a>
+                 <a class="text_self_blue" href="javascript:;" @click="goDetail(scope.row.id)">{{scope.row.entryid}}</a>
                 
              </template>
           </el-table-column>
@@ -221,6 +223,31 @@ const getRoles = () => {
       .catch((response) => {
       })
 }
+
+import {exportHead } from "@/api/qpDec";
+
+
+const exportExcel = () => {
+  //todo 
+  let params = Object.assign(deepClone(listQuery._rawValue),
+           {
+             startTime: parseTime(listQuery._rawValue.declarationData?.length > 0 ? listQuery._rawValue.declarationData[0] : ""),
+             endTime: parseTime(listQuery._rawValue.declarationData?.length > 1 ? listQuery._rawValue.declarationData[1] : "")
+             }
+             )
+  // exportHead({ieFlag:"I"}).then(res => {
+    exportHead(params).then(res => {
+    let blob = new Blob([res.data], {type: 'application/octet-stream'});
+    let url = URL.createObjectURL(blob);
+    const link = document.createElement('a'); //创建a标签
+    link.href = url;
+    link.download = '重大进程.xlsx'; //重命名文件
+    link.click();
+    URL.revokeObjectURL(url);
+  })
+}
+
+
 /**
  * 分页大小修改处理
  */
