@@ -49,10 +49,10 @@ export default ({ command, mode }: any) => {
       cors: true, // 类型： boolean | CorsOptions 为开发服务器配置 CORS。默认启用并允许任何源
       //proxy look for https://vitejs.cn/config/#server-proxy
       proxy: {
-        '/ycjAdmin': {
+        '/customsAdmin': {
           target: loadEnv(mode, process.cwd()).VITE_APP_PROXY_URL,
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/ycjAdmin/, '')//使用pureAdmin匹配,将pureAdmin及其以前的部分都替换成VITE_APP_PROXY_URL，然后拼接上 api文件夹下自己写的请求的路由
+          rewrite: (path) => path.replace(/^\/customsAdmin/, '')//使用pureAdmin匹配,将pureAdmin及其以前的部分都替换成VITE_APP_PROXY_URL，然后拼接上 api文件夹下自己写的请求的路由
           // rewrite: (path) => path.replace(/^\/api/, '')
         }
       }

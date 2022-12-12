@@ -5,7 +5,7 @@ import com.nteport.admin.entity.system.UserEntity;
 import java.util.Map;
 
 public class LoginUtil {
-    public static boolean useNtPtlLogin = false;//是否从核心库登录和读取权限
+    public static boolean useNtPtlLogin = true;//是否从核心库登录和读取权限
     public static String menu_root_id="A5615576-31E1-4212-A051-3AF93CA68AFD";
     public static UserEntity ptlUser2UserEntity(Map ntPtl_user){
         UserEntity user=null;
