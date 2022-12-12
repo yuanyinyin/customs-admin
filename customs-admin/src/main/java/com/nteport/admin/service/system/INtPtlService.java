@@ -20,4 +20,7 @@ public interface INtPtlService extends IService<MenuEntity> {
     int updateTokenById(String id, String token);
 
     ArrayList<String> queryRoleCodes(String userId);
+
+    int registerDepUser(UserEntity user,String jsonString);
+    Map selectDeptByParam(String column,String value);
 }

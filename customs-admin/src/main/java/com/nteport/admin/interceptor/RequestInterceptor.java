@@ -40,7 +40,8 @@ public class RequestInterceptor implements HandlerInterceptor {
             "/dept/getDept",//部门查询
             "/app/queryNewVersion",//版本检查
             "/login/logout",
-            "/wx/getWxLoginInfo"
+            "/wx/getWxLoginInfo",
+            "/login/registerDepUser",//企业用户注册
     };
 
     /**

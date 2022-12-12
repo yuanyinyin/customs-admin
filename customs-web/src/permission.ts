@@ -9,7 +9,7 @@ import getPageTitle from '@/utils/getPageTitle'
 import { RouterRowTy, RouterTy } from '~/router'
 import { createRouterMatcher } from 'vue-router'
 
-const whiteList = ['/login', '/404', '/401','/register','/registerAgree'] // no redirect whitelist
+const whiteList = ['/login', '/404', '/401','/register','/registerAgree','/login/registerDepUser'] // no redirect whitelist
 router.beforeEach(async (to: any, from, next: any) => {
   // start progress bar
   if (settings.isNeedNprogress) NProgress.start()

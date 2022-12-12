@@ -99,5 +99,16 @@ export function getNtPtlLoginDep(){
     isAlertErrorMsg: true
   })
 }
+//注册企业用户
+export function registerDepUser(data: ObjTy){
+  return request({
+    url: `/login/registerDepUser`,
+    data,
+    method: 'post',
+    bfLoading: true,
+    // isParams: true,
+    isAlertErrorMsg: true
+  })
+}
 
 

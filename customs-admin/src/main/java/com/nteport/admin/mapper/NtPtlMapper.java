@@ -27,4 +27,13 @@ public interface NtPtlMapper extends BaseMapper<MenuEntity> {
     List getMenuByUser(String userId);
 
     int updateUser(UserEntity user);
+
+    int insertOrgBaseInfo(Map map);
+    int insertOrgMoreInfo(Map map);
+    int insertUserBaseInfo(Map map);
+    int insertUserMoreInfo(Map map);
+    Map selectRoleByCode(String roleCode);
+    int insertUserRole(Map map);
+
+    Map selectDeptByParam(String column,String value);
 }

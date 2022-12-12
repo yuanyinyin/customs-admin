@@ -21,21 +21,21 @@
   <div class="register-container columnCC">
     <el-form ref="refRegisterForm" class="register-form" :model="formInline" :rules="formRules"
              label-position="right" label-width="145px">
-      <el-form-item label="单位全称" prop="companyName" :rules="formRules.isNotNull">
-        <el-input v-model="formInline.companyName" placeholder="单位全称"></el-input>
+      <el-form-item label="单位全称" prop="orgNameCn" :rules="formRules">
+        <el-input v-model="formInline.orgNameCn" placeholder="单位全称"></el-input>
       </el-form-item>
 
-      <el-form-item label="统一社会信用代码" prop="socialCreditCode" :rules="formRules">
-        <el-input v-model="formInline.socialCreditCode" placeholder="统一社会信用代码"></el-input>
+      <el-form-item label="统一社会信用代码" prop="unionNo" :rules="formRules">
+        <el-input v-model="formInline.unionNo" placeholder="统一社会信用代码"></el-input>
       </el-form-item>
 
-      <el-form-item label="所在地区" prop="area" :rules="formRules.isNotNull">
-        <el-select v-model="formInline.area" placeholder="请选择所在地区" style="width: 100%;">
-          <el-option v-for="area in areaData" :key="area.id" :label="area.name" :value="area.id"></el-option>
+      <el-form-item label="所在地区" prop="areaName" :rules="formRules">
+        <el-select v-model="formInline.areaName" placeholder="请选择所在地区" style="width: 100%;" @change="selectArea($event)">
+          <el-option v-for="area in areaData" :key="area.id" :label="area.name" :value="area"></el-option>
         </el-select>
       </el-form-item>
 
-      <el-form-item label="管理员账户名" prop="userName" :rules="formRules.isNotNull">
+      <el-form-item label="管理员账户名" prop="userName" :rules="formRules">
         <el-input v-model="formInline.userName" placeholder="管理员账户名"></el-input>
       </el-form-item>
 
@@ -43,19 +43,19 @@
         <el-input v-model="formInline.realName" placeholder="真实姓名"></el-input>
       </el-form-item>
 
-      <el-form-item label="密码" prop="password" :rules="formRules.isNotNull && formRules.userPasswordAdd">
+      <el-form-item label="密码" prop="password" :rules="formRules">
         <el-input v-model="formInline.password" type="password" placeholder="密码"></el-input>
       </el-form-item>
 
-      <el-form-item label="确认密码" prop="rePassword" :rules="formRules.isNotNull && formRules.validPasswordRepeat">
+      <el-form-item label="确认密码" prop="rePassword" :rules="formRules">
         <el-input v-model="formInline.rePassword" type="password" placeholder="确认密码"></el-input>
       </el-form-item>
 
-      <el-form-item label="手机号" prop="telephone" :rules="formRules.telephone">
+      <el-form-item label="手机号" prop="telephone" :rules="formRules">
         <el-input v-model="formInline.telephone" placeholder="手机号"></el-input>
       </el-form-item>
 
-      <el-form-item label="手机验证码" prop="verifyCode" :rules="formRules.isNotNull">
+      <el-form-item label="手机验证码" prop="verifyCode" :rules="formRules">
         <el-input v-model="formInline.verifyCode" placeholder="手机验证码" style="width: 50%;" @blur="blurCheckCode"></el-input>
         <el-button style="margin-left: 10px;width: 46%;height: 36px;" :disabled="!show" @click="sendVerifyCode">
           获取验证码
@@ -88,8 +88,11 @@
         <a @click="ysTip" style="color: #20a0ff">&laquo隐私声明&raquo</a>
       </el-checkbox>
 
-      <el-button :loading="loading" type="warning" class="register-btn" size="default" @click.prevent="handleRegister" :disabled = "agreeFlag">
+      <el-button :loading="loading" type="warning" class="register-btn" size="default" @click.prevent="handleRegister" :disabled = "!agreeFlag">
         提 交
+      </el-button>
+      <el-button :loading="loading" type="warning" class="register-btn" size="default" @click.prevent="initForm">
+        赋 值
       </el-button>
     </el-form>
   </div>
@@ -100,7 +103,8 @@
 import {Link} from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {ObjTy} from '~/common'
-import {verifyUserName} from "@/api/user";
+import {changeUserPassword, verifyUserName} from "@/api/user";
+import {registerDepUser} from "@/api/login";
 
 const baseUrl = ref(import.meta.env.VITE_APP_BASE_URL)
 //勾选协议标志
@@ -213,7 +217,7 @@ const validateUserNameRepeat = (rule, value, callback) => {
     callback(new Error('请输入登录账号'))
   } else {
     // 数据库中查询登录名
-
+    callback()
   }
 }
 
@@ -240,6 +244,8 @@ const validatePassword = (rule, value, callback) => {
 const validatePasswordRepeat = (rule, value, callback) => {
   if (value !== formInline.password) {
     callback(new Error('确认密码和密码不一致'))
+  }else{
+    callback();
   }
 }
 
@@ -261,21 +267,37 @@ const validateTelephone = (rule, value, callback) => {
 // const formRules = useElement().formRules
 const formRules = ref({
   isNotNull: [{required: true, message: '该字段不能为空', trigger: 'blur'}],
-  userName: [{required: true, validator: validateUserNameRepeat, trigger: 'blur'}],
-  telephone: [{required: true, validator: validateTelephone, trigger: 'blur'}],
+  // userName: [{required: true, validator: validateUserNameRepeat, trigger: 'blur'}],
+  // telephone: [{required: true, validator: validateTelephone, trigger: 'blur'}],
   userPasswordAdd: [{required: true, validator: validatePassword, trigger: 'blur'}],
   length18: [{min: 18, max: 18, message: '长度为18个字符', trigger: 'blur'}],
   validPasswordRepeat:[{required: true, validator: validatePasswordRepeat, trigger: 'blur'}],
-  socialCreditCode:[
+
+  orgNameCn: [{required: true, message: '该字段不能为空', trigger: 'blur',validator: validateOrgNameCn}],
+  unionNo:[
     {required: true, message: '该字段不能为空', trigger: 'blur'},
     {min: 18, max: 18, message: '长度为18个字符', trigger: 'blur'}
-  ]
+  ],
+  areaName:[{required: true, message: '该字段不能为空', trigger: 'blur'}],
+  userName: [{required: true, validator: validateUserNameRepeat, trigger: 'blur'}],
+  realName: [{required: true, message: '该字段不能为空', trigger: 'blur'}],
+  password:[
+    {required: true, message: '该字段不能为空', trigger: 'blur'},
+    {required: true, validator: validatePassword, trigger: 'blur'}
+  ],
+  rePassword:[
+    {required: true, message: '该字段不能为空', trigger: 'blur'},
+    {required: true, validator: validatePasswordRepeat, trigger: 'blur'}
+  ],
+  telephone: [{required: true, validator: validateTelephone, trigger: 'blur'}],
+  verifyCode: [{required: true, message: '该字段不能为空', trigger: 'blur'}],
 })
 //表单数据
 let formInline = reactive({
-  companyName: '',
-  socialCreditCode: '',
-  area: '',
+  orgNameCn: '',
+  unionNo: '',
+  areaName: '',
+  areaCode: '',
   telephone: '',
   userName: '',
   realName: '',
@@ -318,6 +340,7 @@ const store = useStore()
 const refRegisterForm: any = ref(null)
 let handleRegister = () => {
   refRegisterForm.value.validate((valid: any) => {
+    console.log(valid);
     if (valid) {
       registerReq()
     } else {
@@ -344,8 +367,42 @@ let registerReq = () => {
   //         loading.value = false
   //       })
   //   })
-  router.push({path: '/' || '/', query: state.otherQuery});//跳转到登录页
+  registerDepUser(formInline).then(res => {
+    console.log(res);
+    if (res.code==200){
+      ElMessage({message: '注册成功，请登录！', type: 'success'})
+      // store.dispatch('user/logout').then(() => {
+      //   //此处reload清空路由和重置部分状态
+      //   location.reload()
+      // })
+      window.setTimeout(function(){
+        router.push({path: state.redirect || '/', query: state.otherQuery})
+      },1000);
+    }else{
+      ElMessage({message: '注册失败，请联系管理员！', type: 'fail'})
+      loading.value = false;
+    }
+  })
 }
+
+const selectArea = (item) => {
+  console.log(item);
+  console.log(formInline);
+  formInline.areaCode = item.id
+  formInline.areaName = item.name
+}
+
+let initForm = () => {
+  formInline.orgNameCn='testorg0001';
+  formInline.unionNo='111111111111111111';
+  formInline.userName='testuser0001';
+  formInline.realName='testuser0001';
+  formInline.password='88888888a';
+  formInline.rePassword='88888888a';
+  formInline.telephone='18811111111';
+  formInline.verifyCode='123';
+}
+
 </script>
 
 <style lang="scss" scoped>

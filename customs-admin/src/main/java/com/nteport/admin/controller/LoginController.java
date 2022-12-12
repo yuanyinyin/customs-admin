@@ -194,7 +194,31 @@ public class LoginController {
      */
     @PostMapping("/registerDepUser")
     public ApiResponse registerDepUser(@RequestBody String jsonString,UserEntity user) {
-        Map ntptl_dept=ntPtlService.selectDept(user.getDeptId());
-        return ApiResponse.success(JSONObject.toJSON(ntptl_dept));
+        int result= 0;
+        try {
+            result = ntPtlService.registerDepUser(user,jsonString);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ApiResponse.fail("注册失败");
+        }
+        return ApiResponse.success("注册成功");
+    }
+
+    /**
+     * 确认注册信息是否重复
+     *
+     * @param user 用户
+     * @return
+     */
+    @PostMapping("/registerCheck")
+    public ApiResponse registerCheck(@RequestBody String jsonString,UserEntity user) {
+        int result= 0;
+        try {
+            result = ntPtlService.registerDepUser(user,jsonString);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ApiResponse.fail("注册失败");
+        }
+        return ApiResponse.success("注册成功");
     }
 }
