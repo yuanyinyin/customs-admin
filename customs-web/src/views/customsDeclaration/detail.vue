@@ -1,16 +1,8 @@
 <template>
-  <!-- <div class="roles-container scroll-y p"> -->
-  <el-container>
-    <!-- 顶栏 -->
-    <!-- <el-header height="24px">
-      <h2>报关单详情</h2>
-    </el-header> -->
-    <!-- 嵌套容器 -->
+<div>
     <el-container>
       <el-main>
-        <!-- 第一列栅格布局 -->
         <el-row  class="_row1">
-          <!-- <el-col :span="12" class="col1"></el-col> -->
           <el-col :span="24" class="col2">
             <el-form :model="formData" label-width="160px">
               <el-row>
@@ -322,10 +314,6 @@
               </el-row>
 
                <el-row>
-                <!-- <el-col :span="6" class="_el_col">
-                  
-                </el-col> -->
-                
                 <el-col :span="18" class="_el_col">
                   <el-form-item label="标记唛码:">
                    <el-input readonly  v-model="formData.markno" />
@@ -345,7 +333,6 @@
             </el-form>
           </el-col>
         </el-row>
-        <!-- 第二列布局 -->
         <el-row class="_row2">
           <el-col :span="24" class="col3">
             <el-tabs v-model="activeName" type="card" class="tabs" @tab-click="handleTabClick">
@@ -382,10 +369,7 @@
         </el-row>
       </el-main>
     </el-container>
-    <!-- 底栏 -->
-    <!-- <el-footer height="30px">&copy;究极死胖兽 2019</el-footer> -->
-    <!-- <el-footer >&copy;究极死胖兽 2019</el-footer> -->
-  </el-container>
+ 
 
    <DialogOtherThing ref="dialogOtherThingRef" 
        :dialog-good="dialogOtherThingData"
@@ -398,7 +382,7 @@
        :form-data="formBussinessOpt"
         />
 
-  <!-- </div> -->
+ </div>  
 </template>
 
 <script setup lang="ts">
