@@ -208,7 +208,20 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
         try {
             //设置excel表头
             HashMap param = new HashMap<>();
-            List<HashMap<String ,Object>> lists = qpDecHeadMapper.exportExcel(param);
+
+            //
+
+            String startTime =  params.get("startTime");
+            params.remove("startTime");
+            String endTime =  params.get("endTime");
+            params.remove("endTime");
+            if(StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)){
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+                params.put("startTime",simpleDateFormat.format(new Date(Timestamp.valueOf(startTime).getTime())));
+                params.put("endTime",simpleDateFormat.format(new Date(Timestamp.valueOf(endTime).getTime())));
+            }
+
+            List<HashMap<String ,Object>> lists = qpDecHeadMapper.exportExcel(params);
             DecHeadDownBySXXFExcelHelper decHeadDownExcelHelper = new DecHeadDownBySXXFExcelHelper();
             decHeadDownExcelHelper.init(request);
             List<ExportHeads> exportHeads = decHeadDownExcelHelper.getExportRalation(params.get("ieFlag"), request);

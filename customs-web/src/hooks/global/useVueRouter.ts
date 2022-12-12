@@ -5,6 +5,7 @@ const useVueRouterExample = function () {
     const route: any = router.currentRoute
     const getQueryParam = () => {
         if (route.value?.query.params) {
+         
             return JSON.parse(route.value.query.params)
         }
     }

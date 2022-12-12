@@ -24,7 +24,7 @@
                <el-row>
                 <el-col :span="24" class="_el_col">
                   <el-form-item label="特殊关系确认:">
-                    <el-select v-model="formData.data1" placeholder="请选来源">
+                    <el-select v-model="formData.data1" placeholder="请选来源"   disabled>
             <el-option
               v-for="item in sourceOptions"
               :key="item.value"
@@ -40,7 +40,7 @@
               <el-row>
                 <el-col :span="24" class="_el_col">
                   <el-form-item label="价格影响确认:">
-                   <el-select v-model="formData.data2" placeholder="请选来源">
+                   <el-select v-model="formData.data2" placeholder="请选来源" disabled>
             <el-option
               v-for="item in sourceOptions"
               :key="item.value"
@@ -57,7 +57,7 @@
               <el-row>
                 <el-col :span="24" class="_el_col">
                   <el-form-item label="与货物有关的特许权使用费支付确认:">
-                   <el-select v-model="formData.data3" placeholder="请选来源">
+                   <el-select v-model="formData.data3" placeholder="请选来源" disabled>
             <el-option
               v-for="item in sourceOptions"
               :key="item.value"

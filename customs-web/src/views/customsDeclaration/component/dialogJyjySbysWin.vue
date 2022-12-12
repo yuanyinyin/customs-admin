@@ -12,7 +12,7 @@
             </template>
 
             <el-table  height="300" v-model:data="tableData" v-loading="loading" stripe style="width: 100%">
-          <el-table-column type="selection" align="center" width="50" />
+          <!-- <el-table-column type="selection" align="center" width="50" /> -->
           <el-table-column type="index" label="序号" align="center" width="55">
             <template #default="scope">
               <span>{{  scope.$index + 1 }}</span>
@@ -41,35 +41,35 @@
               <el-row>
                 <el-col :span="24" class="_el_col">
                   <el-form-item label="境内收发货人名称(外文):">
-                     <el-input  v-model="formData.domesticconsigneeename" />
+                     <el-input readonly  v-model="formData.domesticconsigneeename" />
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="24" class="_el_col">
                   <el-form-item label="境外收发货人名称(中文):">
-                     <el-input  v-model="formData.overseasconsignorcname" />
+                     <el-input readonly  v-model="formData.overseasconsignorcname" />
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="24" class="_el_col">
                   <el-form-item label="境外发货人地址:">
-                     <el-input  v-model="formData.overseasconsignoraddr" />
+                     <el-input readonly  v-model="formData.overseasconsignoraddr" />
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="24" class="_el_col">
                   <el-form-item label="卸毕日期:">
-                     <el-input  v-model="formData.cmpldschrgdt" />
+                     <el-input readonly  v-model="formData.cmpldschrgdt" />
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="24" class="_el_col">
                   <el-form-item label="商品英文名称:">
-                     <el-input  v-model="formData.declgoodsenames" />
+                     <el-input readonly  v-model="formData.declgoodsenames" />
                   </el-form-item>
                 </el-col>
               </el-row>

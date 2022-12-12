@@ -11,7 +11,7 @@
             range-separator="到"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            @change="onSearch"
+            @change="handleFilter"
           >
           </el-date-picker>
           </el-form-item>
@@ -19,7 +19,7 @@
              
               <el-form-item label="进出口类型">
             <el-select v-model="listQuery.ieFlag" placeholder="进出口类型" clearable
-                       @change="onSearch">
+                       @change="handleFilter">
               <el-option
                 v-for="item in statuses"
                 :key="item.value"
@@ -41,7 +41,7 @@
               <span class="filter-item">
                 <el-button type="success" :icon="Search" @click="handleFilter">查询</el-button>
                 <el-button type="primary" :icon="Plus" @click="exportExcel">导出</el-button>
-                <!-- <el-button type="primary" :icon="Plus" @click="handleFilter">打印</el-button> -->
+                <el-button type="primary" :icon="Plus" @click="handlePrint">打印</el-button>
               </span>
               </el-form-item>
             </el-form>
@@ -54,7 +54,7 @@
           
 
         </template>
-        <el-table :data="tableData" v-loading="loading"  row-key="id" lazy  fit stripe style="width: 100%">
+        <el-table :data="tableData" v-loading="loading"  row-key="id" lazy  fit stripe style="width: 100%"  @selection-change="handleSelectionChange">
           <el-table-column type="selection" align="center" width="50" />
           <el-table-column type="index" label="序号" align="center" width="55">
             <template #default="scope">
@@ -76,7 +76,7 @@
           </el-table-column>
           <el-table-column prop="billno" label="提运单号" align="center">
           </el-table-column>
-           <el-table-column prop="iedate" label="进出口日期" align="center">
+           <el-table-column prop="iedate" label="进出口日期" align="center" >
           </el-table-column>
           <el-table-column prop="declarationdata" label="申报日期" align="center">
           </el-table-column>
@@ -84,7 +84,7 @@
           </el-table-column>
           <el-table-column prop="agentname" label="申报单位" align="center">
           </el-table-column>
-          <el-table-column prop="ieflag" label="进出口标志" align="center">
+          <el-table-column prop="ieflag" label="进出口标志" align="center" :formatter="formatIeFlag">
           </el-table-column>
           <el-table-column prop="custommasterValue" label="申报地口岸" align="center">
           </el-table-column>
@@ -123,6 +123,14 @@
        :head-id="currentId"
         />
 
+
+         <DialogPrint ref="dialogPrintRef" 
+       :dialog-good="dialogPrintData"
+       :form-data="formPrint"
+        />
+
+
+
   </div>
 </template>
 
@@ -132,10 +140,16 @@ import {Search} from '@element-plus/icons-vue'
 import {dialogTy} from '~/dialog'
 import DialogState from './dialogState.vue'
 import {Ref} from 'vue'
-import {ElMessage, ElMessageBox} from 'element-plus'
+// import {ElMessage, ElMessageBox} from 'element-plus'
+import { ElMessage } from "element-plus/es";
 import {parseTime, deepClone} from '@/utils/dateTime'
 
 const store = useStore()
+
+import DialogPrint from './component/dialogPrint.vue'
+let formPrint = ref({})
+const dialogPrintData: Ref<dialogTy> = ref({})
+const dialogPrintRef: any = ref(null)
 
 // table显示角色数组
 const currentId = ref<string>('')
@@ -152,6 +166,14 @@ onMounted(() => {
   getRoles()
 })
 
+
+let multipleSelection = ref([])
+const handleSelectionChange = (val: any) => {
+  multipleSelection.value = val
+}
+
+
+
 /**
  * 新增
  */
@@ -160,11 +182,25 @@ const dialogData: Ref<dialogTy> = ref({})//ts的规范写法，定义变量的�
 
 // 审核状态
 const statuses = [
-  {name: '全部', value: ''},
+  {name: '请选择', value: ''},
   {name: '进口', value: 'I'},
   {name: '出口', value: 'E'},
 
 ]
+
+const formatIeFlag= (row) => {
+  switch (row.ieflag) {
+    case "I":
+      return "进口";
+    case "E":
+      return "出口";
+    
+  }
+}
+
+
+
+
 import { useRouter } from 'vue-router';
 const router = useRouter()
 
@@ -176,11 +212,12 @@ const goDetail = (id) =>{
       const _path =  '/customsDeclarationDetail'
       const pramSelf = { headId: id };
        routeData = router.resolve({ //使用resolve
-      name: '',
+      //  mode: 'history',
+      name: '报关单详情',
       path: _path,
       query: pramSelf,
       })
-      window.open(routeData.href, '_blank')
+      window.open(routeData.href, '_self')
     
 
 
@@ -205,7 +242,6 @@ const permissionsDialog: Ref<dialogTy> = ref({})//ts的规范写法，定义变�
 
 // 获取角色列表
 const getRoles = () => {
-
   let params = Object.assign(deepClone(listQuery._rawValue),
            {
              startTime: parseTime(listQuery._rawValue.declarationData?.length > 0 ? listQuery._rawValue.declarationData[0] : ""),
@@ -217,31 +253,90 @@ const getRoles = () => {
   store
       .dispatch('qpDec/getHeadList', params)
       .then((response) => {
+        // console.log(1)
         tableData.value = response.items
+        // console.log(2)
         total.value = response.total
+        // console.log(3)
       })
       .catch((response) => {
+        console.log(response)
       })
 }
 
 import {exportHead } from "@/api/qpDec";
+// const { elMessage } = useElement()
+
+import qs from 'qs';
 
 
-const exportExcel = () => {
+
+const handlePrint = () => {
+  let rowDeleteIdArr: Array<any> = []
+  rowDeleteIdArr = multipleSelection.value.map((mItem: any) => {
+    return mItem.id
+  })
+ 
+  if(rowDeleteIdArr && rowDeleteIdArr.length != 1){
+      alert("请选择一天记录打印!")
+      return;
+  } 
+  // params  = qs.stringify({ids:rowDeleteIdArr} , { arrayFormat: 'indices',allowDots: true })
+  
+    formPrint.value = rowDeleteIdArr[0];
+    console.log(formPrint)
+    dialogPrintData.value = {
+    show: true,
+    title: '选择打印类型',
+    
+  }
+
+
   //todo 
   let params = Object.assign(deepClone(listQuery._rawValue),
            {
              startTime: parseTime(listQuery._rawValue.declarationData?.length > 0 ? listQuery._rawValue.declarationData[0] : ""),
              endTime: parseTime(listQuery._rawValue.declarationData?.length > 1 ? listQuery._rawValue.declarationData[1] : "")
              }
-             )
+      )
+
+  // }
+
+ 
+}
+
+const exportExcel = () => {
+  let rowDeleteIdArr: Array<any> = []
+  rowDeleteIdArr = multipleSelection.value.map((mItem: any) => {
+    return mItem.id
+  })
+  let params ;
+  // if(rowDeleteIdArr && rowDeleteIdArr.length > 0){
+  //     params  = qs.stringify({ids:rowDeleteIdArr} , { arrayFormat: 'indices',allowDots: true })
+  // }else{
+    if(!listQuery._rawValue.ieFlag){
+    // ElMessage({ message: '请选择进出口类型', type: 'error' })
+    alert("请选择进出口类型")
+    //  elMessage.error("请选择进出口类型")
+    return;
+  }
+  //todo 
+   params = Object.assign(deepClone(listQuery._rawValue),
+           {
+             startTime: parseTime(listQuery._rawValue.declarationData?.length > 0 ? listQuery._rawValue.declarationData[0] : ""),
+             endTime: parseTime(listQuery._rawValue.declarationData?.length > 1 ? listQuery._rawValue.declarationData[1] : "")
+             }
+      )
+
+  // }
+
   // exportHead({ieFlag:"I"}).then(res => {
     exportHead(params).then(res => {
     let blob = new Blob([res.data], {type: 'application/octet-stream'});
     let url = URL.createObjectURL(blob);
     const link = document.createElement('a'); //创建a标签
     link.href = url;
-    link.download = '重大进程.xlsx'; //重命名文件
+    link.download = '报关单.xlsx'; //重命名文件
     link.click();
     URL.revokeObjectURL(url);
   })
