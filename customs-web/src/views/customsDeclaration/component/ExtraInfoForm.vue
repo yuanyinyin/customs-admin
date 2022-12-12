@@ -10,12 +10,12 @@
                <el-row>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="检验检疫受理机关:">
-                    <el-input  v-model="formData.orgcodeValue" />
+                    <el-input readonly  v-model="formData.orgcodeValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="企业资质:">
-                    <el-input  v-model="formData.coplimitsnames" />
+                    <el-input readonly  v-model="formData.coplimitsnames" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -23,22 +23,22 @@
               <el-row>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="领证机关:">
-                    <el-input  v-model="formData.vsaorgcodeValue" />
+                    <el-input readonly  v-model="formData.vsaorgcodeValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="口岸检验检疫机关:">
-                    <el-input  v-model="formData.insporgcodeValue" />
+                    <el-input readonly  v-model="formData.insporgcodeValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="启运日期:">
-                    <el-input  v-model="formData.despdate" />
+                    <el-input readonly  v-model="formData.despdate" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="B/L号:">
-                    <el-input  v-model="formData.blno" />
+                    <el-input readonly  v-model="formData.blno" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -47,17 +47,17 @@
               <el-row>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="目的地检验检疫机关:">
-                    <el-input  v-model="formData.purporgcodeValue" />
+                    <el-input readonly  v-model="formData.purporgcodeValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="关联号码及理由:">
-                    <el-input  v-model="formData.correlationno" />
+                    <el-input readonly  v-model="formData.correlationno" />
                   </el-form-item>
                 </el-col>
 
                  <el-col :span="5" class="_el_col" :push="2">
-                    <el-input  v-model="formData.correlationreasonflagValue" />
+                    <el-input readonly  v-model="formData.correlationreasonflagValue" />
                 </el-col>
 
                    <el-col :span="3" class="_el_col" :push="3">
@@ -71,17 +71,17 @@
               <el-row>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="原箱运输:">
-                    <el-input  v-model="formData.origboxflagValue" />
+                    <el-input readonly  v-model="formData.origboxflagValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="特殊业务标识:">
-                    <el-input  v-model="formData.specdeclflagValue" />
+                    <el-input readonly  v-model="formData.specdeclflagValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="5" class="_el_col">
                   <el-form-item label="所需单证:">
-                    <el-input  v-model="formData.sxdz" />
+                    <el-input readonly  v-model="formData.sxdz" />
                   </el-form-item>
                 </el-col>
 
