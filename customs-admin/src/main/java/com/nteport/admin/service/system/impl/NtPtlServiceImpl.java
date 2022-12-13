@@ -13,23 +13,35 @@ import com.nteport.admin.entity.system.UserEntity;
 import com.nteport.admin.mapper.MenuMapper;
 import com.nteport.admin.mapper.NtPtlMapper;
 import com.nteport.admin.mapper.UserMapper;
+import com.nteport.admin.service.FeignMessageService;
 import com.nteport.admin.service.system.IMenuService;
 import com.nteport.admin.service.system.INtPtlService;
 import com.nteport.admin.service.system.IPageHelper;
 import com.nteport.admin.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class NtPtlServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> implements INtPtlService {
 
     @Autowired
     private NtPtlMapper ntPtlMapper;
+
+    @Autowired
+    private FeignMessageService feignMessageService;
+
+    @Value("${sms_customs_register}")
+    private String smsCustomsRegister;
+
+    @Autowired
+    private RedisUtils redisUtils;
 
     /**
      * 查询用户
@@ -179,12 +191,39 @@ public class NtPtlServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> implem
             jsonMap.put("code", yzm);
             String jsonParam=JSON.toJSONString(jsonMap);//阿里云短信变量内容json字符串
             request.getSession().setAttribute("yzm", yzm);//把验证码存入session中用于后续判断是否正确
-            AliMessageResult aliMessageResult= AliMessageUtil.sendMsg(phone,source_code, jsonParam);
-            if (!aliMessageResult.getRequestId().isEmpty()&&"OK".equals(aliMessageResult.getCode())) {
+//            AliMessageResult aliMessageResult= AliMessageUtil.sendMsg(phone,source_code, jsonParam);
+//            if (!aliMessageResult.getRequestId().isEmpty()&&"OK".equals(aliMessageResult.getCode())) {
+//                result="1";//短信发送成功
+//            }else{
+//                result="阿里云短信发送失败";//短信发送失败
+//            }
+
+            /*微服务发送短信*/
+            StringBuilder str = new StringBuilder();
+            Random random = new Random();
+            for (int i = 0; i < 6; i++) {
+                str.append(random.nextInt(10));
+            }
+            String verification = str.toString();
+            //组装发送数据
+            Map colomnMap = new HashMap();
+            colomnMap.put("contactTel", phone);
+            colomnMap.put("code", verification);
+            //组装短信接口字段
+            Map mapMes = new HashMap();
+            mapMes.put("messageContent", colomnMap);
+            mapMes.put("sendMobile", phone);
+            mapMes.put("source", smsCustomsRegister);
+            Map resultMap = feignMessageService.sendMessage(JSON.toJSONString(mapMes));
+
+            if ("1".equals(resultMap.get("result"))) {
+                redisUtils.setWithTime(phone, verification, 5L, TimeUnit.MINUTES);
                 result="1";//短信发送成功
-            }else{
+            } else {
                 result="阿里云短信发送失败";//短信发送失败
             }
+            /*end*/
+
             save2sendedYzmInfoList(ip,phone,yzm);//add in 20220722 for 防止短信轰炸  添加手机号发送短信验证码间隔判断
 //			env.getResponse().getWriter().write(yzm);
 //            env.getResponse().getWriter().write(result);
