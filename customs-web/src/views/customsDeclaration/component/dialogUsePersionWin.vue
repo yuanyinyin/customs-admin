@@ -85,14 +85,14 @@ const props = defineProps({
 // ]
 
 // // 获取角色列表
-const getList = () => {
+const getList = (_headId) => {
     // console.log(123)
     //  console.log(props.headId)
-    if (!props.headId) {
+    if (!_headId) {
         return;
     }
     let params =  {
-        headid: props.headId
+        headid: _headId
 
     }
     listUser(params)

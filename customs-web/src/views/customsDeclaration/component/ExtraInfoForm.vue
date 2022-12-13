@@ -99,13 +99,13 @@
 
     </el-form>
 
-     <dialogUsePersionWin ref="dialogBussinessOptRef" 
+     <dialogUsePersionWin ref="dialogUsePersionWinRef" 
        :dialog-good="dialogUsePersionWinData"
        
        :head-id="currentId"
         />
 
-          <dialogJyjySbysWin ref="dialogJyjySbysWinRef" 
+        <dialogJyjySbysWin ref="dialogJyjySbysWinRef" 
        :dialog-good="dialogJyjySbysWinData"
        :form-data="formJyjySbysWin"
        :head-id="currentId"
@@ -135,8 +135,9 @@ import DialogJyjySbysWin from './dialogJyjySbysWin.vue'
 let formJyjySbysWin = ref({})
 const dialogJyjySbysWinData: Ref<dialogTy> = ref({})
 
+ const dialogUsePersionWinRef = ref<InstanceType<typeof DialogUsePersionWin>>()
 
-
+ const dialogJyjySbysWinRef = ref<InstanceType<typeof DialogJyjySbysWin>>()
 
 // 组件属性
 const props = defineProps({
@@ -167,12 +168,14 @@ const usePersionWin = () => {
     title: '使用人',
     
   }
+  dialogUsePersionWinRef.value.getList(headid);
 
 }
 
 
 const jyjySbysWin = () => {
    formJyjySbysWin.value =   props.formData ;
+   const headid =   props.formData.id ;
     // console.log(promiseitmes)
     const firstIsYes = false
     
@@ -181,7 +184,7 @@ const jyjySbysWin = () => {
     title: '检验检疫申报要素',
     
   }
-
+dialogJyjySbysWinRef.value.getList(headid);
 }
 
 
