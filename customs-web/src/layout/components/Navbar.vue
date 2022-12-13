@@ -45,7 +45,12 @@
 
             <!-- 修改当前登录用户的密码 -->
             <el-dropdown-item divided @click="changeUserPassword">
-              <span>修改密码</span>
+              <span>个人信息</span>
+            </el-dropdown-item>
+
+            <!-- 企业信息 -->
+            <el-dropdown-item divided @click="showDepInfo">
+              <span>企业信息</span>
             </el-dropdown-item>
 
             <el-dropdown-item divided @click="loginOut">{{ $t('navbar.logOut') }}</el-dropdown-item>
@@ -55,6 +60,7 @@
 
       <!-- 用户修改密码 Dialog -->
       <ChangePasswordDialog :change-password-dialog="changePasswordDialog" :form-data="formData" />
+      <ShowDepInfoDialog :showDepInfoDialog="showDepInfoDialog" :form-data="formData" />
     </div>
   </div>
 </template>
@@ -72,6 +78,7 @@ import { useStore } from 'vuex'
 import { Ref } from 'vue'
 import { dialogTy } from '~/dialog'
 import ChangePasswordDialog from './changePasswordDialog.vue'
+import ShowDepInfoDialog from './showDepInfo.vue'
 
 const store = useStore()
 const settings = computed(() => {
@@ -109,6 +116,27 @@ const changeUserPassword = () => {
     newPass: ''
   }
 }
+
+// 展示企业信息
+const showDepInfoDialog: Ref<dialogTy> = ref({
+  show: false
+}) //ts的规范写法，定义变量的类型
+
+const showDepInfo = () => {
+  showDepInfoDialog.value = {
+    show: true
+  }
+  formData.value = {
+    /** 传向dialog的 params
+     * ---------------------
+     * | oldPass | newPass |
+     * ---------------------
+     */
+    // oldPass: '',
+    // newPass: ''
+  }
+}
+
 
 /*
  * 退出登录

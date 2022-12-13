@@ -38,7 +38,9 @@ public class TokenServiceImpl extends ServiceImpl<UserMapper, UserEntity> implem
         if(LoginUtil.useNtPtlLogin){
             Map ntPtl_userinfo=ntPtlMapper.selectUserByToken(value);
             userEntity =LoginUtil.ptlUser2UserEntity(ntPtl_userinfo);
-            userEntity.setRoleCodes(ntPtlMapper.queryRoleCodes(userEntity.getId()));
+            if (userEntity!=null){
+                userEntity.setRoleCodes(ntPtlMapper.queryRoleCodes(userEntity.getId()));
+            }
         }
         /*end*/
 

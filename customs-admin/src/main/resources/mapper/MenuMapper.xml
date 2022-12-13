@@ -14,7 +14,7 @@
         where b.menu_id = a.id and exists (
         select c.role_id from t_user_role c
         where c.role_id = b.role_id
-        <if test="userId != -1">
+        <if test="userId != '-1'">
             and c.user_id = #{userId,jdbcType=VARCHAR}
         </if>
         ))
