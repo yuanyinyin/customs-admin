@@ -60,6 +60,16 @@ const consRoutes: RouterTy = [
             }
         ]
     },
+    {
+      path: '/register',
+      component: () => import('@/views/register/Register.vue'),
+      hidden: true
+    },
+    {
+      path: '/registerAgree',
+      component: () => import('@/views/register/RegisterAgree.vue'),
+      hidden: true
+    },
 ]
 
 export const constantRoutes: RouterTy = import.meta.env.VITE_APP_ENV === 'dev' ? consRoutes.concat(demoRoutes) : consRoutes

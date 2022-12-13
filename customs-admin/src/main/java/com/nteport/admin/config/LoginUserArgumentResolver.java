@@ -30,6 +30,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         String token = request.getHeader("authToken");
         // 然后根据token获取用户登录信息，这里省略获取用户信息的过程，随便填写一些数据
         UserEntity userEntity;
+        if (token==null||token.isEmpty())return null;
         if (token.startsWith("OPENID:")) {
             //获取openId
             String openId = token.substring(token.indexOf(":") + 1);

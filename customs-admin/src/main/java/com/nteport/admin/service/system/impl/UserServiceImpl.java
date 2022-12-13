@@ -11,6 +11,7 @@ import com.nteport.admin.entity.TDeptEntity;
 import com.nteport.admin.entity.system.ApiResponse;
 import com.nteport.admin.entity.system.EnumCode;
 import com.nteport.admin.entity.system.UserEntity;
+import com.nteport.admin.mapper.NtPtlMapper;
 import com.nteport.admin.mapper.UserMapper;
 import com.nteport.admin.service.FeignMessageService;
 import com.nteport.admin.service.TDeptService;
@@ -18,6 +19,7 @@ import com.nteport.admin.service.system.IPageHelper;
 import com.nteport.admin.service.system.IUserRoleService;
 import com.nteport.admin.service.system.IUserService;
 import com.nteport.admin.util.ConstantUtil;
+import com.nteport.admin.util.LoginUtil;
 import com.nteport.admin.util.MD5Util;
 import com.nteport.admin.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
 
     @Autowired
     private TDeptService deptService;
+
+    @Autowired
+    private NtPtlMapper ntPtlMapper;
 
     /**
      * 获取用户列表，带分页
@@ -229,9 +234,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         }
 
         UserEntity user = getOperator(token);
+        /*add by panh for 登录验证从核心库读取*/
+        if(LoginUtil.useNtPtlLogin){
+            Map ntPtl_userinfo=ntPtlMapper.selectUserByToken(token);
+            user =LoginUtil.ptlUser2UserEntity(ntPtl_userinfo);
+        }
+        /*end*/
         if (user.getUserPassword().equals(MD5Util.md5(json.getString("oldPass")))) {
             return ApiResponse.success();
         } else {
+            /*add by panh for 登录验证从核心库读取*/
+            if(LoginUtil.useNtPtlLogin){
+                if (user.getUserPassword().toLowerCase().equals(MD5Util.md5(json.getString("oldPass")))) {//注意原oa密码和核心库密码 md5加密时有大小写区分
+                    return ApiResponse.success();
+                }
+            }
+            /*end*/
             return ApiResponse.success("incorrect");
         }
     }
@@ -254,14 +272,37 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
             return ApiResponse.fail(EnumCode.BAD_REQUEST);
         }
         UserEntity user = getOperator(token);
+        /*add by panh for 登录验证从核心库读取*/
+        if(LoginUtil.useNtPtlLogin){
+            Map ntPtl_userinfo=ntPtlMapper.selectUserByToken(token);
+            user =LoginUtil.ptlUser2UserEntity(ntPtl_userinfo);
+        }
+        /*end*/
         try {
 
-            if (!user.getUserPassword().equals(MD5Util.md5(json.getString("oldPass")))) {
-                return ApiResponse.fail("原密码输入错误，操作失败");
+//            if (!user.getUserPassword().equals(MD5Util.md5(json.getString("oldPass")))) {
+//                return ApiResponse.fail("原密码输入错误，操作失败");
+//            }
+            /*add by panh for 登录验证从核心库读取*/
+            if(LoginUtil.useNtPtlLogin){
+                if (!user.getUserPassword().toLowerCase().equals(MD5Util.md5(json.getString("oldPass")))) {//注意原oa密码和核心库密码 md5加密时有大小写区分
+                    return ApiResponse.fail("原密码输入错误，操作失败");
+                }
+            }else{
+                if (!user.getUserPassword().equals(MD5Util.md5(json.getString("oldPass")))) {
+                    return ApiResponse.fail("原密码输入错误，操作失败");
+                }
             }
+            /*end*/
             user.setUserPassword(MD5Util.md5(json.getString("newPass")));
-
             userMapper.updateById(user);
+
+            /*add by panh for 登录验证从核心库读取*/
+            if(LoginUtil.useNtPtlLogin){
+                user.setUserPassword(MD5Util.md5(json.getString("newPass")).toUpperCase());//核心库密码 md5加密 必须要大写
+                ntPtlMapper.updateUser(user);
+            }
+            /*end*/
 
             return ApiResponse.success();
         } catch (Exception e) {

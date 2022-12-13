@@ -9,13 +9,19 @@
 <template>
   <div>
     <el-dialog
-      title="修改用户密码"
+      title="修改用户信息"
       v-model="changePasswordDialog.show"
       center
       width="40%"
+      @open="openFun"
     >
       <el-form ref="refForm" :model="formData" :rules="rules" label-width="100px">
-
+        <el-form-item label="姓名" prop="realName" :rules="formRules.isNotNull">
+          <el-input v-model="formData.realName" type="input" placeholder="请输入姓名" style="width:90%;" />
+        </el-form-item>
+        <el-form-item label="手机号" prop="telephone" :rules="formRules.isNotNull">
+          <el-input v-model="formData.telephone" type="input" placeholder="请输入手机号" style="width:90%;" />
+        </el-form-item>
         <el-form-item label="原密码" prop="oldPass">
           <el-input v-model="formData.oldPass" type="password" placeholder="请输入原密码" style="width:90%;" />
         </el-form-item>
@@ -44,6 +50,11 @@ import { dialogTy } from "~/dialog";
 
 import { changeUserPassword, verifyUserPassword } from "@/api/user";
 import { ElMessage } from "element-plus/es";
+import {queryPointById} from "@/api/point";
+import request from "@/utils/axiosReq";
+
+import {getNtPtlLoginUser} from '@/api/login';
+const formRules = useElement().formRules;//自定义校验规则  继承自useElement.ts  父继承自element-plus
 
 const store = useStore()
 
@@ -88,6 +99,8 @@ const validatePassword = (rule, value, callback) => {
   } else callback(new Error('请输入新密码'))
 }
 const verifyOldPass = (rule, value, callback) => {
+  console.log(props.formData);
+  // console.log(formData);
   if (value === '') {
     callback(new Error('请输入用户旧密码'))
   } else {
@@ -120,7 +133,7 @@ const validateNewPassAgain = (rule, value, callback) => {
 const rules = ref({
   oldPass: [{ required: true, validator: verifyOldPass, trigger: 'blur' }],
   newPass: [{ required: true, validator: validatePassword, trigger: 'blur' }],
-  newPassAgain: [{ required: true, validator: validateNewPassAgain, trigger: 'blur' }]
+  newPassAgain: [{ required: true, validator: validateNewPassAgain, trigger: 'blur' }],
 })
 
 // ’确定‘按钮修改密码
@@ -133,7 +146,8 @@ const changePass = () => {
        */
       changeUserPassword(props.formData).then(res => {
         props.changePasswordDialog.show = false
-        ElMessage({message: '修改密码成功，请重新登录！', type: 'success'})
+        // ElMessage({message: '修改密码成功，请重新登录！', type: 'success'})
+        ElMessage({message: '修改信息成功，请重新登录！', type: 'success'})
         var t
         clearTimeout(t)
         console.log('3秒后登出')
@@ -146,6 +160,15 @@ const changePass = () => {
       })
     }
     else return false
+  })
+}
+
+// const formData = ref([])
+//查询用户信息
+const openFun = () => {
+  getNtPtlLoginUser().then((res) => {
+    Object.assign(props.formData, res.data);
+    // formData.value = res.data;
   })
 }
 

@@ -3,9 +3,11 @@ package com.nteport.admin.util;
 import com.nteport.admin.entity.system.UserEntity;
 
 import java.util.Map;
-
+/*
+    登录相关配置辅助类
+ */
 public class LoginUtil {
-    public static boolean useNtPtlLogin = false;//是否从核心库登录和读取权限
+    public static boolean useNtPtlLogin = true;//是否从核心库登录和读取权限
     public static String menu_root_id="A5615576-31E1-4212-A051-3AF93CA68AFD";
     public static UserEntity ptlUser2UserEntity(Map ntPtl_user){
         UserEntity user=null;
@@ -64,8 +66,8 @@ public class LoginUtil {
                 user.setDeptId(ntPtl_user.get("ORG_ID").toString());
 //                user.setDeptName();
                 user.setUserPassword(ntPtl_user.get("PASSWORD").toString());
-                user.setTelephone(ntPtl_user.get("MOBILE").toString());
-                user.setToken(ntPtl_user.get("TOKEN").toString());
+                user.setTelephone(getMapValue(ntPtl_user,"MOBILE"));
+                user.setToken(getMapValue(ntPtl_user,"TOKEN"));
 //                user.setOpenId();
                 user.setStatus(ntPtl_user.get("STATE").toString());
 //                user.setCaptchaCode();
@@ -83,5 +85,11 @@ public class LoginUtil {
 //            }
         }
         return user;
+    }
+    public static String getMapValue(Map map,String key){
+        if (map!=null&&map.get(key)!=null){
+            return map.get(key).toString();
+        }
+        return null;
     }
 }

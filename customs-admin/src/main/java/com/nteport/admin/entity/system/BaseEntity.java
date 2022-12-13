@@ -62,6 +62,21 @@ public class BaseEntity {
     }
 
     /**
+     * 创建记录调用
+     *
+     * @param user 执行者
+     */
+    public void createTimeStampNullAble(UserEntity user) {
+        if (user!=null){
+            createUser = user.getId();
+            updateUser = user.getId();
+            creatorName = user.getRealName();
+        }
+        createTime = LocalDateTime.now();
+        updateTime = LocalDateTime.now();
+    }
+
+    /**
      * 更新记录调用
      *
      * @param user 执行者
