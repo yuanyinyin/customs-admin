@@ -238,6 +238,7 @@ public class LoginServiceImpl implements ILoginService {
             mapMes.put("sendMobile", telephone);
             mapMes.put("source", smsVerifyCode);
             Map resultMap = feignMessageService.sendMessage(JSON.toJSONString(mapMes));
+
             if ("1".equals(resultMap.get("result"))) {
                 redisUtils.setWithTime(telephone, verification, 5L, TimeUnit.MINUTES);
                 return ApiResponse.success();
