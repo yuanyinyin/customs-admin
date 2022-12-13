@@ -42,6 +42,10 @@ public class RequestInterceptor implements HandlerInterceptor {
             "/login/logout",
             "/wx/getWxLoginInfo",
             "/login/registerDepUser",//企业用户注册
+            "/login/registerCheck",//企业用户注册校验
+            "/login/sendYzm",//发送手机验证码
+            "/login/checkYzm",//校验手机验证码
+            "/file/upload",//附件上传
     };
 
     /**

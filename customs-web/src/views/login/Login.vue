@@ -1,50 +1,74 @@
 <template>
-  <div class="login-container columnCC">
-    <el-form ref="refloginForm" class="login-form" :model="formInline" :rules="formRules">
-      <div class="title-container">
-        <h3 class="title text-center">{{ settings.title }}</h3>
+  <div class="login-main">
+    <div class="login-header">
+      <div class="lh-main">
+        <img class="lh-logo" src="@/assets/main/logo.png" alt="">
+        <div class="lh-line"></div>
+        <div class="lh-name">登录</div>
       </div>
-      <el-form-item prop="username" :rules="formRules.isNotNull">
-        <el-input v-model="formInline.username" placeholder="用户名">
-          <template #prefix>
-            <!--   vue3图标使用方式  -->
-            <svg-icon style="padding-bottom:5px;" class="el-input__icon" icon-class="user"/>
-          </template>
-        </el-input>
-      </el-form-item>
-      <!--<el-form-item prop="password" :rules="formRules.passwordValid">-->
-      <el-form-item prop="password" :rules="formRules.isNotNull">
-        <el-input
-            :key="passwordType"
-            ref="refPassword"
-            v-model="formInline.password"
-            :type="passwordType"
-            name="password"
-            placeholder="密码"
-            @keyup.enter="handleLogin"
-        >
-          <template #prefix>
-            <svg-icon style="padding-bottom:5px;" class="el-input__icon" icon-class="password"/>
-          </template>
-          <template #suffix>
-                <span class="show-pwd" @click="showPwd">
-                  <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"/>
-                </span>
-          </template>
-        </el-input>
+    </div>
+    <div class="login-container">
+      <el-form ref="refloginForm" class="login-form" :model="formInline" :rules="formRules">
+        <h2 class="lf-title">用户登录</h2>
+        <div class="lf-main">
 
-      </el-form-item>
-      <div class="tip-message">{{ tipMessage }}</div>
-      <el-button :loading="loading" type="primary" class="login-btn" size="default" @click.prevent="handleLogin">
-        登 录
-      </el-button>
-      <el-button :loading="loading" type="primary" class="login-btn" size="default" @click.prevent="goRegister" style="margin-left:0px;">
-        注 册
-      </el-button>
-<!--      <a @click="goRegister">-->
-<!--        去注册-->
-<!--      </a>-->
-    </el-form>
+          <div class="lf-item">
+            <el-form-item prop="username" :rules="formRules.isNotNull">
+              <el-input v-model="formInline.username" placeholder="请输入账号">
+                <template #prefix>
+                  <svg-icon class="el-input__icon" icon-class="wm-user"/>
+                </template>
+              </el-input>
+            </el-form-item>
+          </div>
+
+          <div class="lf-item">
+            <el-form-item prop="password" :rules="formRules.isNotNull">
+              <el-input
+                :key="passwordType"
+                ref="refPassword"
+                v-model="formInline.password"
+                :type="passwordType"
+                name="password"
+                placeholder="请输入密码"
+                @keyup.enter="handleLogin"
+              >
+                <template #prefix>
+                  <svg-icon class="el-input__icon" icon-class="wm-password"/>
+                </template>
+                <template #suffix>
+                      <span class="show-pwd" @click="showPwd">
+                        <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"/>
+                      </span>
+                </template>
+              </el-input>
+            </el-form-item>
+          </div>
+
+          <div class="lf-item">
+            <el-form-item prop="vcode" :rules="formRules.isNotNull">
+              <el-input v-model="formInline.vcode" placeholder="验证码">
+                <template #prefix>
+                  <svg-icon class="el-input__icon" icon-class="wm-vcode"/>
+                </template>
+              </el-input>
+            </el-form-item>
+            <img class="lf-vcode" src="@/assets/main/vcode.png" alt="">
+            <el-link class="lf-link" type="default">换一张</el-link>
+          </div>
+
+          <div class="lf-item">
+            <el-button :loading="loading" type="primary" class="login-btn" size="default" @click.prevent="handleLogin">登 录</el-button>
+          </div>
+<!--          <div class="lf-item lf-tip">忘记密码？</div>-->
+          <div class="lf-item">
+            <div class="lf-center">
+              还没有账号？<el-link type="primary" @click.native="goRegister">去注册</el-link>
+            </div>
+          </div>
+        </div>
+      </el-form>
+    </div>
   </div>
 </template>
 
@@ -53,6 +77,8 @@ import settings from '@/settings'
 import {Search} from '@element-plus/icons-vue'
 import {ElMessage} from 'element-plus'
 import {ObjTy} from '~/common'
+
+const baseUrl = ref(import.meta.env.VITE_APP_BASE_URL)
 
 const formRules = useElement().formRules
 
@@ -77,14 +103,14 @@ let getOtherQuery = (query: any) => {
 }
 
 watch(
-    () => route.query,
-    (query) => {
-      if (query) {
-        state.redirect = query.redirect
-        state.otherQuery = getOtherQuery(query)
-      }
-    },
-    {immediate: true}
+  () => route.query,
+  (query) => {
+    if (query) {
+      state.redirect = query.redirect
+      state.otherQuery = getOtherQuery(query)
+    }
+  },
+  {immediate: true}
 )
 
 /*
@@ -109,19 +135,19 @@ const router = useRouter()
 let loginReq = () => {
   loading.value = true
   store
-      .dispatch('user/login', formInline)
-      .then(() => {
-        ElMessage({message: '登录成功', type: 'success'})
-        router.push({path: state.redirect || '/', query: state.otherQuery})
-      })
-      .catch((res) => {
-        tipMessage.value = res.msg
-        useCommon()
-            .sleep(30)
-            .then(() => {
-              loading.value = false
-            })
-      })
+    .dispatch('user/login', formInline)
+    .then(() => {
+      ElMessage({message: '登录成功', type: 'success'})
+      router.push({path: state.redirect || '/', query: state.otherQuery})
+    })
+    .catch((res) => {
+      tipMessage.value = res.msg
+      useCommon()
+        .sleep(30)
+        .then(() => {
+          loading.value = false
+        })
+    })
 }
 
 /*
@@ -144,109 +170,138 @@ let showPwd = () => {
 let goRegister = () => {
   router.push({path: '/registerAgree' || '/', query: state.otherQuery})
 }
+
 </script>
 
 <style lang="scss" scoped>
-$dark_gray: #889aa4;
-.login-container {
+$fontColor: #4B5058;
+.login-main{
   height: 100vh;
   width: 100%;
-  background-image: url("../../assets/bg1.png");
+  min-height: 600px;
+  background: url('@/assets/main/login_bg.jpg') no-repeat center center;
   background-size: cover;
-
-  .login-form {
-    border-radius: 6px;
-    background: #ffffff;
-    width: 400px;
-    padding: 25px 25px 5px 25px;
-
-    .el-input {
-      height: 38px;
-      border: 0px;
-
-      input {
-        height: 38px;
-      }
-    }
-
-    .input-icon {
-      height: 39px;
-      width: 14px;
-      margin-left: 2px;
-    }
-  }
-
-  .login-tip {
-    font-size: 13px;
-    text-align: center;
-    color: #bfbfbf;
-  }
-
-  .login-code {
-    width: 33%;
-    height: 38px;
-    float: right;
-
-    img {
-      cursor: pointer;
-      vertical-align: middle;
-    }
-  }
-
-  .el-login-footer {
-    height: 40px;
-    line-height: 40px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    color: #fff;
-    font-family: Arial;
-    font-size: 12px;
-    letter-spacing: 1px;
-  }
-
-  .login-code-img {
-    height: 38px;
-  }
-
-  .title-container {
-    .title {
-      font-size: 22px;
-      color: #707070;
-      margin: 0px auto 25px auto;
-      text-align: center;
-      font-weight: bold;
-    }
-  }
+  display: flex;
+  flex-direction: column;
 }
 
-.svg-container {
-  padding-left: 6px;
-  color: $dark_gray;
+.login-header{
+  flex: 0 0 80px;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+}
+
+.lh-main{
+  width: 1200px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.lh-logo{
+  display: inline-block;
+  height: 50px;
+  vertical-align: top;
+}
+
+.lh-line{
+  height: 50px;
+  width: 1px;
+  background-color: #707070;
+  margin: 0 30px;
+}
+
+.lh-name{
+  color: $fontColor;
+  font-size: 20px;
+}
+
+.login-container{
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.login-form{
+  padding: 40px;
+  margin-left: 40%;
+  background-color: rgba($color: #ffffff, $alpha: 0.95);
+  box-shadow: 0 10px 10px rgba($color: #000000, $alpha: 0.01);
+}
+
+.lf-title{
+  padding-bottom: 30px;
+  color: #2882FE;
+  font-size: 24px;
   text-align: center;
-  width: 30px;
 }
 
-//错误提示信息
-.tip-message {
-  color: #e4393c;
-  height: 30px;
-  margin-top: -12px;
-  font-size: 12px;
+.lf-main{
+  width: 360px;
+  display: flex;
+  flex-direction: column;
 }
 
-//登录按钮
+.lf-item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+
+  .el-form-item{
+    flex: 1 1 auto;
+  }
+
+  .el-input {
+    height: 38px;
+    border: 0px;
+    font-size: 14px;
+    input {
+      height: 38px;
+    }
+  }
+
+  .el-input__icon {
+    height: 100%;
+    width: 14px;
+    display: flex;
+    align-items: center;
+    padding: 0 !important;
+    margin-left: 2px;
+  }
+}
+
+.lf-vcode{
+  display: inline-block;
+  width: 120px;
+  height: 38px;
+  border-radius: 2px;
+  margin: 0px 5px 18px;
+}
+
+.lf-link{
+  width: 70px;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
 .login-btn {
   width: 100%;
-  margin-bottom: 30px;
+  height: 38px;
+  font-size: 16px;
 }
 
-.show-pwd {
-  padding: 6px;
-  width: 40px;
-  font-size: 16px;
-  color: $dark_gray;
+.lf-tip{
+  color: #666;
+}
+
+.lf-center{
+  width: 100%;
+  text-align: center;
+  color: #666;
 }
 </style>
 

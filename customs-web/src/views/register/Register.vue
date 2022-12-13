@@ -4,8 +4,9 @@
   <!-- 标题 -->
   <div class="topTitleDiv">
     <div class="topTitleSub">
-      <span class="imgSpan"><img src="/rm/favicon.ico"></span>
-      <span class="wmbFont">外<span style="margin-left: 2px;">贸</span><span style="margin-left: 2px;">帮</span></span>
+<!--      <span class="imgSpan"><img src="/rm/favicon.ico"></span>-->
+<!--      <span class="wmbFont">外<span style="margin-left: 2px;">贸</span><span style="margin-left: 2px;">帮</span></span>-->
+      <img class="lh-logo" src="@/assets/main/logo.png" alt="" style="vertical-align:middle;margin-left: 30%;width: 150px;height: 50px;">
       <span class="sxFont">|</span>
       <span class="zcFont">账户注册</span>
     </div>
@@ -68,17 +69,21 @@
         <!--  action是后端文件上传路径    -->
         <el-upload
           v-model:file-list="fileList"
-          :action="baseUrl + '/file/upload'"
+          :action="baseUrl + '/file/upload?type=register'"
           multiple
           :on-preview="handlePreview"
           :on-success="handleUploadSuccess"
           :on-remove="handleRemove"
           :on-exceed="handleExceed"
+          accept="image/png,image/jpeg,image/gif,image/jpg"
+          list-type="picture-card"
+          limit="1"
           style="margin-top: 10px;"
         >
-          <el-button :icon="Link" style="height: 36px;width: 174px;">
-            附件上传
-          </el-button>
+          <!--          <el-button :icon="Link" style="height: 36px;width: 174px;">
+                      附件上传
+                    </el-button>-->
+          <el-icon><Plus /></el-icon>
         </el-upload>
       </el-form-item>
 
@@ -91,20 +96,19 @@
       <el-button :loading="loading" type="warning" class="register-btn" size="default" @click.prevent="handleRegister" :disabled = "!agreeFlag">
         提 交
       </el-button>
-      <el-button :loading="loading" type="warning" class="register-btn" size="default" @click.prevent="initForm">
-        赋 值
-      </el-button>
+<!--      <el-button :loading="loading" type="warning" class="register-btn" size="default" @click.prevent="initForm">-->
+<!--        赋 值-->
+<!--      </el-button>-->
     </el-form>
   </div>
 </template>
 
 <script setup lang="ts">
-
-import {Link} from '@element-plus/icons-vue'
+import {Link,Plus} from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {ObjTy} from '~/common'
 import {changeUserPassword, verifyUserName} from "@/api/user";
-import {registerDepUser} from "@/api/login";
+import {checkYzm, getNtPtlLoginUser, registerCheck, registerDepUser, sendYzm} from "@/api/login";
 
 const baseUrl = ref(import.meta.env.VITE_APP_BASE_URL)
 //勾选协议标志
@@ -142,6 +146,21 @@ const sendVerifyCode = () => {
   if (formInline.telephone == '') {
     ElMessage({message: '请填写手机号', type: 'error'})
   } else {
+    loading.value = true;
+    sendYzm(formInline).then(res => {
+      console.log(res);
+      if (res.code==200){
+        if(res.data==1){
+          ElMessage({message: '手机验证码已发送！', type: 'success'})
+        }else{
+          // ElMessage({message: '手机验证码发送失败！', type: 'fail'})
+          ElMessage({message: res.data, type: 'fail'})
+        }
+      }else{
+        ElMessage({message: '手机验证码发送失败！', type: 'fail'})
+      }
+      loading.value = false;
+    })
     if (!timer.value) {
       count.value = TIME_COUNT
       show.value = false
@@ -182,7 +201,9 @@ const handleRemove = uploadFile => {
 
 //文件上传成功
 const handleUploadSuccess = (response, file) => {
-  file.uid = response.data
+  // file.uid = response.data
+  console.log(response.data);
+  formInline.registerPicId=response.data;
 }
 
 //文件预览
@@ -210,16 +231,142 @@ const ysTip = () => {
     },
   })
 }
+// 校验单位全称是否已存在
+const validateOrgNameCnRepeat = (rule, value, callback) => {
+  let param={
+    repeatCheckName:"单位全称",
+    repeatCheckColumn:"ORG_NAME_CN",
+    repeatCheckValue:formInline.orgNameCn
+  }
+  if (value === '') {
+    callback(new Error('请输入'+param.repeatCheckName))
+  } else {
+    // 数据库中查询
+    registerCheck(param).then((res) => {
+      console.log(res);
+      if (res.code==200){
+        if(res.data==1){
+          callback(new Error(param.repeatCheckName+'已存在'));//重复
+        }else{
+          callback();//不重复
+        }
+      }else{
+        callback(new Error('验证'+param.repeatCheckName+'出错'))
+      }
+      // formData.value = res.data;
+    })
+  }
+}
+
+// 校验统一社会信用代码是否已存在
+const validateUnionNoRepeat = (rule, value, callback) => {
+  let param={
+    repeatCheckName:"统一社会信用代码",
+    repeatCheckColumn:"UNION_NO",
+    repeatCheckValue:formInline.unionNo
+  }
+  if (value === '') {
+    callback(new Error('请输入'+param.repeatCheckName))
+  } else {
+    // 数据库中查询
+    registerCheck(param).then((res) => {
+      console.log(res);
+      if (res.code==200){
+        if(res.data==1){
+          callback(new Error(param.repeatCheckName+'已存在'));//重复
+        }else{
+          callback();//不重复
+        }
+      }else{
+        callback(new Error('验证'+param.repeatCheckName+'出错'))
+      }
+      // formData.value = res.data;
+    })
+  }
+}
 
 // 校验账号名是否已存在
 const validateUserNameRepeat = (rule, value, callback) => {
+  let param={
+    repeatCheckName:"管理员账户名",
+    repeatCheckColumn:"USERNAME",
+    repeatCheckValue:formInline.userName
+  }
   if (value === '') {
-    callback(new Error('请输入登录账号'))
+    callback(new Error('请输入'+param.repeatCheckName))
   } else {
-    // 数据库中查询登录名
-    callback()
+    // 数据库中查询
+    registerCheck(param).then((res) => {
+      console.log(res);
+      if (res.code==200){
+        if(res.data==1){
+          callback(new Error(param.repeatCheckName+'已存在'));//重复
+        }else{
+          callback();//不重复
+        }
+      }else{
+        callback(new Error('验证'+param.repeatCheckName+'出错'))
+      }
+      // formData.value = res.data;
+    })
   }
 }
+// 校验手机号格式
+const validateTelephone = (rule, value, callback) => {
+  let param={
+    repeatCheckName:"手机号",
+    repeatCheckColumn:"MOBILE",
+    repeatCheckValue:formInline.telephone
+  }
+  if (value === '') {
+    callback(new Error('请输入'+param.repeatCheckName))
+  } else {
+    // 验证手机号码
+    const isPhone = /^(13[0-9]|14[014-9]|15[0-35-9]|16[25-7]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/
+    if (!isPhone.test(value)) {
+      callback(new Error('不符合手机号码格式'))
+    } else {
+      // 数据库中查询
+      registerCheck(param).then((res) => {
+        console.log(res);
+        if (res.code==200){
+          if(res.data==1){
+            callback(new Error(param.repeatCheckName+'已存在'));//重复
+          }else{
+            callback();//不重复
+          }
+        }else{
+          callback(new Error('验证'+param.repeatCheckName+'出错'))
+        }
+        // formData.value = res.data;
+      })
+    }
+
+  }
+}
+// 校验验证码
+const validateVerifyCode = (rule, value, callback) => {
+  if (value === '') {
+    callback(new Error('请输入验证码'))
+  } else {
+    // 数据库中查询
+    checkYzm(formInline).then((res) => {
+      console.log(res);
+      if (res.code==200){
+        if(res.data==1){
+          callback();//校验通过
+        }else{
+          callback(new Error(res.data));//校验不通过
+        }
+      }else{
+        callback(new Error('验证码出错'))
+      }
+      // formData.value = res.data;
+    })
+  }
+}
+
+
 
 // 校验密码强度是否过低
 const validatePassword = (rule, value, callback) => {
@@ -249,20 +396,7 @@ const validatePasswordRepeat = (rule, value, callback) => {
   }
 }
 
-// 校验手机号格式
-const validateTelephone = (rule, value, callback) => {
-  if (value === '') {
-    callback(new Error('请输入手机号码'))
-  } else {
-    // 验证手机号码
-    const isPhone = /^(13[0-9]|14[014-9]|15[0-35-9]|16[25-7]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/
-    if (!isPhone.test(value)) {
-      callback(new Error('不符合手机号码格式'))
-    } else {
-      callback()
-    }
-  }
-}
+
 
 // const formRules = useElement().formRules
 const formRules = ref({
@@ -273,9 +407,9 @@ const formRules = ref({
   length18: [{min: 18, max: 18, message: '长度为18个字符', trigger: 'blur'}],
   validPasswordRepeat:[{required: true, validator: validatePasswordRepeat, trigger: 'blur'}],
 
-  orgNameCn: [{required: true, message: '该字段不能为空', trigger: 'blur',validator: validateOrgNameCn}],
+  orgNameCn: [{required: true, trigger: 'blur',validator: validateOrgNameCnRepeat}],
   unionNo:[
-    {required: true, message: '该字段不能为空', trigger: 'blur'},
+    {required: true, trigger: 'blur',validator: validateUnionNoRepeat},
     {min: 18, max: 18, message: '长度为18个字符', trigger: 'blur'}
   ],
   areaName:[{required: true, message: '该字段不能为空', trigger: 'blur'}],
@@ -290,7 +424,7 @@ const formRules = ref({
     {required: true, validator: validatePasswordRepeat, trigger: 'blur'}
   ],
   telephone: [{required: true, validator: validateTelephone, trigger: 'blur'}],
-  verifyCode: [{required: true, message: '该字段不能为空', trigger: 'blur'}],
+  verifyCode: [{required: true, trigger: 'blur',validator: validateVerifyCode}],
 })
 //表单数据
 let formInline = reactive({
@@ -303,7 +437,8 @@ let formInline = reactive({
   realName: '',
   password: '',
   rePassword: '',
-  verifyCode: ''
+  verifyCode: '',
+  registerPicId: '',
 })
 
 let state: ObjTy = reactive({

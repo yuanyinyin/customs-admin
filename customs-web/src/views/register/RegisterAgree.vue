@@ -4,8 +4,9 @@
   <!-- 标题 -->
   <div class="topTitleDiv">
     <div class="topTitleSub">
-      <span class="imgSpan"><img src="/rm/favicon.ico"></span>
-      <span class="wmbFont">外<span style="margin-left: 2px;">贸</span><span style="margin-left: 2px;">帮</span></span>
+<!--      <span class="imgSpan"><img src="/rm/favicon.ico"></span>-->
+<!--      <span class="wmbFont">外<span style="margin-left: 2px;">贸</span><span style="margin-left: 2px;">帮</span></span>-->
+      <img class="lh-logo" src="@/assets/main/logo.png" alt="" style="vertical-align:middle;margin-left: 30%;width: 150px;height: 50px;">
       <span class="sxFont">|</span>
       <span class="zcFont">账户注册</span>
     </div>

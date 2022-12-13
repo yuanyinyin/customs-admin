@@ -35,5 +35,6 @@ public interface NtPtlMapper extends BaseMapper<MenuEntity> {
     Map selectRoleByCode(String roleCode);
     int insertUserRole(Map map);
 
-    Map selectDeptByParam(String column,String value);
+    List<Map> selectDeptByParam(String column,String value);
+    List<Map> selectUserByParam(String column,String value);
 }

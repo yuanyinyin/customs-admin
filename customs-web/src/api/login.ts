@@ -110,5 +110,38 @@ export function registerDepUser(data: ObjTy){
     isAlertErrorMsg: true
   })
 }
+//企业用户注册验证
+export function registerCheck(data: ObjTy){
+  return request({
+    url: `/login/registerCheck`,
+    data,
+    method: 'post',
+    bfLoading: true,
+    // isParams: true,
+    isAlertErrorMsg: true
+  })
+}
+//发送验证码
+export function sendYzm(data: ObjTy){
+  return request({
+    url: `/login/sendYzm`,
+    data,
+    method: 'post',
+    bfLoading: true,
+    // isParams: true,
+    isAlertErrorMsg: true
+  })
+}
+//校验验证码
+export function checkYzm(data: ObjTy){
+  return request({
+    url: `/login/checkYzm`,
+    data,
+    method: 'post',
+    bfLoading: true,
+    // isParams: true,
+    isAlertErrorMsg: true
+  })
+}
 
 

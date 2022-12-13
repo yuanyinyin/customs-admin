@@ -6,6 +6,7 @@ import com.nteport.admin.entity.system.ApiResponse;
 import com.nteport.admin.entity.system.MenuEntity;
 import com.nteport.admin.entity.system.UserEntity;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,5 +23,7 @@ public interface INtPtlService extends IService<MenuEntity> {
     ArrayList<String> queryRoleCodes(String userId);
 
     int registerDepUser(UserEntity user,String jsonString);
-    Map selectDeptByParam(String column,String value);
+    List<Map> registerCheck(String column,String value);
+
+    String sendYzm(String mobile, String ip, HttpServletRequest request);
 }

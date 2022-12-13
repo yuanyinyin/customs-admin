@@ -82,7 +82,8 @@
             RELATION_SN,
             COMPLETE_STATE,
             UNION_NO,
-            ALERT_STATE
+            ALERT_STATE,
+            REGISTER_PIC_ID
         )
         values(
             #{ID,jdbcType=VARCHAR},
@@ -105,7 +106,8 @@
             #{RELATION_SN,jdbcType=VARCHAR},
             '1',
             #{UNION_NO,jdbcType=VARCHAR},
-            null
+            null,
+            #{REGISTER_PIC_ID,jdbcType=VARCHAR}
         )
     </insert>
 
@@ -223,6 +225,11 @@
 
     <select id="selectDeptByParam" parameterType="java.lang.String" resultType="hashMap">
         select ID from ORG_BASEINFO@NT_PTL t
-        where t.#{column,jdbcType=VARCHAR}=#{value,jdbcType=VARCHAR}
+        where t.${column}=#{value,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectUserByParam" parameterType="java.lang.String" resultType="hashMap">
+        select ID from USER_BASEINFO@NT_PTL t
+        where t.${column}=#{value,jdbcType=VARCHAR}
     </select>
 </mapper>
