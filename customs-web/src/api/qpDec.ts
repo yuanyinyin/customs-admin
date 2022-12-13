@@ -110,6 +110,25 @@ export function exportHead(data: ObjTy){
 }
 
 
+export function listCert(data: ObjTy) {
+  /**
+   * @PostMapping("/listPage")
+   * @param jsonString String[page        当前页数,
+   *                          limit       每页大小
+   *                          roleName   角色名称
+ *                            roleCode     角色编码]
+   * @return Json[list 角色列表，total 结果总数] 或 状态码
+   */
+  return request({
+    url: '/qpDecRequestCert/list',
+    data,
+    method: 'get',
+    bfLoading: true,
+    isParams: true,
+    isAlertErrorMsg: true
+  })
+}
+
 
  
 

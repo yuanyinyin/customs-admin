@@ -447,9 +447,10 @@ const otherThing = () => {
   // console.log(123)
   // console.log(formData)
     const promiseitmes =   formData.value.promiseitmes ;
+    
     // console.log(promiseitmes)
     var firstIsYes = false
-    if(promiseitmes){
+    if(promiseitmes ){
         var vsArr = promiseitmes.split("");
             for(var i = 0; i < vsArr.length; i++){
                 if (vsArr[i] !="1" || vsArr[i] !="0"){
@@ -479,17 +480,70 @@ const otherThing = () => {
 
 const bussinessOpt = (headId) => {
   const entrytype =   formData.value.entrytype ;
+  const ieflag =   formData.value.ieflag ;
+
+
+  const bussSw =   formData.value.bussSw ;
+  const bussZb =   formData.value.bussZb ;
+  const bussSyzz =   formData.value.bussSyzz ;
+  const bussZbzj =   formData.value.bussZbzj ;
+  const chksurety =   formData.value.chksurety ;
+  const chkshunt =   formData.value.chkshunt ;
+
+
     // console.log(promiseitmes)
-    const firstIsYes = false
-    if(entrytype){
+    // const firstIsYes = false
+    var tenderGroup = [];
+    var checkList = [];
+    if(bussSw && '1' == bussSw){
+        checkList.push('1')
+    }
+    if(bussSw && '1' == bussSw){
+        checkList.push('2')
+    }
+    if(bussSw && '1' == bussSw){
+        checkList.push('3')
+    }
+    if(bussSw && '1' == bussSw){
+        checkList.push('4')
+    }
+    if(bussSw && '1' == bussSw){
+        checkList.push('5')
+    }
+   
+
+    if(entrytype && ieflag){
       var obj = {}
-            if(entrytype == "M"){
-               obj.checkList = ['1','4','5']
-            }else {
-               obj.checkList = ['1','2']
-            }
+      if(ieflag == 'I'){
+           tenderGroup = [
+                 { id: '1', realName: '税单无纸化',},
+                 { id: '2', realName: '自主报税', },
+                 { id: '4', realName: '自报自缴', },
+                 { id: '5', realName: '担保验放', },
+                ]
+
+          // if(entrytype == "M"){
+              
+          //      obj.checkList = ['1','4','5']
+               
+          //   }else {
+          //      obj.checkList = ['1','2']
+          //   }
+      }else{
+        tenderGroup = [
+                  { id: '1', realName: '税单无纸化',},
+                  { id: '2', realName: '自主报税', },
+                  { id: '3', realName: '水运中转', },
+                  { id: '4', realName: '自报自缴', },
+                  { id: '5', realName: '担保验放', },
+                ]
+      }
+             obj.checkList = checkList
+            obj.tenderGroup = tenderGroup
            
             formBussinessOpt.value = obj;
+    }else{
+      alert("请确认报关单类型与进出口标志!")
     }
     dialogBussinessOptData.value = {
     show: true,
