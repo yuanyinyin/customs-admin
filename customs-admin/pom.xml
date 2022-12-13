@@ -10,10 +10,10 @@
         <relativePath/>
     </parent>
     <groupId>com.nteport</groupId>
-    <artifactId>ycj-admin</artifactId>
+    <artifactId>customs-admin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ycj-admin</name>
-    <description>Ycj Admin for nteport</description>
+    <name>customs-admin</name>
+    <description>customs Admin for nteport</description>
 
     <properties>
         <java.version>17</java.version>
