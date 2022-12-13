@@ -1,7 +1,7 @@
 <template>
   <div class="finance scroll-y pb-100">
     <el-table  height="240"  v-model:data="tableData" v-loading="loading" stripe style="width: 100%" @row-dblclick="showDetail">
-          <el-table-column  prop="gno" type="gno" label="商品序号" align="center" width="55">
+          <el-table-column  prop="gno" type="gno" label="商品序号" align="center" width="80">
             <!-- <template #default="scope">
               <span>{{  scope.$index + 1 }}</span>
             </template> -->

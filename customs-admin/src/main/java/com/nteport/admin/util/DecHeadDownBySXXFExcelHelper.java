@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//import static cn.gov.nteport.nplat.platform.util.Struts2Utils.getRequest;
 
 /**
  * Created by 薛卫 on 2018/11/19.
@@ -301,11 +300,12 @@ public class DecHeadDownBySXXFExcelHelper {
 
     public CellStyle createHeaderStyle(Workbook wb){
         CellStyle topStyle = (CellStyle) wb.createCellStyle();// 创建标题样式
-//        topStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);    //设置垂直居中
-//        topStyle.setAlignment(CellStyle.ALIGN_CENTER);   //设置水平居中
+        topStyle.setVerticalAlignment(topStyle.getVerticalAlignmentEnum().CENTER);    //设置垂直居中
+        topStyle.setAlignment(HorizontalAlignment.CENTER);   //设置水平居中
         topStyle.setWrapText(true);
         Font topFont = (Font) wb.createFont(); //创建字体样式
 //        topFont.setBoldweight(Font.BOLDWEIGHT_BOLD); // 字体加粗
+        topFont.setBold(true); // 字体加粗
         topFont.setFontName("宋体");  //设置字体类型
         topFont.setFontHeightInPoints((short) 16);    //设置字体大小
         topStyle.setFont(topFont);    //为标题样式设置字体样式
@@ -314,18 +314,19 @@ public class DecHeadDownBySXXFExcelHelper {
 
     public CellStyle createTitleStyle(Workbook wb){
         CellStyle headerStyle = (CellStyle) wb.createCellStyle();// 创建标题样式
-//        headerStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);    //设置垂直居中
-//        headerStyle.setAlignment(CellStyle.ALIGN_CENTER);   //设置水平居中
+//        HSSFCellStyle headerStyle = (HSSFCellStyle) wb.createCellStyle();
+        headerStyle.setVerticalAlignment(topStyle.getVerticalAlignmentEnum().CENTER);    //设置垂直居中
+        headerStyle.setAlignment(HorizontalAlignment.CENTER);   //设置水平居中
         headerStyle.setWrapText(true);
         Font headerFont = (Font) wb.createFont(); //创建字体样式
-//        headerFont.setBoldweight(Font.BOLDWEIGHT_BOLD); // 字体加粗
+        headerFont.setBold(true); // 字体加粗
         headerFont.setFontName("宋体");  //设置字体类型
         headerFont.setFontHeightInPoints((short) 10);    //设置字体大小
         headerStyle.setFont(headerFont);    //为标题样式设置字体样式
-//        headerStyle.setBorderTop(CellStyle.BORDER_THICK);// 上边框
-//        headerStyle.setBorderBottom(CellStyle.BORDER_THIN); // 下边框
-//        headerStyle.setBorderLeft(CellStyle.BORDER_THIN);// 左边框
-//        headerStyle.setBorderRight(CellStyle.BORDER_THIN);// 右边框
+        headerStyle.setBorderTop(BorderStyle.THIN);// 上边框
+        headerStyle.setBorderBottom(BorderStyle.THIN); // 下边框
+        headerStyle.setBorderLeft(BorderStyle.THIN);// 左边框
+        headerStyle.setBorderRight(BorderStyle.THIN);// 右边框
         return headerStyle;
     }
 
@@ -333,9 +334,12 @@ public class DecHeadDownBySXXFExcelHelper {
         CellStyle dateStyle = (CellStyle) wb.createCellStyle();// 创建标题样式
 //        dateStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);    //设置垂直居中
 //        dateStyle.setAlignment(CellStyle.ALIGN_CENTER);   //设置水平居中
+        dateStyle.setVerticalAlignment(topStyle.getVerticalAlignmentEnum().CENTER);    //设置垂直居中
+        dateStyle.setAlignment(HorizontalAlignment.CENTER);   //设置水平居中
         dateStyle.setWrapText(true);
         Font dateFont = (Font) wb.createFont(); //创建字体样式
 //        dateFont.setBoldweight(Font.BOLDWEIGHT_BOLD); // 字体加粗
+        dateFont.setBold(true);
         dateFont.setFontName("宋体");  //设置字体类型
         dateFont.setFontHeightInPoints((short) 12);    //设置字体大小
         dateStyle.setFont(dateFont);    //为标题样式设置字体样式
@@ -346,15 +350,17 @@ public class DecHeadDownBySXXFExcelHelper {
         CellStyle cell_Style = (CellStyle) wb.createCellStyle();// 设置字体样式
 //        cell_Style.setAlignment(CellStyle.ALIGN_CENTER);
 //        cell_Style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);// 垂直对齐居中
+        cell_Style.setVerticalAlignment(topStyle.getVerticalAlignmentEnum().CENTER);    //设置垂直居中
+        cell_Style.setAlignment(HorizontalAlignment.CENTER);   //设置水平居中
         cell_Style.setWrapText(true);
         Font cell_Font = (Font) wb.createFont();
         cell_Font.setFontName("宋体");
         cell_Font.setFontHeightInPoints((short) 10);
         cell_Style.setFont(cell_Font);
-//        cell_Style.setBorderBottom(CellStyle.BORDER_THIN); // 下边框
-//        cell_Style.setBorderLeft(CellStyle.BORDER_THIN);// 左边框
-//        cell_Style.setBorderTop(CellStyle.BORDER_THIN);// 上边框
-//        cell_Style.setBorderRight(CellStyle.BORDER_THIN);// 右边框
+        cell_Style.setBorderBottom(BorderStyle.THIN); // 下边框
+        cell_Style.setBorderLeft(BorderStyle.THIN);// 左边框
+        cell_Style.setBorderTop(BorderStyle.THIN);// 上边框
+        cell_Style.setBorderRight(BorderStyle.THIN);// 右边框
         return cell_Style;
     }
 

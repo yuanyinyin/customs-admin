@@ -3,7 +3,7 @@
 <mapper namespace="com.nteport.admin.mapper.QpDecHeadMapper">
 
 
-    <select id="exportExcel" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+    <select id="exportExcel" resultType="java.util.HashMap" parameterType="java.util.Map">
         SELECT
             tt.sfdzs,
             h.spDecSeqNo,
@@ -118,7 +118,7 @@
         </if>
 
         <if test="entryId != null and entryId != ''" >
-            and h.entryId like  CONCAT('%',#{entryId,jdbcType=VARCHAR},'%')
+            and h.entryId like  concat(concat('%', #{entryId,jdbcType=VARCHAR}), '%')
         </if>
 
         <if test="startTime != null and startTime != ''" >
