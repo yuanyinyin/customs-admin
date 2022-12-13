@@ -20,9 +20,9 @@
     >
                <el-row>
                 <el-col :span="24" class="_el_col">
-                   <el-checkbox-group v-model="formData.checkList"  disabled>
+            <el-checkbox-group v-model="formData.checkList"  disabled>
           <el-checkbox
-            v-for="(item, index) in tenderGroup"
+            v-for="(item, index) in formData.tenderGroup"
             :key="index"
             :label="item.id"
           >{{ item.realName }}
@@ -78,14 +78,14 @@ const props = defineProps({
 })
 
 //定义变量
-const tenderGroup = [
-  { id: '1', realName: '税单无纸化',},
-  { id: '2', realName: '自主报税', },
-  { id: '3', realName: '水运中转', },
-  { id: '4', realName: '自报自缴', },
-  { id: '5', realName: '担保验放', },
-  { id: '6', realName: '查验分流', },
-]
+// const tenderGroup = [
+//   { id: '1', realName: '税单无纸化',},
+//   { id: '2', realName: '自主报税', },
+//   { id: '3', realName: '水运中转', },
+//   { id: '4', realName: '自报自缴', },
+//   { id: '5', realName: '担保验放', },
+//   { id: '6', realName: '查验分流', },
+// ]
 
 // // 获取角色列表
 const getList = () => {

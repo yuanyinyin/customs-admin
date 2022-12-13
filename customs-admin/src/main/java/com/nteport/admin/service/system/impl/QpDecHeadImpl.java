@@ -220,6 +220,7 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
                 params.put("startTime",simpleDateFormat.format(new Date(Timestamp.valueOf(startTime).getTime())));
                 params.put("endTime",simpleDateFormat.format(new Date(Timestamp.valueOf(endTime).getTime())));
             }
+            String isMerge =  params.get("isMerge");
 
             List<HashMap<String ,Object>> lists = qpDecHeadMapper.exportExcel(params);
             DecHeadDownBySXXFExcelHelper decHeadDownExcelHelper = new DecHeadDownBySXXFExcelHelper();
@@ -227,9 +228,8 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
             List<ExportHeads> exportHeads = decHeadDownExcelHelper.getExportRalation(params.get("ieFlag"), request);
             decHeadDownExcelHelper.setTitle(params.get("ieFlag"),exportHeads);
             decHeadDownExcelHelper.setHeader(params.get("ieFlag"));
-//            decHeadDownExcelHelper.setDateContent(startTime,endTime);
-//            decHeadDownExcelHelper.setColumnContent(lists,exportHeads,export_isMerge);
-            decHeadDownExcelHelper.setColumnContent(lists,exportHeads,"T");
+            decHeadDownExcelHelper.setDateContent(startTime,endTime);
+            decHeadDownExcelHelper.setColumnContent(lists,exportHeads,isMerge);
             decHeadDownExcelHelper.writeToExcel();  //
             decHeadDownExcelHelper.closeInputStream();  //释放资源
 

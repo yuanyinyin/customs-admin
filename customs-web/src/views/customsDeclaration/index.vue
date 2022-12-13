@@ -40,7 +40,8 @@
               <el-form-item>
               <span class="filter-item">
                 <el-button type="success" :icon="Search" @click="handleFilter">查询</el-button>
-                <el-button type="primary" :icon="Plus" @click="exportExcel">导出</el-button>
+                <el-button type="primary" :icon="Plus" @click="exportExcel('T')">导出</el-button>
+                 <el-button type="primary" :icon="Plus" @click="exportExcel('F')">导出(不合并表头)</el-button>
                 <el-button type="primary" :icon="Plus" @click="handlePrint">打印</el-button>
               </span>
               </el-form-item>
@@ -140,8 +141,8 @@ import {Search} from '@element-plus/icons-vue'
 import {dialogTy} from '~/dialog'
 import DialogState from './dialogState.vue'
 import {Ref} from 'vue'
-// import {ElMessage, ElMessageBox} from 'element-plus'
-import { ElMessage } from "element-plus/es";
+import {ElMessage} from 'element-plus'
+// import { ElMessage } from "element-plus/es";
 import {parseTime, deepClone} from '@/utils/dateTime'
 
 const store = useStore()
@@ -304,8 +305,27 @@ const handlePrint = () => {
 
  
 }
+const getDateTime = () => {
+   var dateObj = new Date(); //表示当前系统时间的Date对象
+            var year = dateObj.getFullYear(); //当前系统时间的完整年份值
+            var month = dateObj.getMonth()+1; //当前系统时间的月份值
+            var date = dateObj.getDate(); //当前系统时间的月份中的日
+            var day = dateObj.getDay(); //当前系统时间中的星期值
+            return '' + year + dateFilter(month) + dateFilter(date)
+}
 
-const exportExcel = () => {
+const dateFilter = (date) => {
+ if(date < 10){return "0"+date;} 
+    return date;
+}
+
+ 
+
+         
+
+
+const exportExcel = (_isMerge) => {
+  
   let rowDeleteIdArr: Array<any> = []
   rowDeleteIdArr = multipleSelection.value.map((mItem: any) => {
     return mItem.id
@@ -316,6 +336,12 @@ const exportExcel = () => {
   // }else{
     if(!listQuery._rawValue.ieFlag){
     // ElMessage({ message: '请选择进出口类型', type: 'error' })
+    // ElMessage({
+    //         message: '请选择进出口类型',
+    //         type: 'error',
+    //         showClose: true,
+    //         offset: 50
+    //       });
     alert("请选择进出口类型")
     //  elMessage.error("请选择进出口类型")
     return;
@@ -324,7 +350,8 @@ const exportExcel = () => {
    params = Object.assign(deepClone(listQuery._rawValue),
            {
              startTime: parseTime(listQuery._rawValue.declarationData?.length > 0 ? listQuery._rawValue.declarationData[0] : ""),
-             endTime: parseTime(listQuery._rawValue.declarationData?.length > 1 ? listQuery._rawValue.declarationData[1] : "")
+             endTime: parseTime(listQuery._rawValue.declarationData?.length > 1 ? listQuery._rawValue.declarationData[1] : ""),
+             isMerge :_isMerge
              }
       )
 
@@ -336,7 +363,7 @@ const exportExcel = () => {
     let url = URL.createObjectURL(blob);
     const link = document.createElement('a'); //创建a标签
     link.href = url;
-    link.download = '报关单.xlsx'; //重命名文件
+    link.download = '报关单'+ getDateTime() +'.xlsx'; //重命名文件
     link.click();
     URL.revokeObjectURL(url);
   })
