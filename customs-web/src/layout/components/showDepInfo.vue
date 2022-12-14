@@ -20,7 +20,32 @@
         <el-form-item label="所在地区" prop="AREA_NAME">
           <el-input v-model="formData.AREA_NAME" type="input" placeholder="请输入所在地区" style="width:90%;" />
         </el-form-item>
+
+        <el-form-item :label="'组织机构代码\n附件图片'" prop="" style="white-space: pre-line!important;">
+          <!--  action是后端文件上传路径    -->
+          <el-upload
+            v-model:file-list="fileList"
+            :action="baseUrl + '/file/upload?type=register'"
+            multiple
+            :on-preview="handlePreview"
+            :on-success="handleUploadSuccess"
+            :on-remove="handleRemove"
+            :on-exceed="handleExceed"
+            accept="image/png,image/jpeg,image/gif,image/jpg"
+            list-type="picture-card"
+            limit="1"
+            style="margin-top: 10px;"
+            disabled="true"
+          >
+            <!--                   <el-button :icon="Link" style="height: 36px;width: 174px;">-->
+            <!--                      附件上传-->
+            <!--                    </el-button>-->
+            <el-icon><Plus /></el-icon>
+          </el-upload>
+        </el-form-item>
       </el-form>
+
+
 
       <template #footer>
         <span class="dialog-footer">
@@ -101,6 +126,19 @@ const openFun = () => {
     // formData.value = res.data;
   })
 }
+
+let fileList = ref([
+  {
+    uid: 1,
+    name: 'p图说明1.doc',
+    url:'https://www.nteport.com/images/logo.png'
+  },
+  {
+    uid: 4,
+    name: 'test.jpg',
+    url:'https://www.nteport.com/images/logo.png'
+  }
+])
 
 </script>
 

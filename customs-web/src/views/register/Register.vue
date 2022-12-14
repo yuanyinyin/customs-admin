@@ -71,7 +71,7 @@
           v-model:file-list="fileList"
           :action="baseUrl + '/file/upload?type=register'"
           multiple
-          :on-preview="handlePreview"
+          :on-preview="handlePictureCardPreview"
           :on-success="handleUploadSuccess"
           :on-remove="handleRemove"
           :on-exceed="handleExceed"
@@ -80,12 +80,18 @@
           limit="1"
           style="margin-top: 10px;"
         >
-          <!--          <el-button :icon="Link" style="height: 36px;width: 174px;">
-                      附件上传
-                    </el-button>-->
+<!--                   <el-button :icon="Link" style="height: 36px;width: 174px;">-->
+<!--                      附件上传-->
+<!--                    </el-button>-->
           <el-icon><Plus /></el-icon>
         </el-upload>
       </el-form-item>
+
+      <el-dialog v-model="dialogVisible" width="80%">
+        <div style="width: 100%;text-align: center;">
+          <img w-full :src="dialogImageUrl" alt="图片预览" style="width: 40%;"/>
+        </div>
+      </el-dialog>
 
       <el-checkbox v-model="agreeFlag">创建网站账号的同时，我同意遵守：
         <a @click="wmbTip" style="color: #20a0ff">&laquo外贸帮服务条款&raquo</a>
@@ -96,9 +102,9 @@
       <el-button :loading="loading" type="warning" class="register-btn" size="default" @click.prevent="handleRegister" :disabled = "!agreeFlag">
         提 交
       </el-button>
-<!--      <el-button :loading="loading" type="warning" class="register-btn" size="default" @click.prevent="initForm">-->
-<!--        赋 值-->
-<!--      </el-button>-->
+      <el-button :loading="loading" type="warning" class="register-btn" size="default" @click.prevent="initForm">
+        赋 值
+      </el-button>
     </el-form>
   </div>
 </template>
@@ -109,6 +115,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import {ObjTy} from '~/common'
 import {changeUserPassword, verifyUserName} from "@/api/user";
 import {checkYzm, getNtPtlLoginUser, registerCheck, registerDepUser, sendYzm} from "@/api/login";
+import type { UploadProps, UploadUserFile } from 'element-plus'
 
 const baseUrl = ref(import.meta.env.VITE_APP_BASE_URL)
 //勾选协议标志
@@ -184,7 +191,20 @@ const blurCheckCode = () => {
 
 }
 
-const fileList = ref([])
+/*附件上传*/
+// const fileList = ref([])
+let fileList = ref([
+  // {
+  //   uid: 1,
+  //   name: 'p图说明1.doc',
+  //   url:'https://www.nteport.com/images/logo.png'
+  // },
+  // {
+  //   uid: 4,
+  //   name: 'test.jpg',
+  //   url:'https://www.nteport.com/images/logo.png'
+  // }
+])
 const upload = ref()
 const handleExceed = (files) => {
   upload.value.clearFiles()
@@ -201,9 +221,9 @@ const handleRemove = uploadFile => {
 
 //文件上传成功
 const handleUploadSuccess = (response, file) => {
-  // file.uid = response.data
-  console.log(response.data);
-  formInline.registerPicId=response.data;
+  file.uid = response.data
+  // console.log(response.data);
+  // formInline.registerPicId=response.data;
 }
 
 //文件预览
@@ -213,6 +233,16 @@ const handlePreview = uploadFile => {
   document.body.appendChild(a)
   a.click()
 }
+
+//图片预览
+const dialogVisible = ref(false)
+const dialogImageUrl = ref('')
+const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
+  dialogImageUrl.value = uploadFile.url!
+  dialogVisible.value = true
+}
+//end
+
 
 const wmbTip = () => {
   ElMessageBox.alert('这是外贸帮服务条款信息，这是外贸帮服务条款信息这是外贸帮服务条款信息这是外贸帮服务条款信息这是外贸帮服务条款信息这是外贸帮服务条款信息这是外贸帮服务条款信息这是外贸帮服务条款信息', '外贸帮服务条款', {
@@ -536,6 +566,19 @@ let initForm = () => {
   formInline.rePassword='88888888a';
   formInline.telephone='18811111111';
   formInline.verifyCode='123';
+
+  fileList.value=[
+    {
+      uid: 1,
+      name: 'p图说明1.doc',
+      url:'https://www.nteport.com/images/logo.png'
+    },
+    {
+      uid: 4,
+      name: 'test.jpg',
+      url:'https://www.nteport.com/images/logo.png'
+    }
+  ]
 }
 
 </script>
@@ -643,5 +686,6 @@ $dark_gray: #889aa4;
   display: flex;
   background-image: linear-gradient(#F3C475FF, #ee9f1a,#EE9F1AFF);
 }
+
 </style>
 
