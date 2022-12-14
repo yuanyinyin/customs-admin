@@ -2,7 +2,7 @@
   <router-view />
 </template>
 <script setup lang="ts">
-import { setToken } from '@/utils/auth'
+import { setToken , getToken} from '@/utils/auth'
 
 const store = useStore()
 const settings = computed(() => {
@@ -16,9 +16,13 @@ const timer = ref(null);
 const router = useRouter()
 
 onMounted(() => {
-    timer.value = setInterval(async () => {
-    handleCurrentChange();
+    
+    if(getToken()){
+      timer.value = setInterval(async () => {
+       handleCurrentChange();
     }, 30000);
+    }
+    
   });
 
 onUnmounted(() => {
@@ -61,19 +65,7 @@ const handleCurrentChange = () => {
           const obj = tableData[i] 
           const  message =    obj.content + '<br/>' + "<div class='app-message-right'>" + obj.createTime + '</div>'
 
-          // ElNotification({
-          //   title: '回执信息提醒',
-          //   message: message,
-          //   position: 'bottom-right',
-          //    dangerouslyUseHTMLString:true,
-          //   // offset:36,
-          //   duration:30000,
-          //   onClick:function(){
-          //     linkTodo(
-          //       obj
-          //     );
-          //   },
-          // })
+    
 
           window.setTimeout(() => {
           ElNotification({
