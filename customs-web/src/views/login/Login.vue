@@ -45,16 +45,26 @@
             </el-form-item>
           </div>
 
-          <div class="lf-item">
-            <el-form-item prop="vcode" :rules="formRules.isNotNull">
+          <div class="lf-item" style="border: 0px solid green;">
+            <el-form-item prop="vcode" :rules="formRules">
               <el-input v-model="formInline.vcode" placeholder="验证码">
                 <template #prefix>
                   <svg-icon class="el-input__icon" icon-class="wm-vcode"/>
                 </template>
               </el-input>
             </el-form-item>
-            <img class="lf-vcode" src="@/assets/main/vcode.png" alt="">
-            <el-link class="lf-link" type="default">换一张</el-link>
+<!--            <img class="lf-vcode" src="@/assets/main/vcode.png" alt="" style="border: 1px solid red;margin-top: 0px;">-->
+<!--            <el-link class="lf-link" type="default">换一张</el-link>-->
+<!--            <div class="login-code" @click="refreshCode">-->
+<!--              <Identify :identifyCode="identifyCode"></Identify>-->
+<!--            </div>-->
+
+<!--            <div class="code" @click="refreshCode" style="border: 0px solid red;margin-bottom: 0px;padding-top: 0px;vertical-align: top;margin-bottom: 18px;margin-left: 20px;">-->
+<!--              <s-identify :identifyCode="identifyCode" style="border: 0px solid gray"></s-identify>-->
+<!--            </div>-->
+                <div @click="refreshCode" style="margin-bottom: 18px;margin-left: 15px;">
+                  <SIdentity3 :identifyCode="identifyCode" />
+                </div>
           </div>
 
           <div class="lf-item">
@@ -77,10 +87,58 @@ import settings from '@/settings'
 import {Search} from '@element-plus/icons-vue'
 import {ElMessage} from 'element-plus'
 import {ObjTy} from '~/common'
+// import Identify  from './SIdentity.vue';//验证码2  vue2版本
+// import SIdentify  from './identify.vue';//验证码1  vue2版本
+
+import { reactive, ref, onMounted } from 'vue'// 图形验证码  vue3版本
+import SIdentity3 from './SIdentity3.vue';// 图形验证码  vue3版本
 
 const baseUrl = ref(import.meta.env.VITE_APP_BASE_URL)
 
-const formRules = useElement().formRules
+
+// 图形验证码  vue3版本
+let identifyCodes = "1234567890"
+let identifyCode = ref('3212')
+
+const randomNum = (min, max) => {
+  return Math.floor(Math.random() * (max - min) + min)
+}
+
+const makeCode = (o, l) => {
+  for (let i = 0; i < l; i++) {
+    identifyCode.value += o[
+      randomNum(0, o.length)
+      ];
+  }
+}
+
+const refreshCode = () => {
+  identifyCode.value = "";
+  makeCode(identifyCodes, 4);
+}
+
+onMounted(() => {
+  identifyCode.value = "";
+  makeCode(identifyCodes, 4);
+})
+//end
+
+
+const validateVcode = (rule, value, callback) => {
+  console.log(identifyCode.value);
+  if (value !== identifyCode.value) {
+    callback(new Error('验证码错误'))
+  }else{
+    callback();
+  }
+}
+
+// const formRules = useElement().formRules
+const formRules = ref({
+  isNotNull: [{required: true, message: '该字段不能为空', trigger: 'blur'}],
+  vcode:[{required: true, validator: validateVcode, trigger: 'blur'}],
+})
+
 
 let formInline = reactive({
   username: '',
@@ -172,6 +230,7 @@ let goRegister = () => {
 }
 
 </script>
+
 
 <style lang="scss" scoped>
 $fontColor: #4B5058;
