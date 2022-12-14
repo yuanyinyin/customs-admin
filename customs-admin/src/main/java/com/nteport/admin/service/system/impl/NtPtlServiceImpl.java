@@ -2,27 +2,21 @@ package com.nteport.admin.service.system.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.nteport.admin.entity.system.ApiResponse;
-import com.nteport.admin.entity.system.EnumCode;
 import com.nteport.admin.entity.system.MenuEntity;
 import com.nteport.admin.entity.system.UserEntity;
 import com.nteport.admin.mapper.MenuMapper;
 import com.nteport.admin.mapper.NtPtlMapper;
-import com.nteport.admin.mapper.UserMapper;
 import com.nteport.admin.service.FeignMessageService;
-import com.nteport.admin.service.system.IMenuService;
 import com.nteport.admin.service.system.INtPtlService;
-import com.nteport.admin.service.system.IPageHelper;
-import com.nteport.admin.util.*;
+import com.nteport.admin.util.GUtilUuid;
+import com.nteport.admin.util.MD5Util;
+import com.nteport.admin.util.RedisUtils;
+import com.nteport.admin.util.YzmSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -185,7 +179,7 @@ public class NtPtlServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> implem
         if (!checkIfCanSendYzm(ip,phone)) {//不能发送验证码
             return "send message error (attach)!!";
         }else{//能发送验证码
-            String source_code=AliMessageUtil.SOURCE_CODE;//阿里云短信模板code
+           // String source_code=AliMessageUtil.SOURCE_CODE;//阿里云短信模板code
             String yzm=GUtilUuid.getUUID(6,GUtilUuid.UUID_TYPE_ONLY_NUMBER);//生成6位数字随机数验证码
             Map jsonMap=new HashMap();
             jsonMap.put("code", yzm);
