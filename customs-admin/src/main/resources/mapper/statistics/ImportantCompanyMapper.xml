@@ -12,8 +12,8 @@
         a.REMARK ,
         b.CUSTOM_NO
         FROM
-        ORG_BASEINFO a
-        LEFT JOIN ORG_MOREINFO b ON
+        ORG_BASEINFO@NT_PTL a
+        LEFT JOIN ORG_MOREINFO@NT_PTL b ON
         b.ORG_ID = a.ID
         AND NOT EXISTS (SELECT 1 FROM IMPORTANT_COMPANY c WHERE c.ORG_ID = a.ID)
         where 1=1
@@ -29,10 +29,10 @@
         WHERE RN &gt;= #{current,jdbcType=BIGINT}
     </select>
     <select id="queryCompanyListCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
-        select count(*)
+        select count(1)
         FROM
-        ORG_BASEINFO a
-        LEFT JOIN ORG_MOREINFO b ON
+        ORG_BASEINFO@NT_PTL a
+        LEFT JOIN ORG_MOREINFO@NT_PTL b ON
         b.ORG_ID = a.ID
         AND NOT EXISTS (
         SELECT

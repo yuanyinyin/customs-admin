@@ -1,15 +1,20 @@
 package com.nteport.admin.service.companyStatistics.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.nteport.admin.entity.NoticeInfo;
+import com.nteport.admin.entity.TDeptEntity;
 import com.nteport.admin.entity.companyStatistics.QpDecHead;
 import com.nteport.admin.entity.system.ApiResponse;
 import com.nteport.admin.entity.system.EnumCode;
 import com.nteport.admin.entity.system.UserEntity;
+import com.nteport.admin.mapper.NoticeInfoMapper;
 import com.nteport.admin.mapper.statistics.QpDecHeadStatisticsMapper;
 import com.nteport.admin.service.companyStatistics.IQpDecHeadService;
 
 
+import com.nteport.admin.util.CalculateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -25,6 +30,8 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
     @Autowired
     private QpDecHeadStatisticsMapper qpDecHeadMapper;
 
+    @Autowired
+    private NoticeInfoMapper noticeInfoMapper;
 
     @Override
     public ApiResponse queryImOrExCustomsData(Map<String, String> params, UserEntity user) {
@@ -45,7 +52,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             map0.put("qyFlag", qyFlag);
             map0.put("startDate", startDate);
             map0.put("endDate", endDate);
-            map0.put("orgid", "201306050000007559");
+            map0.put("orgid", user.getDeptId());
 
             List<Map>list = qpDecHeadMapper.queryImOrExCustomsData(map0);
             BigDecimal sum = new BigDecimal(0);
@@ -89,7 +96,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             map0.put("ieFlag", ieFlag);
             map0.put("startDate", startDate);
             map0.put("endDate", endDate);
-            map0.put("orgid", "201306050000007559");
+            map0.put("orgid", user.getDeptId());
 
             List<Map>list = qpDecHeadMapper.queryTransportMode(map0);
             BigDecimal sum = new BigDecimal(0);
@@ -138,7 +145,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             HashMap map0=new HashMap();
             map0.put("startDate", startDate);
             map0.put("endDate", endDate);
-            map0.put("orgid", "201306050000007559");
+            map0.put("orgid", user.getDeptId());
             map0.put("ieFlag", ieFlag);
             map0.put("trafMode", trafMode);
 
@@ -218,7 +225,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             HashMap map0=new HashMap();
             map0.put("startDate", startDate);
             map0.put("endDate", endDate);
-            map0.put("orgid", "201306050000007559");
+            map0.put("orgid", user.getDeptId());
             map0.put("ieFlag", ieFlag);
 
             List<Map>list = qpDecHeadMapper.queryTradeMode(map0);
@@ -266,7 +273,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             HashMap map0=new HashMap();
             map0.put("startDate", startDate);
             map0.put("endDate", endDate);
-            map0.put("orgid", "201306050000007559");
+            map0.put("orgid",user.getDeptId());
             map0.put("ieFlag", ieFlag);
 
             List<Map>list1 = qpDecHeadMapper.queryGoodsTotal1(map0);
@@ -343,7 +350,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             HashMap map0=new HashMap();
             map0.put("startDate", startDate);
             map0.put("endDate", endDate);
-            map0.put("orgid", "201306050000007559");
+            map0.put("orgid",user.getDeptId());
             map0.put("qyFlag", qyFlag);
             map0.put("ieFlag", ieFlag);
 
@@ -374,7 +381,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             HashMap map0=new HashMap();
             map0.put("startDate", startDate);
             map0.put("endDate", endDate);
-            map0.put("orgid", "201306050000007559");
+            map0.put("orgid",user.getDeptId());
             map0.put("ieFlag", ieFlag);
 
             List<Map>list = qpDecHeadMapper.queryTopFrequency(map0);
@@ -399,6 +406,8 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             String startDate = params.get("startDate");
             String endDate = params.get("endDate");
             String ieFlag = params.get("ieFlag");
+            String qyFlag = params.get("qyFlag");
+            String keyFlag = params.get("keyFlag");
             startDate = startDate.replace("-","");
             endDate = endDate.replace("-","");
 
@@ -406,6 +415,8 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             map0.put("startDate", startDate);
             map0.put("endDate", endDate);
             map0.put("ieFlag", ieFlag);
+            map0.put("qyFlag", qyFlag);
+            map0.put("keyFlag", keyFlag);
 
             List<Map>list = qpDecHeadMapper.queryAreaData(map0);
 
@@ -472,7 +483,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             map0.put("qyFlag", qyFlag);
             map0.put("startDate", startDate);
             map0.put("endDate", endDate);
-            map0.put("orgid", "201306050000007559");
+            map0.put("orgid",user.getDeptId());
 
             List<Map>list1 = qpDecHeadMapper.queryInspectRate(map0);
 
@@ -735,13 +746,339 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             map0.put("qyFlag", qyFlag);
             map0.put("startDate", startDate);
             map0.put("endDate", endDate);
-            map0.put("orgid", "201306050000007559");
+            map0.put("orgid",      user.getDeptId());
 
             List<Map>list1 = qpDecHeadMapper.queryInspectRateDash(map0);
 
 
             data.put("rs", list1);
             response.fillMessage(data);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.fillMessage(EnumCode.ERROR_SERVER);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return response;
+        }
+    }
+
+    @Override
+    public ApiResponse queryCustomSumDash(Map<String, String> params, UserEntity user) {
+        ApiResponse response = new ApiResponse();
+        JSONObject data = new JSONObject();
+
+        try {
+            String startDate = params.get("startDate");
+            String endDate = params.get("endDate");
+            String ieFlag = params.get("ieFlag");
+            String qyFlag = params.get("qyFlag");
+            startDate = startDate.replace("-","");
+            endDate = endDate.replace("-","");
+
+
+            HashMap map0=new HashMap();
+            map0.put("ieFlag", ieFlag);
+            map0.put("qyFlag", qyFlag);
+            map0.put("startDate", startDate);
+            map0.put("endDate", endDate);
+            map0.put("orgid",      user.getDeptId());
+
+            List<Map>list1 = qpDecHeadMapper.queryCustomSumDash(map0);
+
+
+            data.put("rs", list1);
+            response.fillMessage(data);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.fillMessage(EnumCode.ERROR_SERVER);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return response;
+        }
+    }
+    @Override
+    public ApiResponse queryTotalCustomDataDash(Map<String, String> params, UserEntity user) {
+        ApiResponse response = new ApiResponse();
+        JSONObject data = new JSONObject();
+
+        try {
+            String startDate = params.get("startDate");
+            String endDate = params.get("endDate");
+            String qyFlag = params.get("qyFlag");
+            String keyFlag = params.get("keyFlag");
+
+            startDate = startDate.replace("-","");
+            endDate = endDate.replace("-","");
+
+
+            HashMap map0=new HashMap();
+            map0.put("qyFlag", qyFlag);
+            map0.put("keyFlag", keyFlag);
+            map0.put("startDate", startDate);
+            map0.put("endDate", endDate);
+            map0.put("orgid",      user.getDeptId());
+
+            List<Map>list1 = qpDecHeadMapper.queryTotalCustomDataDash(map0);
+
+
+            data.put("rs", list1);
+            response.fillMessage(data);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.fillMessage(EnumCode.ERROR_SERVER);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return response;
+        }
+    }
+    @Override
+    public ApiResponse queryCalculateCustomDataDash(Map<String, String> params, UserEntity user) {
+        ApiResponse response = new ApiResponse();
+        JSONObject data = new JSONObject();
+
+        try {
+            String qyFlag = params.get("qyFlag");
+            String keyFlag = params.get("keyFlag");
+
+            HashMap map0=new HashMap();
+            map0.put("qyFlag", qyFlag);
+            map0.put("keyFlag", keyFlag);
+            map0.put("orgid",      user.getDeptId());
+
+            List<Map>list1 = qpDecHeadMapper.querySysTimeCustomData(map0);
+            List<Map>list2 = qpDecHeadMapper.queryMonthCustomData(map0);
+            List<Map>list3 = qpDecHeadMapper.queryYearCustomData(map0);
+            List<Map>list4 = qpDecHeadMapper.queryTotalCustomData(map0);
+
+            Map map = new HashMap();
+            if(list1!=null&& list1.size()>0){
+                BigDecimal bigDecimal1 = new BigDecimal(String.valueOf(list1.get(0).get("NUMBNOWDAY")));
+                BigDecimal bigDecimal2 = new BigDecimal(String.valueOf(list1.get(0).get("NUMBBEFOREDAY")));
+                String bigDecimal = CalculateUtil.percentBigDecimal(bigDecimal1,bigDecimal2);
+                list1.get(0).put("rate1",bigDecimal);
+                map.putAll((Map)list1.get(0));
+            }
+            if (list2 != null && list2.size() > 0) {
+                BigDecimal bigDecimal1 = new BigDecimal(String.valueOf(list2.get(0).get("NUMBNOWMONTH")));
+                BigDecimal bigDecimal2 = new BigDecimal(String.valueOf(list2.get(0).get("NUMBBEFOREMONTH")));
+                String bigDecimal = CalculateUtil.percentBigDecimal(bigDecimal1, bigDecimal2);
+                list2.get(0).put("rate2",bigDecimal);
+                map.putAll((Map) list2.get(0));
+            }
+            if (list3 != null && list3.size() > 0) {
+                BigDecimal bigDecimal1 = new BigDecimal(String.valueOf(list3.get(0).get("NUMBNOWYEAR")));
+                BigDecimal bigDecimal2 = new BigDecimal(String.valueOf(list3.get(0).get("NUMBBEFOREYEAR")));
+                String bigDecimal = CalculateUtil.percentBigDecimal(bigDecimal1, bigDecimal2);
+                list3.get(0).put("rate3",bigDecimal);
+                map.putAll((Map) list3.get(0));
+            }
+            if (list4 != null && list4.size() > 0) {
+                map.putAll((Map) list4.get(0));
+            }
+            Iterator<Map.Entry<String, String>> entries = map.entrySet().iterator();
+            while (entries.hasNext()) {
+                Map.Entry<String, String> entry = entries.next();
+                String key = entry.getKey();
+                String value = entry.getValue();
+                if(value == null || "".equals(value)) {
+                     map.put(key,"0");
+                }
+            }
+            List list=new ArrayList();
+            list.add(map);
+            data.put("rs", list);
+            response.fillMessage(data);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.fillMessage(EnumCode.ERROR_SERVER);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return response;
+        }
+    }
+
+    @Override
+    public ApiResponse queryAreaDataDash(Map<String, String> params, UserEntity user) {
+        ApiResponse response = new ApiResponse();
+        JSONObject data = new JSONObject();
+
+        try {
+            String startDate = params.get("startDate");
+            String endDate = params.get("endDate");
+            String qyFlag = params.get("qyFlag");
+            String keyFlag = params.get("keyFlag");
+
+            startDate = startDate.replace("-","");
+            endDate = endDate.replace("-","");
+
+
+            HashMap map0=new HashMap();
+            map0.put("keyFlag", keyFlag);
+            map0.put("qyFlag", qyFlag);
+            map0.put("orgid",      user.getDeptId());
+            map0.put("startDate", startDate);
+            map0.put("endDate", endDate);
+            List<Map>list1 = qpDecHeadMapper.queryAreaDataDash(map0);
+
+
+            data.put("rs", list1);
+            response.fillMessage(data);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.fillMessage(EnumCode.ERROR_SERVER);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return response;
+        }
+    }
+
+    @Override
+    public ApiResponse queryCustomDataDash(Map<String, String> params, UserEntity user) {
+        ApiResponse response = new ApiResponse();
+        JSONObject data = new JSONObject();
+
+        try {
+            String startDate = params.get("startDate");
+            String endDate = params.get("endDate");
+            String qyFlag = params.get("qyFlag");
+            String keyFlag = params.get("keyFlag");
+
+            startDate = startDate.replace("-","");
+            endDate = endDate.replace("-","");
+
+
+            HashMap map0=new HashMap();
+            map0.put("keyFlag", keyFlag);
+            map0.put("qyFlag", qyFlag);
+            map0.put("orgid", user.getDeptId());
+            map0.put("startDate", startDate);
+            map0.put("endDate", endDate);
+            List<Map>list1 = qpDecHeadMapper.queryCustomDataDash(map0);
+
+
+            data.put("rs", list1);
+            response.fillMessage(data);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.fillMessage(EnumCode.ERROR_SERVER);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return response;
+        }
+    }
+    @Override
+    public ApiResponse queryQyUseDataDash(Map<String, String> params, UserEntity user) {
+        ApiResponse response = new ApiResponse();
+        JSONObject data = new JSONObject();
+
+        try {
+
+            HashMap map0=new HashMap();
+            List<Map>list1 = qpDecHeadMapper.queryQyUseDataDash(map0);
+            List<Map>list2 = qpDecHeadMapper.queryKeyQyDataDash(map0);
+            List<Map>list3 = qpDecHeadMapper.querAllQyDataDash(map0);
+            Map map = new HashMap();
+            if(list1!=null&& list1.size()>0){
+                BigDecimal bigDecimal1 = new BigDecimal(String.valueOf(list1.get(0).get("NOWDAY")));
+                BigDecimal bigDecimal2 = new BigDecimal(String.valueOf(list1.get(0).get("BEFOREDAY")));
+                String bigDecimal11 = CalculateUtil.percentBigDecimal(bigDecimal1,bigDecimal2);
+                list1.get(0).put("rate1",bigDecimal11);
+                BigDecimal bigDecimal3 = new BigDecimal(String.valueOf(list1.get(0).get("NOWMONTH")));
+                BigDecimal bigDecimal4 = new BigDecimal(String.valueOf(list1.get(0).get("BEFOREMONTH")));
+                String bigDecimal33 = CalculateUtil.percentBigDecimal(bigDecimal3,bigDecimal4);
+                list1.get(0).put("rate3",bigDecimal33);
+                BigDecimal bigDecimal5 = new BigDecimal(String.valueOf(list1.get(0).get("NOWYEAR")));
+                BigDecimal bigDecimal6 = new BigDecimal(String.valueOf(list1.get(0).get("BEFOREYEAR")));
+                String bigDecimal55 = CalculateUtil.percentBigDecimal(bigDecimal3,bigDecimal4);
+                list1.get(0).put("rate4",bigDecimal55);
+
+
+                //重点企业/总企业今日占比
+                String ratioStr1 = String.valueOf(CalculateUtil.getRatioDouble(new BigDecimal(list2.get(0).get("NOWDAY1").toString()), new BigDecimal(list3.get(0).get("NOWDAY11").toString())));
+                //去年重点企业/去年总企业今日占比
+                String ratioStr2 = String.valueOf(CalculateUtil.getRatioDouble(new BigDecimal(list2.get(0).get("BEFOREDAY1").toString()), new BigDecimal(list3.get(0).get("BEFOREDAY11").toString())));
+                //前年重点企业/前年总企业今日占比
+                String ratioStr3 = String.valueOf(CalculateUtil.getRatioDouble(new BigDecimal(list2.get(0).get("BEFOREDAY2").toString()), new BigDecimal(list3.get(0).get("BEFOREDAY21").toString())));
+
+                String bigDecimal11new1 = CalculateUtil.percentBigDecimalnot(new BigDecimal(ratioStr1),new BigDecimal(ratioStr2));
+                String bigDecimal11new2 = CalculateUtil.percentBigDecimalnot(new BigDecimal(ratioStr2),new BigDecimal(ratioStr3));
+                //重点企业的今日占比同比
+                String bigDecimal11new22 = CalculateUtil.percentBigDecimal(new BigDecimal(String.valueOf(bigDecimal11new1)),new BigDecimal(String.valueOf(bigDecimal11new2)));
+
+                list1.get(0).put("rate11",bigDecimal11new22);
+                //重点企业/总企业本月占比
+                String ratioStr4 = String.valueOf(CalculateUtil.getRatioDouble(new BigDecimal(list2.get(0).get("NOWMONTH1").toString()), new BigDecimal(list3.get(0).get("NOWMONTH11").toString())));
+                //去年重点企业/去年总企业本月占比
+                String ratioStr5 = String.valueOf(CalculateUtil.getRatioDouble(new BigDecimal(list2.get(0).get("BEFOREMONTH1").toString()), new BigDecimal(list3.get(0).get("BEFOREMONTH11").toString())));
+                //前年重点企业/前年总企业本月占比
+                String ratioStr6 = String.valueOf(CalculateUtil.getRatioDouble(new BigDecimal(list2.get(0).get("BEFOREMONTH2").toString()), new BigDecimal(list3.get(0).get("BEFOREMONTH21").toString())));
+                String bigDecimal11new11 = CalculateUtil.percentBigDecimalnot(new BigDecimal(ratioStr4),new BigDecimal(ratioStr5));
+                String bigDecimal11new21 = CalculateUtil.percentBigDecimalnot(new BigDecimal(ratioStr5),new BigDecimal(ratioStr6));
+                //重点企业的本月同比
+                String bigDecimal11new221 = CalculateUtil.percentBigDecimal(new BigDecimal(String.valueOf(bigDecimal11new11)),new BigDecimal(String.valueOf(bigDecimal11new21)));
+                list1.get(0).put("rate33",bigDecimal11new221);
+
+
+                //重点企业/总企业本年占比
+                String ratioStr7 = String.valueOf(CalculateUtil.getRatioDouble(new BigDecimal(list2.get(0).get("NOWYEAR1").toString()), new BigDecimal(list3.get(0).get("NOWYEAR11").toString())));
+                //去年重点企业/去年总企业本年占比
+                String ratioStr8 = String.valueOf(CalculateUtil.getRatioDouble(new BigDecimal(list2.get(0).get("BEFOREYEAR1").toString()), new BigDecimal(list3.get(0).get("BEFOREYEAR11").toString())));
+                //前年重点企业/前年总企业本年占比
+                String ratioStr9 = String.valueOf(CalculateUtil.getRatioDouble(new BigDecimal(list2.get(0).get("BEFOREYEAR2").toString()), new BigDecimal(list3.get(0).get("BEFOREYEAR11").toString())));
+                String bigDecimal11new111 = CalculateUtil.percentBigDecimalnot(new BigDecimal(ratioStr7),new BigDecimal(ratioStr8));
+                String bigDecimal11new211 = CalculateUtil.percentBigDecimalnot(new BigDecimal(ratioStr8),new BigDecimal(ratioStr9));
+                //重点企业的本年同比
+                String bigDecimal11new2211 = CalculateUtil.percentBigDecimal(new BigDecimal(String.valueOf(bigDecimal11new111)),new BigDecimal(String.valueOf(bigDecimal11new211)));
+                list1.get(0).put("rate44",bigDecimal11new2211);
+
+
+                // 重点企业/all企业今日
+
+                list1.get(0).put("NOWDAY1",list2.get(0).get("NOWDAY1").toString());
+                list1.get(0).put("NOWDAY11",list3.get(0).get("NOWDAY11").toString());
+
+                // 重点企业/all企业本月
+                list1.get(0).put("NOWMONTH1",list2.get(0).get("NOWMONTH1").toString());
+                list1.get(0).put("NOWMONTH11",list3.get(0).get("NOWMONTH11").toString());
+
+                // 重点企业/all企业本周
+                list1.get(0).put("NOWWEEK1",list2.get(0).get("NOWWEEK1").toString());
+                list1.get(0).put("NOWWEEK1",list3.get(0).get("NOWWEEK11").toString());
+
+                list1.get(0).put("NOWYEAR1",list2.get(0).get("NOWYEAR1").toString());
+                list1.get(0).put("NOWYEAR11",list3.get(0).get("NOWYEAR11").toString());
+
+                map.putAll((Map)list1.get(0));
+            }
+
+
+            List list=new ArrayList();
+            list.add(map);
+            data.put("rs", list);
+            response.fillMessage(data);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.fillMessage(EnumCode.ERROR_SERVER);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return response;
+        }
+    }
+
+    @Override
+    public ApiResponse queryNoticeInfoDash(Map<String, String> params, UserEntity user) {
+        ApiResponse response = new ApiResponse();
+        JSONObject data = new JSONObject();
+
+        try {
+            QueryWrapper<NoticeInfo> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("NOTICE_USER_ID", user.getId());
+            queryWrapper.eq("TYPE",1);
+            List<NoticeInfo> list = noticeInfoMapper.selectList(queryWrapper);
+
+
+            data.put("rs", list);
+            response.fillMessage(list);
             return response;
         } catch (Exception e) {
             e.printStackTrace();

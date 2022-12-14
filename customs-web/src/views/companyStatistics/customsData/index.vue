@@ -302,6 +302,7 @@ const loadChar = (_data,type) => {
             monthValueArry.push(_data[i].NUMB);
         }
         let data={month:monthArry,val:monthValueArry};
+        console.log(23333,data)
         let totalType=''
             let mainType=''
             if(type=='I'){

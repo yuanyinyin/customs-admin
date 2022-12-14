@@ -116,4 +116,45 @@ public class CompanyStatisticsController {
     public ApiResponse queryInspectRateDash(@RequestParam Map<String, String> params, UserEntity user) {
         return iQpDecHeadService.queryInspectRateDash(params,user);
     }
+
+    /**
+     *
+     * 报关单货值   首页
+     * @param params
+     * @return
+     */
+    @GetMapping("/queryCustomSumDash")
+    public ApiResponse queryCustomSumDash(@RequestParam Map<String, String> params, UserEntity user) {
+        return iQpDecHeadService.queryCustomSumDash(params,user);
+    }
+    /**
+     *企业端
+     * 总体进出口情况  首页
+     * @param params
+     * @return
+     */
+    @GetMapping("/queryTotalCustomDataDash")
+    public ApiResponse queryTotalCustomDataDash(@RequestParam Map<String, String> params, UserEntity user) {
+        return iQpDecHeadService.queryTotalCustomDataDash(params,user);
+    }
+    /**
+     *企业端
+     * 当日同步单量  首页
+     * @param params
+     * @return
+     */
+    @GetMapping("/queryCalculateCustomDataDash")
+    public ApiResponse querySysDateCustomDataDash(@RequestParam Map<String, String> params, UserEntity user) {
+        return iQpDecHeadService.queryCalculateCustomDataDash(params,user);
+    }
+    /**
+     *企业端
+     * 通知
+     * @param params
+     * @return
+     */
+    @GetMapping("/queryNoticeInfoDash")
+    public ApiResponse queryNoticeInfoDash(@RequestParam Map<String, String> params, UserEntity user) {
+        return iQpDecHeadService.queryNoticeInfoDash(params,user);
+    }
 }

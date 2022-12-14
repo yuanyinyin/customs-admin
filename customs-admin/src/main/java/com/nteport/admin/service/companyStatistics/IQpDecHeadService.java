@@ -28,5 +28,15 @@ public interface IQpDecHeadService extends IService<QpDecHead> {
     ApiResponse queryKeyCompanyDataSum(Map<String, String> params, UserEntity user);
     ApiResponse queryKeyCompanyDataByCode(Map<String, String> params, UserEntity user);
     ApiResponse queryInspectRateDash(Map<String, String> params, UserEntity user);
+    ApiResponse queryCustomSumDash(Map<String, String> params, UserEntity user);
+    ApiResponse queryTotalCustomDataDash(Map<String, String> params, UserEntity user);
+    ApiResponse queryCalculateCustomDataDash(Map<String, String> params, UserEntity user);
+    //管理端首页
+    ApiResponse queryAreaDataDash(Map<String, String> params, UserEntity user);
+    ApiResponse queryCustomDataDash(Map<String, String> params, UserEntity user);
+
+    ApiResponse queryQyUseDataDash(Map<String, String> params, UserEntity user);
+
+    ApiResponse queryNoticeInfoDash(Map<String, String> params, UserEntity user);
 }
 

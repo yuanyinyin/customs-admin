@@ -104,4 +104,31 @@ public class ManageStatisticsController {
     public ApiResponse queryKeyCompanyDataByCode(@RequestParam Map<String, String> params, UserEntity user) {
         return iQpDecHeadService.queryKeyCompanyDataByCode(params,user);
     }
+    /**
+     * 管理端首页 区域单量
+     * @param params
+     * @return
+     */
+    @GetMapping("/queryAreaDataDash")
+    public ApiResponse queryAreaDataDash(@RequestParam Map<String, String> params, UserEntity user) {
+        return iQpDecHeadService.queryAreaDataDash(params,user);
+    }
+    /**
+     * 管理端首页 报关单量
+     * @param params
+     * @return
+     */
+    @GetMapping("/queryCustomDataDash")
+    public ApiResponse queryCustomDataDash(@RequestParam Map<String, String> params, UserEntity user) {
+        return iQpDecHeadService.queryCustomDataDash(params,user);
+    }
+    /**
+     * 管理端首页 企业登录
+     * @param params
+     * @return
+     */
+    @GetMapping("/queryQyUseDataDash")
+    public ApiResponse queryQyUseDataDash(@RequestParam Map<String, String> params, UserEntity user) {
+        return iQpDecHeadService.queryQyUseDataDash(params,user);
+    }
 }
