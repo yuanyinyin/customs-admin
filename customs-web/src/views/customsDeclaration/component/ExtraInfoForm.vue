@@ -32,12 +32,12 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
-                  <el-form-item label="启运日期:">
+                  <el-form-item v-if="formData.ieflag =='I'" label="启运日期:">
                     <el-input readonly  v-model="formData.despdate" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
-                  <el-form-item label="B/L号:">
+                  <el-form-item v-if="formData.ieflag =='I'" label="B/L号:">
                     <el-input readonly  v-model="formData.blno" />
                   </el-form-item>
                 </el-col>
@@ -61,7 +61,7 @@
                 </el-col>
 
                    <el-col :span="3" class="_el_col" :push="3">
-                   <el-button type="primary" @click="usePersionWin()" >使用人</el-button>
+                   <el-button type="primary" v-if="formData.ieflag =='I'" @click="usePersionWin()" >使用人</el-button>
                    </el-col>
 
 
@@ -70,7 +70,7 @@
 
               <el-row>
                 <el-col :span="6" class="_el_col">
-                  <el-form-item label="原箱运输:">
+                  <el-form-item label="原箱运输:" v-if="formData.ieflag =='I'">
                     <el-input readonly  v-model="formData.origboxflagValue" />
                   </el-form-item>
                 </el-col>
@@ -176,6 +176,8 @@ const usePersionWin = () => {
 const jyjySbysWin = () => {
    formJyjySbysWin.value =   props.formData ;
    const headid =   props.formData.id ;
+   console.log(123)
+   console.log(headid)
     // console.log(promiseitmes)
     const firstIsYes = false
     
