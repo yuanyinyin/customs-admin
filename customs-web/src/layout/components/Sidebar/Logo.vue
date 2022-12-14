@@ -23,7 +23,7 @@ defineProps({
 })
 const state = reactive({
   title: setting.title,
-  logo: '/ycj/favicon.ico'
+  logo: '/customs/favicon.ico'
 })
 //export to page for
 const { title, logo } = toRefs(state)
