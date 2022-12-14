@@ -81,8 +81,8 @@
                 </el-col>
                 <el-col :span="5" class="_el_col">
                   <el-form-item label="币制:">
-                    <el-input readonly v-model="formData.tradeCurrValue" />
-                  </el-form-item>
+                    <el-input readonly v-model="formData.tradecurrValue" />
+                  </el-form-item>  
                 </el-col>
               </el-row>
 
