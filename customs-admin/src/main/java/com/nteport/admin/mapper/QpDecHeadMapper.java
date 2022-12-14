@@ -18,6 +18,6 @@ import java.util.Map;
 @Repository
 public interface QpDecHeadMapper extends BaseMapper<QpDecHead> {
 
-    List<HashMap<String,Object>>  exportExcel(HashMap params);
+    List<HashMap<String,Object>>  exportExcel(Map params);
 
 }

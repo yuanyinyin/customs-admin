@@ -1,5 +1,6 @@
 package com.nteport.admin.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.nteport.admin.entity.TDeptEntity;
 import com.nteport.admin.entity.system.ApiResponse;
@@ -15,6 +16,8 @@ import com.nteport.admin.util.LoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -163,4 +166,104 @@ public class LoginController {
 
 
 
+    /**
+     * 获取用户信息
+     *
+     * @param user 用户
+     * @return
+     */
+    @PostMapping("/getNtPtlLoginUser")
+    public ApiResponse getNtPtlLoginUser(UserEntity user) {
+        return ApiResponse.success(JSONObject.toJSON(user));
+    }
+
+    /**
+     * 获取企业信息
+     *
+     * @param user 用户
+     * @return
+     */
+    @PostMapping("/getNtPtlLoginDep")
+    public ApiResponse getNtPtlLoginDep(UserEntity user) {
+        Map ntptl_dept=ntPtlService.selectDept(user.getDeptId());
+        return ApiResponse.success(JSONObject.toJSON(ntptl_dept));
+    }
+
+    /**
+     * 注册企业用户
+     *
+     * @param user 用户
+     * @return
+     */
+    @PostMapping("/registerDepUser")
+    public ApiResponse registerDepUser(@RequestBody String jsonString,UserEntity user) {
+        int result= 0;
+        try {
+            result = ntPtlService.registerDepUser(user,jsonString);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ApiResponse.fail("注册失败");
+        }
+        return ApiResponse.success("注册成功");
+    }
+
+    /**
+     * 确认注册信息是否重复
+     *
+     * @param user 用户
+     * @return
+     */
+    @PostMapping("/registerCheck")
+    public ApiResponse registerCheck(@RequestBody String jsonString,UserEntity user) {
+        JSONObject json = JSON.parseObject(jsonString);
+//        String orgNameCn=json.getString("orgNameCn");//单位全称
+//        String unionNo=json.getString("unionNo");//统一社会信用代码
+//        String areaName=json.getString("areaName");//所在地区
+//        String areaCode=json.getString("areaCode");//所在地区
+//        String userName=json.getString("userName");//管理员账户名
+//        String realName=json.getString("realName");//真实姓名
+//        String password=json.getString("password");//密码
+//        String telephone=json.getString("telephone");//手机号
+        String repeatCheckColumn=json.getString("repeatCheckColumn");//唯一校验字段
+        String repeatCheckValue=json.getString("repeatCheckValue");//唯一校验字段值
+        List<Map> list=ntPtlService.registerCheck(repeatCheckColumn,repeatCheckValue);
+        if (list!=null&&list.size()>0){
+            return ApiResponse.success(1);
+        }else{
+            return ApiResponse.success(0);
+        }
+    }
+    /**
+     * 发送验证码
+     *
+     * @return
+     */
+    @PostMapping("/sendYzm")
+    public ApiResponse sendYzm(@RequestBody String jsonString, UserEntity user, HttpServletRequest request) {
+        JSONObject json = JSON.parseObject(jsonString);
+        String telephone=json.getString("telephone");//手机号
+        String ip=request.getRemoteAddr();
+        String result=ntPtlService.sendYzm(telephone,ip,request);
+        return ApiResponse.success(result);
+    }
+    /**
+     * 发送验证码
+     *
+     * @return
+     */
+    @PostMapping("/checkYzm")
+    public ApiResponse checkYzm(@RequestBody String jsonString, UserEntity user, HttpServletRequest request) {
+        JSONObject json = JSON.parseObject(jsonString);
+        String session_yzm=request.getSession().getAttribute("yzm")!=null?request.getSession().getAttribute("yzm").toString():"";
+        String yzm=json.getString("verifyCode");
+        String result="1";
+        if(session_yzm.isEmpty()){//验证码session失效
+            result="验证码已失效";
+        }else{
+            if (!yzm.equals(session_yzm)) {//手机验证码不正确
+                result="手机验证码不正确";
+            }
+        }
+        return ApiResponse.success(result);
+    }
 }

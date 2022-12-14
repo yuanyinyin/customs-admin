@@ -2,7 +2,7 @@
   <router-view />
 </template>
 <script setup lang="ts">
-import { setToken } from '@/utils/auth'
+import { setToken , getToken} from '@/utils/auth'
 
 const store = useStore()
 const settings = computed(() => {
@@ -16,9 +16,13 @@ const timer = ref(null);
 const router = useRouter()
 
 onMounted(() => {
-    timer.value = setInterval(async () => {
-    handleCurrentChange();
-    }, 3000000);
+    
+    if(getToken()){
+      timer.value = setInterval(async () => {
+       handleCurrentChange();
+    }, 30000);
+    }
+    
   });
 
 onUnmounted(() => {
@@ -26,6 +30,25 @@ onUnmounted(() => {
   });
 
 const handleCurrentChange = () => {
+ 
+  //  window.setTimeout(() => {
+  //         ElNotification({
+  //           title: '回执信息提醒',
+  //           message: '1111111111',
+  //           position: 'bottom-right',
+  //           dangerouslyUseHTMLString:true,
+  //           // offset:36,
+  //           duration:30000,
+  //           // type:type,
+  //           onClick:function(){
+  //             linkTodo(
+  //               {}
+  //             );
+  //           },
+  //         })
+  //     }, 0)
+
+
     let params={
         page: 1,
         limit:5,
@@ -36,25 +59,13 @@ const handleCurrentChange = () => {
     .then((response) => {
       const tableData = response.items
       const pageTotal = response.total
-      if(pageTotal){
+      if(pageTotal && pageTotal > 0){
        
         for(var i=0;i<tableData.length;i++){
           const obj = tableData[i] 
           const  message =    obj.content + '<br/>' + "<div class='app-message-right'>" + obj.createTime + '</div>'
 
-          // ElNotification({
-          //   title: '回执信息提醒',
-          //   message: message,
-          //   position: 'bottom-right',
-          //    dangerouslyUseHTMLString:true,
-          //   // offset:36,
-          //   duration:30000,
-          //   onClick:function(){
-          //     linkTodo(
-          //       obj
-          //     );
-          //   },
-          // })
+    
 
           window.setTimeout(() => {
           ElNotification({

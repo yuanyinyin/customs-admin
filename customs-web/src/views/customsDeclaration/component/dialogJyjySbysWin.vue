@@ -1,17 +1,14 @@
 <template>
     <div>
     
-        <el-dialog  v-model="dialogGood.show" :title="dialogGood.title" width="45%" center>
+        <el-dialog class="dialogClass" v-model="dialogGood.show"  :title="dialogGood.title" width="45%" center>
             <template #header>
-    
               <div class="clearfix">
-    
                 <span>检验检疫申报要素</span>
-    
               </div>
             </template>
 
-            <el-table  height="300" v-model:data="tableData" v-loading="loading" stripe style="width: 100%">
+            <el-table  ref="tableRef" height="300" v-model:data="tableData" v-loading="loading" stripe style="width: 100%">
           <el-table-column type="selection" align="center" width="50" />
           <el-table-column type="index" label="序号" align="center" width="55">
             <template #default="scope">
@@ -41,35 +38,35 @@
               <el-row>
                 <el-col :span="24" class="_el_col">
                   <el-form-item label="境内收发货人名称(外文):">
-                     <el-input  v-model="formData.domesticconsigneeename" />
+                     <el-input readonly  v-model="formData.domesticconsigneeename" />
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="24" class="_el_col">
                   <el-form-item label="境外收发货人名称(中文):">
-                     <el-input  v-model="formData.overseasconsignorcname" />
+                     <el-input readonly  v-model="formData.overseasconsignorcname" />
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="24" class="_el_col">
                   <el-form-item label="境外发货人地址:">
-                     <el-input  v-model="formData.overseasconsignoraddr" />
+                     <el-input readonly  v-model="formData.overseasconsignoraddr" />
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="24" class="_el_col">
                   <el-form-item label="卸毕日期:">
-                     <el-input  v-model="formData.cmpldschrgdt" />
+                     <el-input readonly  v-model="formData.cmpldschrgdt" />
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="24" class="_el_col">
                   <el-form-item label="商品英文名称:">
-                     <el-input  v-model="formData.declgoodsenames" />
+                     <el-input readonly  v-model="formData.declgoodsenames" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -87,7 +84,7 @@ import { PropType } from 'vue'
 import { getLogList } from "@/api/qpDec";
 import { parseTime, deepClone } from '@/utils/dateTime'
 
-import { listUser } from "@/api/qpDec";
+import { listCert } from "@/api/qpDec";
 
 const tableData: any = ref(null)
 // const tableData: any = ref(null)
@@ -97,7 +94,7 @@ const total = ref(null)
 
 onMounted(() => {
     // getList()
-    initData();
+    // initData();
 })
 
 // // 查询配置 [pageNum 当前页数, pageSize 每页大小]
@@ -162,29 +159,88 @@ const props = defineProps({
 const  initData = () =>{
   tableData.value = dataOrigin;
 }
+
+type TableInstance = InstanceType<typeof ElTable>
+const tableRef = ref<TableInstance>()
+
+
 // // 获取角色列表
-const getList = () => {
+const getList = (_headId) => {
     // console.log(123)
     //  console.log(props.headId)
-    if (!props.headId) {
+    if (!_headId) {
         return;
     }
     let params =  {
-        headid: props.headId
+        headid: _headId
 
     }
-    listUser(params)
+    listCert(params)
         .then((response) => {
-            tableData.value = response.data.items
-            // total.value = response.data.total
+           var _items = response.data.items
+            if(_items && _items.length > 0){
+                  for(var i=0; i< dataOrigin.length; i++){
+                    var data = dataOrigin[i];
+                    if(_items != null){
+                        var isExsit = false;
+                        for(var j =0; j < _items.length;j++){
+
+                            if(data.appCertCode == _items[j].appcertcode){
+                                isExsit = true;
+                                data.isSelect = true;
+                                data.applOri = _items[j].applori;
+                                data.applCopyQuan = _items[j].applcopyquan;
+                                break;
+                            }
+                        }
+                        if(!isExsit){
+                            data.isSelect="0";
+                        }
+                    }else{
+                        data.isSelect="0";
+                    }
+                }
+            }
+
+            tableData.value = dataOrigin;
+       
+
+                        if (tableRef) {
+                            tableRef.value.clearSelection();
+                        }
+                        tableData.value.forEach(row => {
+                             
+                                if (row.isSelect == true) {
+                                  console.log(9876)
+                                  console.log(row)
+                                  nextTick(() => {
+                                    tableRef.value.toggleRowSelection(row,true);
+                                  })
+                                }
+                            
+                        })
         })
-        .catch((response) => {})
+        .catch((response) => {console.log(response)})
 }
  
 defineExpose({ getList })
 </script>
 
 <style scoped lang="scss">
+.dialogClass {
+  .el-dialog {
+    .el-dialog__body {
+      //border-top: 1px solid #dcdfe6;
+      //border-bottom: 1px solid #dcdfe6;
+      max-height: 500px !important;
+      min-height: 100px;
+      overflow-y: hidden;
+    }
+  }
+}
+
+
+
 ._el_col {
   height: 16px !important;
 }

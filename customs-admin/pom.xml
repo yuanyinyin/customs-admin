@@ -10,10 +10,10 @@
         <relativePath/>
     </parent>
     <groupId>com.nteport</groupId>
-    <artifactId>ycj-admin</artifactId>
+    <artifactId>customs-admin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ycj-admin</name>
-    <description>Ycj Admin for nteport</description>
+    <name>customs-admin</name>
+    <description>customs Admin for nteport</description>
 
     <properties>
         <java.version>17</java.version>
@@ -69,23 +69,23 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>-->
-<!--            <version>2021.1</version>-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <artifactId>guava</artifactId>-->
-<!--                    <groupId>com.google.guava</groupId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <version>2021.1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
-<!--            <version>2021.1</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+            <version>2021.1</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -320,10 +320,19 @@
             <version>2.12.0</version>
         </dependency>
 
+        <!--阿里云短信接口依赖jar包-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.5</version>
+        </dependency>
 
-
-
-
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <!--end-->
 
 
     </dependencies>

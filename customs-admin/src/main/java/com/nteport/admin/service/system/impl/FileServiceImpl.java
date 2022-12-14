@@ -61,7 +61,12 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileEntity> impleme
         file.setFileName(fileName);
         file.setType(type);
         file.setFileUrl(path);
-        file.createTimeStamp(user);
+        file.createTimeStampNullAble(user);
+        if (user==null){
+            file.setCreateUser("user");
+            file.setUpdateUser("user");
+            file.setCreatorName("user");
+        }
         fileMapper.insert(file);
         return file.getId();
     }

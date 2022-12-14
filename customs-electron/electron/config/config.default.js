@@ -1,7 +1,6 @@
 'use strict';
 
 const dayjs = require('dayjs');
-const path = require('path');
 
 /**
  * 默认配置
@@ -34,14 +33,14 @@ module.exports = (appInfo) => {
   };
 
   /* 开发者工具 */
-  config.openDevTools = false;
+  config.openDevTools = true;
 
   /**
    * 应用程序顶部菜单
    * boolean | string
    * true, false, 'dev-show'(dev环境显示，prod环境隐藏)
    */
-  config.openAppMenu = 'dev-show';
+  config.openAppMenu = true;
 
   /**
    * 主窗口
@@ -59,7 +58,8 @@ module.exports = (appInfo) => {
     },
     frame: true,
     show: true,
-    backgroundColor: '#000000'
+    backgroundColor: '#ffffff',
+    partition: String(+new Date()),
     //titleBarStyle: 'hidden'
   };
 
@@ -73,9 +73,9 @@ module.exports = (appInfo) => {
   config.remoteUrl = {
     enable: true, // 是否启用
     // url: 'http://localhost:8080' // Any web url
-    url: 'http://172.16.22.26:9030/customs' // 外贸帮web页面
+    url: 'https://www.nteport.com/customs/' // 外贸帮web页面
     // url: 'http://localhost:7003/customs/' // 外贸帮web页面
-    // url: 'http://www.nteport.com/customs/' // 外贸帮web页面
+    //url: 'https://www.baidu.com/' // 外贸帮web页面
   };
 
   /* 内置socket服务 */
@@ -128,25 +128,25 @@ module.exports = (appInfo) => {
 
   /* 应用自动升级 (可选) */
   config.autoUpdate = {
-    windows: false, // windows平台
+    windows: true, // windows平台
     macOS: false, // macOs 需要签名验证
     linux: false, // linux平台
     options: {
       provider: 'generic', // or github, s3, bintray
-      url: 'http://kodo.qiniu.com/' // resource dir, end with '/'
+      url: 'https://www.nteport.com/customs/update/' // resource dir, end with '/'
     },
-    force: false, // 强制更新（运行软件时，检查新版本并后台下载安装）
+    force: true, // 强制更新（运行软件时，检查新版本并后台下载安装）
   };
 
   /* 被浏览器唤醒 (可选) */
   config.awakeProtocol = {
-    protocol: 'ee', // 自定义协议名（默认你的应用名称-英文）
+    protocol: 'customs', // 自定义协议名（默认你的应用名称-英文）
     args: []
   };
 
   /* 托盘 (可选)  */
   config.tray = {
-    title: 'EE程序', // 托盘显示标题
+    title: '外贸帮', // 托盘显示标题
     icon: '/public/images/tray_logo.png' // 托盘图标
   }
 

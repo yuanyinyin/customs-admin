@@ -13,7 +13,7 @@
     </select>
 
     <select id="selectDept" parameterType="java.lang.String" resultType="hashMap">
-        select t.ORG_NAME_CN from ORG_BASEINFO@NT_PTL t
+        select ID,ORG_NAME_CN,UNION_NO,AREA_NAME from ORG_BASEINFO@NT_PTL t
         where t.id=#{depId,jdbcType=VARCHAR}
     </select>
 
@@ -55,5 +55,181 @@
           and r.LEV = '前台'
           and r.FATHER!='-1'
         order by  r.right_indx desc
+    </select>
+    <update id="updateUser" parameterType="com.nteport.admin.entity.system.UserEntity">
+        update USER_BASEINFO@NT_PTL t set t.PASSWORD=#{userPassword,jdbcType=VARCHAR},t.REALNAME=#{realName,jdbcType=VARCHAR},t.MOBILE=#{telephone,jdbcType=VARCHAR}  where t.id=#{id,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertOrgBaseInfo" parameterType="hashmap">
+        insert into ORG_BASEINFO@NT_PTL(
+            ID,
+            ORG_NAME_CN,
+            INSPECT_NAME_CN,
+            ORG_NAME_SCN,
+            ORG_PROPERTY,
+            ORG_TYPE,
+            AREA_NAME,
+            AREA_CODE,
+            REG_TYPE,
+            CHECK_STATE,
+            STATE,
+            CREATE_USER,
+            CREATE_USER_ID,
+            UPDATE_USER,
+            UPDATE_USER_ID,
+            RELATION_CODE,
+            RELATION_CN,
+            RELATION_SN,
+            COMPLETE_STATE,
+            UNION_NO,
+            ALERT_STATE,
+            REGISTER_PIC_ID
+        )
+        values(
+            #{ID,jdbcType=VARCHAR},
+            #{ORG_NAME_CN,jdbcType=VARCHAR},
+            #{INSPECT_NAME_CN,jdbcType=VARCHAR},
+            #{ORG_NAME_SCN,jdbcType=VARCHAR},
+            '201303280000000652',
+            'JYDW',
+            #{AREA_NAME,jdbcType=VARCHAR},
+            #{AREA_CODE,jdbcType=VARCHAR},
+            '1',
+            '2',
+            '1',
+            #{CREATE_USER,jdbcType=VARCHAR},
+            #{CREATE_USER_ID,jdbcType=VARCHAR},
+            #{UPDATE_USER,jdbcType=VARCHAR},
+            #{UPDATE_USER_ID,jdbcType=VARCHAR},
+            #{RELATION_CODE,jdbcType=VARCHAR},
+            #{RELATION_CN,jdbcType=VARCHAR},
+            #{RELATION_SN,jdbcType=VARCHAR},
+            '1',
+            #{UNION_NO,jdbcType=VARCHAR},
+            null,
+            #{REGISTER_PIC_ID,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertOrgMoreInfo" parameterType="hashmap">
+        insert into ORG_MOREINFO@NT_PTL(
+            ORG_ID,
+            ORG_NAME_EN,
+            IE_ENTER_CODE,
+            IC_CODE,
+            ZIP_CODE,
+            ADDRESS_EN,
+            ORG_URL,
+            BANK,
+            BANK_ACOUNT,
+            REG_MON,
+            CUSTOM_NO,
+            INSPECT_NO,
+            CUSTOM_TYPE,
+            CUSTOM_CODE,
+            CUSTOM_LIMITTIME,
+            BUSINESS_SCOPE
+        )
+        values(
+          #{ORG_ID,jdbcType=VARCHAR},
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+      )
+    </insert>
+
+    <insert id="insertUserBaseInfo" parameterType="hashmap">
+        insert into USER_BASEINFO@NT_PTL(
+            ID,
+            ORG_ID,
+            USERNAME,
+            PASSWORD,
+            REALNAME,
+            MOBILE,
+            SEX,
+            PHONE_STATE,
+            EMAIL_STATE,
+            USER_TYPE,
+            IS_ADMIN,
+            STATE,
+            CREATE_USER,
+            CREATE_USER_ID,
+            UPDATE_USER,
+            UPDATE_USER_ID
+        )
+        values(
+              #{ID,jdbcType=VARCHAR},
+              #{ORG_ID,jdbcType=VARCHAR},
+              #{USERNAME,jdbcType=VARCHAR},
+              #{PASSWORD,jdbcType=VARCHAR},
+              #{REALNAME,jdbcType=VARCHAR},
+              #{MOBILE,jdbcType=VARCHAR},
+            '1',
+            '0',
+            '0',
+            '2',
+            '1',
+            '2',
+              #{CREATE_USER,jdbcType=VARCHAR},
+              #{CREATE_USER_ID,jdbcType=VARCHAR},
+              #{UPDATE_USER,jdbcType=VARCHAR},
+              #{UPDATE_USER_ID,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertUserMoreInfo" parameterType="hashmap">
+        insert into USER_MOREINFO@NT_PTL(
+            USER_ID,
+            FIX_PHONE
+        )
+        values(
+            #{USER_ID,jdbcType=VARCHAR},
+            null
+          )
+    </insert>
+
+    <select id="selectRoleByCode" parameterType="java.lang.String" resultType="hashMap">
+        select t.* from ROLE_RM@NSW t
+        where webid = 'WMB'
+        and t.SIMPLE_NAME=#{roleCode,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertUserRole" parameterType="hashmap">
+        insert into ROLE_EMPLOYEE@NSW(
+            ID,
+            ROLE_ID,
+            EMPLOYEE_ID,
+            EMPLOYEE_NAME,
+            ROLE_NAME
+        )
+        values(
+          #{ID,jdbcType=VARCHAR},
+          #{ROLE_ID,jdbcType=VARCHAR},
+          #{EMPLOYEE_ID,jdbcType=VARCHAR},
+          #{EMPLOYEE_NAME,jdbcType=VARCHAR},
+          #{ROLE_NAME,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="selectDeptByParam" parameterType="java.lang.String" resultType="hashMap">
+        select ID from ORG_BASEINFO@NT_PTL t
+        where t.${column}=#{value,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectUserByParam" parameterType="java.lang.String" resultType="hashMap">
+        select ID from USER_BASEINFO@NT_PTL t
+        where t.${column}=#{value,jdbcType=VARCHAR}
     </select>
 </mapper>

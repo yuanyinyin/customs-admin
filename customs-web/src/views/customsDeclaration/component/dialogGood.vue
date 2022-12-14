@@ -24,22 +24,22 @@
                <el-row>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="商品序号:">
-                    <el-input v-model="formData.gno" />
+                    <el-input readonly v-model="formData.gno" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="备案序号:">
-                    <el-input v-model="formData.contritem" />
+                    <el-input readonly v-model="formData.contritem" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="商品编号:">
-                    <el-input v-model="formData.codets" />
+                    <el-input readonly v-model="formData.codets" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="检验检疫名称:">
-                    <el-input v-model="formData.ciqname" />
+                    <el-input readonly v-model="formData.ciqname" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -47,12 +47,12 @@
               <el-row>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="商品名称:">
-                    <el-input  v-model="formData.gname" />
+                    <el-input readonly  v-model="formData.gname" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="规格型号:">
-                    <el-input  v-model="formData.gmodel" />
+                    <el-input readonly  v-model="formData.gmodel" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -61,28 +61,28 @@
               <el-row>
                 <el-col :span="5" class="_el_col">
                   <el-form-item label="成交数量:">
-                    <el-input v-model="formData.gqty" />
+                    <el-input readonly v-model="formData.gqty" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="4" class="_el_col">
                   <el-form-item label="成交单位:">
-                    <el-input v-model="formData.gunitValue" />
+                    <el-input readonly v-model="formData.gunitValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="5" class="_el_col">
                   <el-form-item label="成交单价:">
-                    <el-input v-model="formData.declprice" />
+                    <el-input readonly v-model="formData.declprice" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="5" class="_el_col">
                   <el-form-item label="成交总价:">
-                    <el-input v-model="formData.decltotal" />
+                    <el-input readonly v-model="formData.decltotal" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="5" class="_el_col">
                   <el-form-item label="币制:">
-                    <el-input v-model="formData.tradeCurrValue" />
-                  </el-form-item>
+                    <el-input readonly v-model="formData.tradecurrValue" />
+                  </el-form-item>  
                 </el-col>
               </el-row>
 
@@ -90,27 +90,27 @@
                <el-row>
                 <el-col :span="5" class="_el_col">
                   <el-form-item label="法定数量:">
-                    <el-input v-model="formData.firstqty" />
+                    <el-input readonly v-model="formData.firstqty" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="4" class="_el_col">
                   <el-form-item label="法定单位:">
-                    <el-input v-model="formData.firstunitValue" />
+                    <el-input readonly v-model="formData.firstunitValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="5" class="_el_col">
                   <el-form-item label="版本号:">
-                    <el-input v-model="formData.exgversion" />
+                    <el-input readonly v-model="formData.exgversion" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="5" class="_el_col">
                   <el-form-item label="货号:">
-                    <el-input v-model="formData.exgno" />
+                    <el-input readonly v-model="formData.exgno" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="5" class="_el_col">
                   <el-form-item label="最终目的国:">
-                    <el-input v-model="formData.destinationcountryValue" />
+                    <el-input readonly v-model="formData.destinationcountryValue" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -119,22 +119,22 @@
               <el-row>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="第二数量:">
-                    <el-input v-model="formData.secondqty" />
+                    <el-input readonly v-model="formData.secondqty" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="第二单位:">
-                    <el-input v-model="formData.secondunitValue" />
+                    <el-input readonly v-model="formData.secondunitValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="原产国(地区):">
-                    <el-input v-model="formData.origincountryValue" />
+                    <el-input readonly v-model="formData.origincountryValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="原产地区:">
-                    <el-input v-model="formData.origplacecodeValue" />
+                    <el-input readonly v-model="formData.origplacecodeValue" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -143,15 +143,15 @@
               <el-row>
                 <el-col :span="8" class="_el_col">
                   <el-form-item label="境内目的地:">
-                    <el-input v-model="formData.districtcodeValue" />
+                    <el-input readonly v-model="formData.districtcodeValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="7" class="_el_col" :push="1">        
-                    <el-input v-model="formData.destcodeValue" />
+                    <el-input readonly v-model="formData.destcodeValue" />
                 </el-col>
                 <el-col :span="8" class="_el_col">
                   <el-form-item label="征免方式:">
-                    <el-input v-model="formData.dutymodeValue" />
+                    <el-input readonly v-model="formData.dutymodeValue" />
                   </el-form-item>
                 </el-col> 
               </el-row>
@@ -160,7 +160,7 @@
                <el-row>
                 <el-col :span="18" class="_el_col">
                   <el-form-item label="检验检疫货物规格:">
-                    <el-input v-model="formData.jyjyggxh" />
+                    <el-input readonly v-model="formData.jyjyggxh" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -169,12 +169,12 @@
                 <el-row>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="货物属性:">
-                    <el-input  v-model="formData.goodsattrname" />
+                    <el-input readonly  v-model="formData.goodsattrname" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="用途:">
-                    <el-input  v-model="formData.purposeValue" />
+                    <el-input readonly  v-model="formData.purposeValue" />
                   </el-form-item>
                 </el-col>
               </el-row>

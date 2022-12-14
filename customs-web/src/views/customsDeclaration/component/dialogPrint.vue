@@ -1,12 +1,12 @@
 <template>
     <div>
     
-        <el-dialog v-model="dialogGood.show" :title="dialogGood.title" width="40%" center>
+        <el-dialog v-model="dialogGood.show" :title="dialogGood.title" width="24%" center>
             <template #header>
     
               <div class="clearfix">
     
-                <span>业务事项</span>
+                <span>选择打印类型</span>
     
               </div>
 </template>
@@ -20,9 +20,9 @@
     >
                <el-row>
                 <el-col :span="24" class="_el_col">
-            <el-checkbox-group v-model="formData.checkList"  disabled>
+                   <el-checkbox-group v-model="formData.checkList"  >
           <el-checkbox
-            v-for="(item, index) in formData.tenderGroup"
+            v-for="(item, index) in tenderGroup"
             :key="index"
             :label="item.id"
           >{{ item.realName }}
@@ -38,7 +38,8 @@
               
     </el-form>
        
-
+    <br>
+     <br>
     </el-dialog>
   </div>
 </template>
@@ -58,10 +59,7 @@ onMounted(() => {
 })
 
 // // 查询配置 [pageNum 当前页数, pageSize 每页大小]
-const listQuery: any = ref({
-    page: 1,
-    limit: 10
-})
+
 
 // //定义组件的属性
 const props = defineProps({
@@ -78,54 +76,23 @@ const props = defineProps({
 })
 
 //定义变量
-// const tenderGroup = [
-//   { id: '1', realName: '税单无纸化',},
-//   { id: '2', realName: '自主报税', },
-//   { id: '3', realName: '水运中转', },
-//   { id: '4', realName: '自报自缴', },
-//   { id: '5', realName: '担保验放', },
-//   { id: '6', realName: '查验分流', },
-// ]
+const tenderGroup = [
+  { id: '1', realName: '报关单核对单',},
+  { id: '2', realName: '报关单商品附加联', },
+  { id: '3', realName: '集装箱', },
+  { id: '4', realName: '检验检疫', },
+  { id: '5', realName: '放行通知书', },
+  { id: '6', realName: '报关单', },
+]
 
 // // 获取角色列表
-const getList = () => {
-    // console.log(123)
-    //  console.log(props.headId)
-    if (!props.headId) {
-        return;
-    }
-    let params = Object.assign(deepClone(listQuery._rawValue), {
-        headid: props.headId
-
-    })
-    getLogList(params)
-        .then((response) => {
-            tableData.value = response.data.items
-            total.value = response.data.total
-        })
-        .catch((response) => {})
-}
-// /**
-//  * 分页大小修改处理
-//  */
-const handleSizeChange = () => {
-    listQuery.page = 1
-    getList()
-}
-/**
- * 查询框处理
- */
-const handleFilter = () => {
-    listQuery.page = 1
-    getList()
-}
-
-
+ 
+ 
 // const resetForm = () => {
 //   props.dialogRoles.show = false
 // }
 
-defineExpose({ getList })
+// defineExpose({ getList })
 </script>
 
 <style scoped lang="scss">

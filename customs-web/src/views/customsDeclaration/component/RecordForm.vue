@@ -12,12 +12,12 @@
                <el-row>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="关联报关单:">
-                    <el-input v-model="formData.relid" />
+                    <el-input readonly v-model="formData.relid" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="关联备案:">
-                    <el-input v-model="formData.relmanno" />
+                    <el-input readonly v-model="formData.relmanno" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -25,12 +25,12 @@
               <el-row>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="保税/监管场地:">
-                    <el-input  v-model="formData.bonno" />
+                    <el-input readonly  v-model="formData.bonno" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="场地代码:">
-                    <el-input  v-model="formData.cusfie" />
+                    <el-input readonly  v-model="formData.cusfie" />
                   </el-form-item>
                 </el-col>
                 

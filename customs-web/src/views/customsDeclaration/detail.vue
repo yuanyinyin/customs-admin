@@ -1,51 +1,47 @@
 <template>
-  <!-- <div class="roles-container scroll-y p"> -->
-  <el-container>
-    <!-- 顶栏 -->
-    <!-- <el-header height="24px">
-      <h2>报关单详情</h2>
-    </el-header> -->
-    <!-- 嵌套容器 -->
-    <el-container>
+<div >
+  <!-- <el-dialog  class="abow_dialog" append-to-body   custom-class="abow_dialog"  draggable  v-model="dialogMore.show" :title="dialogMore.title"    > -->
+    <el-container >
       <el-main>
-        <!-- 第一列栅格布局 -->
         <el-row  class="_row1">
-          <!-- <el-col :span="12" class="col1"></el-col> -->
           <el-col :span="24" class="col2">
             <el-form :model="formData" label-width="160px">
               <el-row>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="报关/转关:">
-                   <el-input  v-model="formData.decltrnrelValue" />
+                   <el-input readonly   v-model="formData.decltrnrelValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="申报地海关:">
-                    <el-input  v-model="formData.custommasterValue" />
+                    <el-input readonly  v-model="formData.custommasterValue" />
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="统一编号:">
-                   <el-input  v-model="formData.seqno" />
+                   <el-input readonly  v-model="formData.seqno" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="预录入编号:">
-                   <el-input  v-model="formData.preentryid" />
+                   <el-input readonly  v-model="formData.preentryid" />
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="海关编号:">
-                   <el-input  v-model="formData.entryid" />
+                   <el-input readonly  v-model="formData.entryid" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" class="_el_col">
-                  <el-form-item label="进境关别:">
-                   <el-input  v-model="formData.ieportValue" />
+                  <el-form-item v-if="formData.ieflag =='I'" label="进境关别:">
+                   <el-input readonly  v-model="formData.ieportValue" />
+                  </el-form-item>
+                  <el-form-item v-else  label="出境关别:">
+                   <el-input readonly  v-model="formData.ieportValue" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -53,71 +49,78 @@
               <el-row>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="备案号:">
-                   <el-input  v-model="formData.manualno" />
+                   <el-input readonly  v-model="formData.manualno" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="合同协议号:">
-                   <el-input  v-model="formData.contrno" />
+                   <el-input readonly  v-model="formData.contrno" />
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="12" class="_el_col">
-                  <el-form-item label="进口日期:">
-                   <el-input  v-model="formData.iedate" />
+                  <el-form-item v-if="formData.ieflag =='I'" label="进口日期:">
+                   <el-input readonly  v-model="formData.iedate" />
                   </el-form-item>
+                  <el-form-item  v-else label="出口日期:">
+                   <el-input readonly  v-model="formData.iedate" />
+                  </el-form-item>
+
                 </el-col>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="申报日期:">
-                   <el-input  v-model="formData.declarationdata" />
+                   <el-input readonly  v-model="formData.declarationdata" />
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="5" class="_el_col" >
                   <el-form-item label="境内收发货人:">
-                   <el-input  v-model="formData.tradecodescc" />
+                   <el-input readonly  v-model="formData.tradecodescc" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="3" class="_el_col" :push="1">        
-                   <el-input  v-model="formData.tradecode" />         
+                   <el-input readonly  v-model="formData.tradecode" />         
                 </el-col>
                 <el-col :span="3" class="_el_col" :push="2">              
-                   <el-input  v-model="formData.consigneecode" />         
+                   <el-input readonly  v-model="formData.consigneecode" />         
                 </el-col>
                 <el-col :span="10" class="_el_col" :push="3">                
-                   <el-input  v-model="formData.tradename" />
+                   <el-input readonly  v-model="formData.tradename" />
                 </el-col>
               </el-row>
 
               <el-row>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="境外收发货人:">
-                   <el-input  v-model="formData.overseasconsignorcode" />
+                   <el-input readonly  v-model="formData.overseasconsignorcode" />
                   </el-form-item>
                 </el-col>
               
                 <el-col :span="11" class="_el_col" :push="1">                
-                   <el-input  v-model="formData.overseasconsignorename" />
+                   <el-input readonly  v-model="formData.overseasconsignorename" />
                 </el-col>
               </el-row>
 
               <el-row>
                 
                 <el-col :span="6" class="_el_col">
-                  <el-form-item label="消费使用单位:">
-                   <el-input  v-model="formData.ownercodescc" />
+                  <el-form-item v-if="formData.ieflag =='I'" label="消费使用单位:">
+                   <el-input readonly  v-model="formData.ownercodescc" />
+                  </el-form-item>
+                  <el-form-item v-else label="生产销售单位:">
+                   <el-input readonly  v-model="formData.ownercodescc" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="3" class="_el_col">        
-                   <el-input  v-model="formData.ownercode" />         
+                   <el-input readonly  v-model="formData.ownercode" />         
                 </el-col>
                 <el-col :span="3" class="_el_col">              
-                   <el-input  v-model="formData.ownerciqcode" />         
+                   <el-input readonly  v-model="formData.ownerciqcode" />         
                 </el-col>
                 <el-col :span="12" class="_el_col">                
-                   <el-input  v-model="formData.ownername" />
+                   <el-input readonly  v-model="formData.ownername" />
                 </el-col>
               </el-row>
 
@@ -125,73 +128,81 @@
             
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="申报单位:">
-                   <el-input  v-model="formData.agentcodescc" />
+                   <el-input readonly  v-model="formData.agentcodescc" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="3" class="_el_col">        
-                   <el-input  v-model="formData.agentcode" />         
+                   <el-input readonly  v-model="formData.agentcode" />         
                 </el-col>
                 <el-col :span="3" class="_el_col">              
-                   <el-input  v-model="formData.declregno" />         
+                   <el-input readonly  v-model="formData.declregno" />         
                 </el-col>
                 <el-col :span="12" class="_el_col">                
-                   <el-input  v-model="formData.agentname" />
+                   <el-input readonly  v-model="formData.agentname" />
                 </el-col>
               </el-row>
 
               <el-row>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="运输方式:">
-                   <el-input  v-model="formData.trafmodeValue" />
+                   <el-input readonly  v-model="formData.trafmodeValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="运输工具名称:">
-                   <el-input  v-model="formData.trafname" />
+                   <el-input readonly  v-model="formData.trafname" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="航次号:">
-                   <el-input  v-model="formData.voyno" />
+                   <el-input readonly  v-model="formData.voyno" />
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="提运单号:">
-                   <el-input  v-model="formData.billno" />
+                   <el-input readonly  v-model="formData.billno" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="监管方式:">
-                   <el-input  v-model="formData.trademodeValue" />
+                   <el-input readonly  v-model="formData.trademodeValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="征免性质:">
-                   <el-input  v-model="formData.cutmodeValue" />
+                   <el-input readonly  v-model="formData.cutmodeValue" />
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="许可证号:">
-                   <el-input  v-model="formData.licenseno" />
+                   <el-input readonly  v-model="formData.licenseno" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
-                  <el-form-item label="启运国(地区):">
-                   <el-input  v-model="formData.tradecountryValue" />
+                  <el-form-item v-if="formData.ieflag =='I'" label="启运国(地区):">
+                   <el-input readonly  v-model="formData.tradecountryValue" />
                   </el-form-item>
+                  <el-form-item v-else label="运抵国(地区):">
+                   <el-input readonly  v-model="formData.tradecountryValue" />
+                  </el-form-item>
+
+
                 </el-col>
                 <el-col :span="6" class="_el_col">
-                  <el-form-item label="经停港:">
-                   <el-input  v-model="formData.distinateportValue" />
+                  <el-form-item v-if="formData.ieflag =='I'" label="经停港:">
+                   <el-input readonly  v-model="formData.distinateportValue" />
+                  </el-form-item>
+                  <el-form-item v-else label="指运港:">
+                   <el-input readonly  v-model="formData.distinateportValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="成交方式:">
-                   <el-input  v-model="formData.transmodeValue" />
+                   <el-input readonly  v-model="formData.transmodeValue" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -199,45 +210,45 @@
               <el-row>
                 <el-col :span="4" class="_el_col">
                   <el-form-item label="运费:">
-                   <el-input  v-model="formData.feemarkValue" />
+                   <el-input readonly  v-model="formData.feemarkValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="1" class="_el_col">         
-                   <el-input  v-model="formData.feerate" />
+                   <el-input readonly  v-model="formData.feerate" />
                 </el-col>
                 <el-col :span="1" class="_el_col">
-                   <el-input  v-model="formData.feecurrValue" />
+                   <el-input readonly  v-model="formData.feecurrValue" />
                 </el-col>
 
                 <el-col :span="4" class="_el_col">
                   <el-form-item label="保费:">
-                   <el-input  v-model="formData.insurmarkValue" />
+                   <el-input readonly  v-model="formData.insurmarkValue" />
                   </el-form-item>
                 </el-col>
                  <el-col :span="1" class="_el_col">         
-                   <el-input  v-model="formData.insurrate" />
+                   <el-input readonly  v-model="formData.insurrate" />
                 </el-col>
                 <el-col :span="1" class="_el_col">
-                   <el-input  v-model="formData.insurcurrValue" />
+                   <el-input readonly  v-model="formData.insurcurrValue" />
                 </el-col>
 
 
                 <el-col :span="4" class="_el_col">
                   <el-form-item label="杂费:">
-                   <el-input  v-model="formData.othermarkValue" />
+                   <el-input readonly  v-model="formData.othermarkValue" />
                   </el-form-item>
                 </el-col>
                  <el-col :span="1" class="_el_col">         
-                   <el-input  v-model="formData.otherrate" />
+                   <el-input readonly  v-model="formData.otherrate" />
                 </el-col>
                 <el-col :span="1" class="_el_col">
-                   <el-input  v-model="formData.othercurrValue" />
+                   <el-input readonly  v-model="formData.othercurrValue" />
                 </el-col>
 
 
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="件数:">
-                   <el-input  v-model="formData.packno" />
+                   <el-input readonly  v-model="formData.packno" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -245,18 +256,18 @@
               <el-row>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="包装种类:">
-                   <el-input  v-model="formData.wraptypeValue" />
+                   <el-input readonly  v-model="formData.wraptypeValue" />
                   </el-form-item>
                 </el-col>
                 
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="毛重(KG):">
-                   <el-input  v-model="formData.grosswet" />
+                   <el-input readonly  v-model="formData.grosswet" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="净重(KG):">
-                   <el-input  v-model="formData.netwt" />
+                   <el-input readonly  v-model="formData.netwt" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -264,18 +275,18 @@
               <el-row>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="贸易国别(地区):">
-                   <el-input  v-model="formData.tradeareacodeValue" />
+                   <el-input readonly  v-model="formData.tradeareacodeValue" />
                   </el-form-item>
                 </el-col>
                 
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="集装箱数:">
-                   <el-input  v-model="formData.deccontainernum" />
+                   <el-input readonly  v-model="formData.deccontainernum" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="随附单证:">
-                   <el-input  v-model="formData.sfdz" />
+                   <el-input readonly  v-model="formData.sfdz" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -283,19 +294,25 @@
 
               <el-row>
                 <el-col :span="6" class="_el_col">
-                  <el-form-item label="入境口岸:">
-                   <el-input  v-model="formData.entyportcodeValue" />
+                  <el-form-item v-if="formData.ieflag =='I'" label="入境口岸:">
+                   <el-input readonly  v-model="formData.entyportcodeValue" />
                   </el-form-item>
+
+                  <el-form-item v-else label="离境口岸:">
+                   <el-input readonly  v-model="formData.entyportcodeValue" />
+                  </el-form-item>
+
+
                 </el-col>
                 
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="货物存放地点:">
-                   <el-input  v-model="formData.goodsplace" />
+                   <el-input readonly  v-model="formData.goodsplace" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
-                  <el-form-item label="启运港:">
-                   <el-input  v-model="formData.despportcodeValue" />
+                  <el-form-item v-if="formData.ieflag =='I'" label="启运港:">
+                   <el-input readonly  v-model="formData.despportcodeValue" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -304,13 +321,13 @@
               <el-row>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="报关单类型:">
-                   <el-input  v-model="formData.entrytypeValue" />
+                   <el-input readonly  v-model="formData.entrytypeValue" />
                   </el-form-item>
                 </el-col>
                 
                 <el-col :span="11" class="_el_col">
                   <el-form-item label="备注:">
-                   <el-input  v-model="formData.notes" />
+                   <el-input readonly  v-model="formData.notes" />
                   </el-form-item>
                 </el-col>
 
@@ -322,13 +339,9 @@
               </el-row>
 
                <el-row>
-                <!-- <el-col :span="6" class="_el_col">
-                  
-                </el-col> -->
-                
                 <el-col :span="18" class="_el_col">
                   <el-form-item label="标记唛码:">
-                   <el-input  v-model="formData.markno" />
+                   <el-input readonly  v-model="formData.markno" />
                   </el-form-item>
                 </el-col>
 
@@ -345,37 +358,35 @@
             </el-form>
           </el-col>
         </el-row>
-        <!-- 第二列布局 -->
         <el-row class="_row2">
           <el-col :span="24" class="col3">
             <el-tabs v-model="activeName" type="card" class="tabs" @tab-click="handleTabClick">
-              <el-tab-pane label="补充信息" name="extra">
+              <el-tab-pane label="检验检疫信息" name="extra">
                 <ExtraInfoForm
-                  ref="ExtraInfoFormRef"
-                  :current-id="currentId"
-                  :current="current"
+                  
+               
                   :form-data="formDataExtra"
-                  @close-drawer="closeDrawer"
+                
                 />
               </el-tab-pane>
-              <el-tab-pane label="商品列表" name="good">
-                <GoodListForm ref="GoodListFormRef"  :table-data="formDataGood"/>
+              <el-tab-pane label="商品信息" name="good">
+                <GoodListForm   :table-data="formDataGood"/>
               </el-tab-pane>
-              <el-tab-pane label="集装箱详情" name="container" >
+              <el-tab-pane label="集装箱信息" name="container" >
             <ContainerListForm
-              ref="ContainerListFormRef" :table-data="formDataContainer"
+              :table-data="formDataContainer"
             />
           </el-tab-pane>
 
-          <el-tab-pane label="单证信息" name="document">
+          <el-tab-pane label="随附单证信息" name="document">
             <DocumentListForm
-              ref="DocumentListFormRef" :table-data="formDataDocument"
+               :table-data="formDataDocument"
             />
           </el-tab-pane>
 
-           <el-tab-pane label="备案详情" name="record">
+           <el-tab-pane label="其他详情" name="record">
             <RecordForm
-              ref="RecordFormRef"  :form-data="formDataRecord"
+                :form-data="formDataRecord"
             />
               </el-tab-pane>
             </el-tabs>
@@ -383,10 +394,7 @@
         </el-row>
       </el-main>
     </el-container>
-    <!-- 底栏 -->
-    <!-- <el-footer height="30px">&copy;究极死胖兽 2019</el-footer> -->
-    <!-- <el-footer >&copy;究极死胖兽 2019</el-footer> -->
-  </el-container>
+ 
 
    <DialogOtherThing ref="dialogOtherThingRef" 
        :dialog-good="dialogOtherThingData"
@@ -399,13 +407,9 @@
        :form-data="formBussinessOpt"
         />
 
+  <!-- </el-dialog> -->
 
-
-
-
-
-
-  <!-- </div> -->
+ </div>  
 </template>
 
 <script setup lang="ts">
@@ -416,6 +420,20 @@ import DocumentListForm from './component/DocumentListForm.vue'
 import RecordForm from './component/RecordForm.vue'
 import {showOne } from "@/api/qpDec";
 
+import { dialogTy } from '~/dialog'
+import { PropType } from 'vue'
+
+
+
+const props = defineProps({
+    
+    dialogMore: {
+        require: false,
+        default: null,
+        type: Object as PropType < dialogTy >
+    },
+    
+})
 
 
 
@@ -457,8 +475,8 @@ onMounted(() => {
   nextTick(() => {
     //跳转直接进行审批详情页
     if (route.query.headId) {
-      console.log(666)
-      console.log(route.query.headId)
+      // console.log(666)
+      // console.log(route.query.headId)
       getData(route.query.headId);
       // getData("4028b881827b43cd01827b4b0bd40e38");
     }
@@ -470,9 +488,10 @@ const otherThing = () => {
   // console.log(123)
   // console.log(formData)
     const promiseitmes =   formData.value.promiseitmes ;
+    
     // console.log(promiseitmes)
     var firstIsYes = false
-    if(promiseitmes){
+    if(promiseitmes ){
         var vsArr = promiseitmes.split("");
             for(var i = 0; i < vsArr.length; i++){
                 if (vsArr[i] !="1" || vsArr[i] !="0"){
@@ -502,17 +521,70 @@ const otherThing = () => {
 
 const bussinessOpt = (headId) => {
   const entrytype =   formData.value.entrytype ;
+  const ieflag =   formData.value.ieflag ;
+
+
+  const bussSw =   formData.value.bussSw ;
+  const bussZb =   formData.value.bussZb ;
+  const bussSyzz =   formData.value.bussSyzz ;
+  const bussZbzj =   formData.value.bussZbzj ;
+  const chksurety =   formData.value.chksurety ;
+  const chkshunt =   formData.value.chkshunt ;
+
+
     // console.log(promiseitmes)
-    const firstIsYes = false
-    if(entrytype){
+    // const firstIsYes = false
+    var tenderGroup = [];
+    var checkList = [];
+    if(bussSw && '1' == bussSw){
+        checkList.push('1')
+    }
+    if(bussSw && '1' == bussSw){
+        checkList.push('2')
+    }
+    if(bussSw && '1' == bussSw){
+        checkList.push('3')
+    }
+    if(bussSw && '1' == bussSw){
+        checkList.push('4')
+    }
+    if(bussSw && '1' == bussSw){
+        checkList.push('5')
+    }
+   
+
+    if(entrytype && ieflag){
       var obj = {}
-            if(entrytype == "M"){
-               obj.checkList = ['1','4','5']
-            }else {
-               obj.checkList = ['1','2']
-            }
+      if(ieflag == 'I'){
+           tenderGroup = [
+                 { id: '1', realName: '税单无纸化',},
+                 { id: '2', realName: '自主报税', },
+                 { id: '4', realName: '自报自缴', },
+                 { id: '5', realName: '担保验放', },
+                ]
+
+          // if(entrytype == "M"){
+              
+          //      obj.checkList = ['1','4','5']
+               
+          //   }else {
+          //      obj.checkList = ['1','2']
+          //   }
+      }else{
+        tenderGroup = [
+                  { id: '1', realName: '税单无纸化',},
+                  { id: '2', realName: '自主报税', },
+                  { id: '3', realName: '水运中转', },
+                  { id: '4', realName: '自报自缴', },
+                  { id: '5', realName: '担保验放', },
+                ]
+      }
+             obj.checkList = checkList
+            obj.tenderGroup = tenderGroup
            
             formBussinessOpt.value = obj;
+    }else{
+      alert("请确认报关单类型与进出口标志!")
     }
     dialogBussinessOptData.value = {
     show: true,
@@ -536,11 +608,9 @@ const getData = (headId) => {
          const dataT = res.data;
          console.log(dataT)
          formData.value = dataT;
-        //  console.log(dataT.trafmodeValue)
-        //  console.log(dataT.agentcode)
+      
          formDataExtra.value  = dataT;
-        //  console.log(888)
-        //  console.log(dataT.qpDecLists)
+
          formDataGood.value = dataT.qpDecLists
          formDataContainer.value = dataT.qpDecContainerList
          formDataDocument.value = dataT.qpDecLicenseDocuList
@@ -568,34 +638,20 @@ const RecordFormRef = ref<InstanceType<typeof RecordForm>>()
 
 
 
-
+defineExpose({ getData })
 
 const handleTabClick = (tab) => {
-  if (currentId?.value > 0) {
-    switch (tab.props.name) {
-      case 'extra':
-        // showAuditProcess(currentId.value).then(res => {
-        //   if (res.code == 200) {
-        //     ExtraInfoFormFormRef.value.showProcess(res.data)
-        //   } else {
-        //     ElMessage({message: '审核流程获取出错', type: 'error'})
-        //     console.log(res.message)
-        //   }
-        // })
-        break
-      case 'good':
-        // showPayProcess(currentId.value).then(res => {
-        //   if (res.code == 200) {
-        //     GoodListFormRef.value.showProcess(res.data)
-        //   } else {
-        //     ElMessage({message: '收付款流程获取出错', type: 'error'})
-        //     console.log(res.message)
-        //   }
-        // })
-        break
-      default:
-    }
-  }
+  // if (currentId?.value > 0) {
+  //   switch (tab.props.name) {
+  //     case 'extra':
+
+  //       break
+  //     case 'good':
+     
+  //       break
+  //     default:
+  //   }
+  // }
 }
 
 /**
@@ -607,6 +663,46 @@ const dialogData: Ref<dialogTy> = ref({}) //ts的规范写法，定义变量的�
 
 
 <style scoped lang="scss">
+.el-dialog__wrapper {
+    display: flex;
+    padding: 24px; //添加上下间隙，可为任意值
+    .el-dialog {
+        margin: auto !important;
+    }
+}
+
+.abow_dialog {
+  // height:1024px
+}
+  
+// .abow_dialog {
+//     display: flex;
+//     justify-content: center;
+//     align-items: Center;
+//     overflow: hidden;
+//     .el-dialog {
+//         margin: 0 auto !important;
+//         height: 60%;
+//         overflow: hidden;
+//         .el-dialog__body {
+//             position: absolute;
+//             left: 0;
+//             top: 54px;
+//             bottom: 0;
+//             right: 0;
+//             padding: 0;
+//             z-index: 1;
+//             overflow: hidden;
+//             overflow-y: auto;
+//         }
+//     }
+//     }
+
+ 
+
+._container{
+  //  height: 100% !important;
+}
 ._el_col {
   height: 8px !important;
 }
@@ -615,8 +711,9 @@ const dialogData: Ref<dialogTy> = ref({}) //ts的规范写法，定义变量的�
    overflow: auto;
 }
 ._row2{
-  //  height: 260px !important;
-   overflow: auto;
+  //  height: 200px !important;
+  // height:calc(100vh - 600px);
+  //  overflow: auto;
 }
 .el-col {
   // height: 30px;
