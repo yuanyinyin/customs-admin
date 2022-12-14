@@ -1,7 +1,7 @@
 {
-  "name": "ee",
-  "version": "2.2.0",
-  "description": "A fast, desktop software development framework",
+  "name": "customs",
+  "version": "1.0.2",
+  "description": "自动获取最新报关单数据，助您更好的管理外贸业务",
   "main": "main.js",
   "scripts": {
     "start": "electron . ",
@@ -32,9 +32,9 @@
     "events": {}
   },
   "build": {
-    "productName": "ee",
-    "appId": "com.electron.ee",
-    "copyright": "wallace5303",
+    "productName": "外贸帮",
+    "appId": "com.nteport.customs",
+    "copyright": "2013-2020 nteport.com All Rights Reserved",
     "directories": {
       "output": "out"
     },
@@ -62,12 +62,12 @@
       "installerHeaderIcon": "./build/icons/icon.ico",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "EE框架"
+      "shortcutName": "外贸帮"
     },
     "publish": [
       {
         "provider": "generic",
-        "url": "https://github.com/wallace5303/electron-egg"
+        "url": "https://www.nteport.com/customs/update/"
       }
     ],
     "mac": {
@@ -98,12 +98,11 @@
   },
   "repository": "https://github.com/wallace5303/ee.git",
   "keywords": [
-    "Electron"
+    "customs"
   ],
   "author": "wallace5303, Inc <530353222@qq.com>",
   "license": "Apache",
   "devDependencies": {
-    "amqplib": "^0.10.3",
     "debug": "^4.3.3",
     "electron": "^13.6.9",
     "electron-builder": "^23.1.0",
@@ -120,6 +119,7 @@
     "electron-is": "^3.0.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
-    "node-schedule": "^2.1.0"
+    "node-schedule": "^2.1.0",
+    "amqplib": "^0.6.0"
   }
 }

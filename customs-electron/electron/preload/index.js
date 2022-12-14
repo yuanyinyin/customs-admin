@@ -18,7 +18,7 @@ module.exports = async (app) => {
 
   //已实现的功能模块，可选择性使用和修改
 
-  // tray.install(app);//托盘模块
+ //  tray.install(app);//托盘模块
 
   security.install(app);
 

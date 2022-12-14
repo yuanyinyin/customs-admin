@@ -11,7 +11,7 @@ const demoRoutes: RouterTy = []
  * 打死不变的路由，不要删了奥
  */
 const consRoutes: RouterTy = [
-    {
+    /*{
         path: '/redirect',
         component: Layout,
         hidden: true,
@@ -21,7 +21,7 @@ const consRoutes: RouterTy = [
                 component: () => import('@/views/redirect')
             }
         ]
-    },
+    },*/
     {
         path: '/login',
         component: () => import('@/views/login/Login.vue'),

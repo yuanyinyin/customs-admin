@@ -5,7 +5,7 @@ import pack from '../../package.json'
 import {ObjTy} from '~/common'
 
 const errorLogReq = (errLog: string) => {
-    request({
+    /*request({
         url: '/integration-front/errorCollection/insert',
         data: {
             pageUrl: window.location.href,
@@ -18,7 +18,7 @@ const errorLogReq = (errLog: string) => {
         isAlertErrorMsg: true
     }).then(() => {
         bus.emit('reloadErrorPage', {})
-    })
+    })*/
 }
 
 export default function () {
