@@ -20,11 +20,6 @@ public interface QpDecHeadStatisticsMapper extends BaseMapper<QpDecHead> {
     List  queryGoodsTotal2(HashMap hashMap);
     List  queryTopGoods(HashMap hashMap);
     List  queryTopFrequency(HashMap hashMap);
-    List queryAreaList(HashMap hashMap);
-    List queryCustomsData(HashMap hashMap);
-    List queryCustomsTotalData(HashMap hashMap);
-    List queryNetWtData(HashMap hashMap);
-    List queryGrossWtData(HashMap hashMap);
     List queryAreaData(HashMap hashMap);
     List queryAreaDataByCode(HashMap hashMap);
     List queryInspectRate(HashMap hashMap);
@@ -40,4 +35,18 @@ public interface QpDecHeadStatisticsMapper extends BaseMapper<QpDecHead> {
 
     //首页
     List queryInspectRateDash(HashMap hashMap);
+    List queryCustomSumDash(HashMap hashMap);
+    List queryTotalCustomDataDash(HashMap hashMap);
+    List querySysTimeCustomData(HashMap hashMap);
+    List queryMonthCustomData(HashMap hashMap);
+    List queryYearCustomData(HashMap hashMap);
+    List queryTotalCustomData(HashMap hashMap);
+    List queryAreaDataDash(HashMap hashMap);
+    List queryCustomDataDash(HashMap hashMap);
+
+    List queryQyUseDataDash(HashMap hashMap);
+    List queryKeyQyDataDash(HashMap hashMap);
+
+    List querAllQyDataDash(HashMap hashMap);
+
 }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 
-@Repository
+
 public interface ImportantCompanyMapper extends BaseMapper<ImportantCompanyEntity> {
     List <Map>queryCompanyList(HashMap hashMap);
 

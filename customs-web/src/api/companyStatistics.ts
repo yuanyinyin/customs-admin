@@ -101,3 +101,51 @@ export function getInspectRateDash(data: ObjTy) {
   })
 
 }
+export function getCustomSumDash(data: ObjTy) {
+
+  return request({
+    url: '/companyStatistics/queryCustomSumDash',
+    data,
+    method: 'get',
+    bfLoading: true,
+    isParams: true,
+    isAlertErrorMsg: true
+  })
+
+}
+export function getTotalCustomDataDash(data: ObjTy) {
+
+  return request({
+    url: '/companyStatistics/queryTotalCustomDataDash',
+    data,
+    method: 'get',
+    bfLoading: true,
+    isParams: true,
+    isAlertErrorMsg: true
+  })
+
+}
+export function getCalculateCustomDataDash(data: ObjTy) {
+
+  return request({
+    url: '/companyStatistics/queryCalculateCustomDataDash',
+    data,
+    method: 'get',
+    bfLoading: true,
+    isParams: true,
+    isAlertErrorMsg: true
+  })
+
+}
+export function getNoticeInfoDash(data: ObjTy) {
+
+  return request({
+    url: '/companyStatistics/queryNoticeInfoDash',
+    data,
+    method: 'get',
+    bfLoading: true,
+    isParams: true,
+    isAlertErrorMsg: true
+  })
+
+}

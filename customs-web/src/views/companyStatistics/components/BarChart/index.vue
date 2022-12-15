@@ -1,5 +1,5 @@
 <template>
-  <div class="report" ref="lineChart"></div>
+  <div class="report" ref="barChart"></div>
 </template>
 <script lang="ts" setup>
   import * as echarts from 'echarts'
@@ -15,51 +15,47 @@
   onMounted(() => {
     // 获取DOM元素并且进行初始化
     currentInstance = getCurrentInstance()
-    const myChart = echarts.init(currentInstance.ctx.$refs.lineChart);
+    const myChart = echarts.init(currentInstance.ctx.$refs.barChart);
     //series数据
     let seriesData = [];
     let xAxisData = [];
- 
     props.list.map((item) => {
       seriesData.push({
         name: item.title,
-        type: 'line',
-        smooth: true,
-        symbol: 'circle',
-        symbolSize: 6,
-        itemStyle: { 
+        type:'bar',
+        barWidth: 10,
+        barGap: 0.5,
+        itemStyle: {
             normal: {
-              color: item.colors[1],
-              borderColor: "#ffffff",
-              borderType: "solid",
-              borderWidth: 1,
-              lineStyle: {
-                color: item.colors[1],
-                width:1
-              },
-              areaStyle: { 
-                color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
-                offset: 0,
-                color: item.colors[0]
-              }, {
-                offset: 1,
-                color: item.colors[1]
-              }]),
+                barBorderRadius: [ 5, 5, 0, 0],
+                label: {
+                    show: false, 
+                    position: 'top', 
+                    textStyle: { 
+                        color: item.colors[1],
+                        fontSize: 12
+                    }
+                },
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                    offset: 0,
+                    color: item.colors[0]
+                }, {
+                    offset: 1,
+                    color:  item.colors[1]
+                }]),
             }
-          }
         },
         data: item.data
       })
-      
-
     })
 
-    props.list.map((item0) => {
+    props.list.map((item0)=>{
       xAxisData.push({
+        xAxis: {
         type: 'category',
-        boundaryGap: false,//坐标轴两边留白
-        // data: ['01月', '02月', '03月','04月','05月','06月','07月', '08月', '09月','10月','11月','12月'],
-        data: item0.month,
+        // boundaryGap: false,//坐标轴两边留白
+        // data: ['崇川区', '海门区', '通州区','海安县','启东市','如皋市','如东县','开发区', '苏锡通','通州湾'],
+        data: item0.areaName,
         axisLabel: { //坐标轴刻度标签的相关设置。
           interval: 0,//设置为 1，表示『隔一个标签显示一个标签』
           textStyle: {
@@ -85,23 +81,33 @@
           opacity:0.6
         }
       }
+      },
       })
-      
-
     })
     // 创建图标
     myChart.setOption({
       tooltip: {
           trigger: 'axis'
       },
+       legend: {
+        x:'center',
+        padding:[5,0,0,0],
+        icon:'rect',
+        itemHeight:5,
+        itemWidth:30,
+        textStyle: { 
+            color: '#333',
+            fontSize: 12
+        }
+      },
       grid: {
           top:'30',
-          left: '10',
-          right: '30',
+          left: '0',
+          right: '10',
           bottom: '0',
           containLabel: true
       },
-      xAxis: xAxisData,
+      xAxis:xAxisData,
       yAxis: [
       {
         name: '资产（万）',
