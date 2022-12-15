@@ -35,7 +35,8 @@
             r.NAME title,
             r.IMAGE_URL icon,
             r.RIGHT_INDX sort,
-            '1' hidden,
+--             '1' hidden,
+            case when r.LEV='前台' then '1' else '0' end hidden,
             r.IS_FATHER has_children,
             '' permissions,
             case when r.IS_FATHER='1' then 'noRedirect' else '' end redirect,
@@ -52,7 +53,7 @@
             FROM ROLE_EMPLOYEE@NSW T2
             WHERE T2.EMPLOYEE_ID = #{userId,jdbcType=VARCHAR})
             )
-          and r.LEV = '前台'
+--           and r.LEV = '前台'
           and r.FATHER!='-1'
         order by  r.right_indx desc
     </select>
