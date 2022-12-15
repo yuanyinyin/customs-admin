@@ -27,7 +27,7 @@
             v-model:file-list="fileList"
             :action="baseUrl + '/file/upload?type=register'"
             multiple
-            :on-preview="handlePreview"
+            :on-preview="handlePictureCardPreview"
             :on-success="handleUploadSuccess"
             :on-remove="handleRemove"
             :on-exceed="handleExceed"
@@ -45,7 +45,11 @@
         </el-form-item>
       </el-form>
 
-
+      <el-dialog v-model="dialogVisible" width="80%">
+        <div style="width: 100%;text-align: center;">
+          <img w-full :src="dialogImageUrl" alt="图片预览" style="width: 40%;"/>
+        </div>
+      </el-dialog>
 
       <template #footer>
         <span class="dialog-footer">
@@ -62,7 +66,7 @@
 import { PropType } from "vue/dist/vue";
 import { dialogTy } from "~/dialog";
 import {getNtPtlLoginDep, getNtPtlRegisterPicId} from "@/api/login";
-import {ElMessage} from "element-plus";
+import {ElMessage, UploadProps} from "element-plus";
 
 // import { changeUserPassword, verifyUserPassword } from "@/api/user";
 // import { ElMessage } from "element-plus/es";
@@ -137,16 +141,20 @@ const openFun = () => {
      console.log(res.data);
     if (res.code==200){
       let REGISTER_PIC_ID=res.data.REGISTER_PIC_ID;
-      fileList.value.push({
-        name: REGISTER_PIC_ID,
-        url: baseUrl.value + '/file/downLoad/' + REGISTER_PIC_ID
-      })
+      if(REGISTER_PIC_ID){
+        fileList.value.push({
+          name: REGISTER_PIC_ID,
+          url: baseUrl.value + '/file/downLoad/' + REGISTER_PIC_ID
+        })
+      }
     }else{
       ElMessage({message: '操作失败，请联系管理员！', type: 'fail'})
     }
   })
 }
 
+/*附件上传*/
+// const fileList = ref([])
 let fileList = ref([
   // {
   //   uid: 1,
@@ -159,6 +167,43 @@ let fileList = ref([
   //   url:'https://www.nteport.com/images/logo.png'
   // }
 ])
+const upload = ref()
+const handleExceed = (files) => {
+  upload.value.clearFiles()
+  upload.value.handleStart(files[0])
+}
+//文件删除
+const handleRemove = uploadFile => {
+  fileList.value.forEach((v, i) => {
+    if (v.uid == uploadFile.uid) {
+      fileList.value.splice(i, 1)
+    }
+  })
+}
+
+//文件上传成功
+const handleUploadSuccess = (response, file) => {
+  file.uid = response.data
+  // console.log(response.data);
+  // formInline.registerPicId=response.data;
+}
+
+//文件预览
+const handlePreview = uploadFile => {
+  var a = document.createElement('a')
+  a.setAttribute('href', baseUrl.value + '/file/downLoad/' + uploadFile.uid)
+  document.body.appendChild(a)
+  a.click()
+}
+
+//图片预览
+const dialogVisible = ref(false)
+const dialogImageUrl = ref('')
+const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
+  dialogImageUrl.value = uploadFile.url!
+  dialogVisible.value = true
+}
+//end
 
 </script>
 
