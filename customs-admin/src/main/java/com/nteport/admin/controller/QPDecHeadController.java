@@ -75,6 +75,16 @@ public class QPDecHeadController {
     }
 
 
+    /**
+     * 导出excel
+     */
+    @GetMapping("/printDec")
+    public ApiResponse printDec(@RequestParam Map<String, String> params){
+       return  qpDecHeadService.printDec(params);
+    }
+
+
+
 
 
 

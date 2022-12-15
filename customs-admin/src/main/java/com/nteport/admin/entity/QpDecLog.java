@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 /**
  * 表头
  */
-@TableName(value = "QP_DECLOG")
+@TableName(value = "NSW.QP_DECLOG")
 public class QpDecLog implements Serializable {
 	@TableId(type = IdType.ASSIGN_UUID)
 	private String id;

@@ -14,4 +14,10 @@ public class QpDecHeadDto extends QpDecHead {
     private List<QpDecContainer> qpDecContainerList;
 
     private List<QpDecLicenseDocu> qpDecLicenseDocuList;
+
+    private List<QpDecRequestCert> qpDecRequestCertList;
+
+
+
+
 }

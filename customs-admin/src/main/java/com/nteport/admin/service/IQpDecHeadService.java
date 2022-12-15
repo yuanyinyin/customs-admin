@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.nteport.admin.entity.QpDecHead;
 import com.nteport.admin.entity.system.ApiResponse;
 import com.nteport.admin.entity.system.UserEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +25,8 @@ public interface IQpDecHeadService extends IService<QpDecHead> {
 
     void exportExcel(Map<String, String> params, HttpServletRequest request , HttpServletResponse response) ;
 
+
+    ApiResponse printDec(Map<String, String> params);
 
 
 }

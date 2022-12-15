@@ -63,13 +63,13 @@ const props = defineProps({
   //   require: false
   // },
   formData: {
-    require: true,
+    require: false,
     default: null,
     type: Object
   }
   
 })
-const formData = ref({
+const formData2 = ref({
   reimburseSubArr: [],
   payAmountNumber: 0,
   payAmountCapital: '零元整',

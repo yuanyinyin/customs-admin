@@ -23,10 +23,16 @@
           </el-table-column>
            <el-table-column prop="gmodel" label="规格型号" align="center">
           </el-table-column>
-          <el-table-column prop="destinationcountryValue" label="原产国" align="center">
+          <el-table-column  v-if="ieFlag =='I'" prop="origincountryValue" label="原产国" align="center">
           </el-table-column>
-           <el-table-column prop="origincountryValue" label="目的国" align="center">
+            <el-table-column  v-else prop="destinationcountryValue" label="原产国" align="center">
           </el-table-column>
+          
+           <el-table-column v-if="ieFlag =='I'" prop="destinationcountryValue" label="目的国" align="center">
+          </el-table-column>
+           <el-table-column v-else prop="origincountryValue" label="目的国" align="center">
+          </el-table-column>
+
           <el-table-column prop="gqty" label="数量" align="center">
           </el-table-column>
           <el-table-column prop="declprice" label="单价" align="center">
@@ -72,7 +78,12 @@ const props = defineProps({
   tableData: {
     require: false,
     default: null,
-    type: Array
+    type:Object
+  },
+  ieFlag: {
+    require: false,
+    default: null,
+    type:String
   }
  
 })
@@ -106,6 +117,7 @@ const showDetail = (row) => {
    dialogData.value = {
     show: true,
     title: '商品详情',
+    ieflag:props.ieFlag
     
   }
   formGood.value = row

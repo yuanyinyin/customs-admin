@@ -10,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-@TableName(value = "QP_DECFREETXT")
+@TableName(value = "NSW.QP_DECFREETXT")
 
 public class QpDecFreeTxt implements Serializable {
 

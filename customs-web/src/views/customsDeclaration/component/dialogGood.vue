@@ -110,7 +110,8 @@
                 </el-col>
                 <el-col :span="5" class="_el_col">
                   <el-form-item label="最终目的国:">
-                    <el-input readonly v-model="formData.destinationcountryValue" />
+                    <el-input  v-if="dialogGood.ieflag =='I'"  readonly v-model="formData.destinationcountryValue" />
+                     <el-input  v-else  readonly v-model="formData.origincountryValue" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -129,12 +130,14 @@
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="原产国(地区):">
-                    <el-input readonly v-model="formData.origincountryValue" />
+                   
+                    <el-input  v-if="dialogGood.ieflag =='I'"  readonly v-model="formData.origincountryValue" />
+                     <el-input  v-else  readonly v-model="formData.destinationcountryValue" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
                   <el-form-item label="原产地区:">
-                    <el-input readonly v-model="formData.origplacecodeValue" />
+                    <el-input readonly v-model="formData.origplacecodeValue " />
                   </el-form-item>
                 </el-col>
               </el-row>

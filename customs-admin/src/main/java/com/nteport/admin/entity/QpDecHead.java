@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 /**
  * 表头
  */
-@TableName(value = "QP_DECHEAD")
+@TableName(value = "NSW.QP_DECHEAD")
 //@Data
 public class QpDecHead  implements Serializable {
 

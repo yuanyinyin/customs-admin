@@ -9,7 +9,15 @@
               <el-row>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="报关/转关:">
-                   <el-input readonly   v-model="formData.decltrnrelValue" />
+                   <!-- <el-input readonly   v-model="formData.decltrnrel" /> -->
+                    <el-select v-model="formData.decltrnrel" placeholder=""   style="width:100%"  disabled>
+            <el-option
+              v-for="item in sourceOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" class="_el_col">
@@ -370,7 +378,7 @@
                 />
               </el-tab-pane>
               <el-tab-pane label="商品信息" name="good">
-                <GoodListForm   :table-data="formDataGood"/>
+                <GoodListForm   :table-data="formDataGood"   :ie-flag="formDataGoodIeFlag"/>
               </el-tab-pane>
               <el-tab-pane label="集装箱信息" name="container" >
             <ContainerListForm
@@ -384,7 +392,7 @@
             />
           </el-tab-pane>
 
-           <el-tab-pane label="其他详情" name="record">
+           <el-tab-pane label="其他信息" name="record">
             <RecordForm
                 :form-data="formDataRecord"
             />
@@ -453,6 +461,7 @@ const currentId = ref<number>(0)
 const formData: any = ref({})
 let formDataExtra = ref({})//这是相对自由点的写法，不定义类型
 let formDataGood = ref()//这是相对自由点的写法，不定义类型
+let formDataGoodIeFlag = ref()//这是相对自由点的写法，不定义类型
 let formDataContainer = ref()//这是相对自由点的写法，不定义类型
 let formDataDocument = ref()//这是相对自由点的写法，不定义类型
 let formDataRecord = ref({})//这是相对自由点的写法，不定义类型
@@ -518,6 +527,14 @@ const otherThing = () => {
 
 
 }
+
+const sourceOptions = [
+  { value: '0', label: '一般报关单', },
+  { value: '1', label: '转关提前报关单', },
+  
+]
+
+
 
 const bussinessOpt = (headId) => {
   const entrytype =   formData.value.entrytype ;
@@ -612,6 +629,8 @@ const getData = (headId) => {
          formDataExtra.value  = dataT;
 
          formDataGood.value = dataT.qpDecLists
+         formDataGoodIeFlag.value = dataT.ieflag
+        //  formDataGood.value = dataT
          formDataContainer.value = dataT.qpDecContainerList
          formDataDocument.value = dataT.qpDecLicenseDocuList
          formDataRecord.value = dataT.qpDecFreeTxt
