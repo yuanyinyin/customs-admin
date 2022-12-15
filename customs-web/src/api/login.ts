@@ -144,4 +144,16 @@ export function checkYzm(data: ObjTy){
   })
 }
 
+//查询企业信息
+export function getNtPtlRegisterPicId(){
+  return request({
+    url: `/login/getNtPtlRegisterPicId`,
+    // data,
+    method: 'post',
+    bfLoading: true,
+    // isParams: true,
+    isAlertErrorMsg: true
+  })
+}
+
 

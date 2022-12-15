@@ -266,4 +266,16 @@ public class LoginController {
         }
         return ApiResponse.success(result);
     }
+
+    /**
+     * 查询组织机构代码附件
+     *
+     * @return
+     */
+    @PostMapping("/getNtPtlRegisterPicId")
+    public ApiResponse getNtPtlRegisterPicId(UserEntity user) {
+        Map ntptl_dept=ntPtlService.selectDept(user.getDeptId());
+        return ApiResponse.success(JSONObject.toJSON(ntptl_dept));
+    }
+
 }

@@ -40,7 +40,7 @@
             <!--                   <el-button :icon="Link" style="height: 36px;width: 174px;">-->
             <!--                      附件上传-->
             <!--                    </el-button>-->
-            <el-icon><Plus /></el-icon>
+<!--            <el-icon><Plus /></el-icon>-->
           </el-upload>
         </el-form-item>
       </el-form>
@@ -61,11 +61,13 @@
 
 import { PropType } from "vue/dist/vue";
 import { dialogTy } from "~/dialog";
-import {getNtPtlLoginDep} from "@/api/login";
+import {getNtPtlLoginDep, getNtPtlRegisterPicId} from "@/api/login";
+import {ElMessage} from "element-plus";
 
 // import { changeUserPassword, verifyUserPassword } from "@/api/user";
 // import { ElMessage } from "element-plus/es";
 // import {getNtPtlLoginUser} from '@/api/login';
+const baseUrl = ref(import.meta.env.VITE_APP_BASE_URL)
 
 const formRules = useElement().formRules;//自定义校验规则  继承自useElement.ts  父继承自element-plus
 
@@ -121,23 +123,41 @@ const rules = ref({
 // const formData = ref([])
 //查询用户信息
 const openFun = () => {
+  fileList.value=[];
   getNtPtlLoginDep().then((res) => {
-    Object.assign(props.formData, res.data);
+    // console.log(res.data);
+    if (res.code==200){
+      Object.assign(props.formData, res.data);
+    }else{
+      ElMessage({message: '操作失败，请联系管理员！', type: 'fail'})
+    }
     // formData.value = res.data;
+  })
+  getNtPtlRegisterPicId().then((res) => {
+     console.log(res.data);
+    if (res.code==200){
+      let REGISTER_PIC_ID=res.data.REGISTER_PIC_ID;
+      fileList.value.push({
+        name: REGISTER_PIC_ID,
+        url: baseUrl.value + '/file/downLoad/' + REGISTER_PIC_ID
+      })
+    }else{
+      ElMessage({message: '操作失败，请联系管理员！', type: 'fail'})
+    }
   })
 }
 
 let fileList = ref([
-  {
-    uid: 1,
-    name: 'p图说明1.doc',
-    url:'https://www.nteport.com/images/logo.png'
-  },
-  {
-    uid: 4,
-    name: 'test.jpg',
-    url:'https://www.nteport.com/images/logo.png'
-  }
+  // {
+  //   uid: 1,
+  //   name: 'p图说明1.doc',
+  //   url:'https://www.nteport.com/images/logo.png'
+  // },
+  // {
+  //   uid: 4,
+  //   name: 'test.jpg',
+  //   url:'https://www.nteport.com/images/logo.png'
+  // }
 ])
 
 </script>
