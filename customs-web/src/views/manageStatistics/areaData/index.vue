@@ -215,9 +215,10 @@ const getAreaDataImport = (tabtype) => {
     let params={
       startDate: parseDateWithoutDay(listQueryI.startDate),
       endDate: parseDateWithoutDay(listQueryI.endDate),
-      ieFlag:'I'
+      ieFlag:'I',
+      qyFlag:'0',
+      keyFlag:'0'
     }
-    console.log(111111,params)
   store
     .dispatch('manageStatistics/getAreaData',params)
     .then((response) => {

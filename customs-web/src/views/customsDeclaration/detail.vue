@@ -1,6 +1,7 @@
 <template>
-<div>
-    <el-container>
+<div >
+  <!-- <el-dialog  class="abow_dialog" append-to-body   custom-class="abow_dialog"  draggable  v-model="dialogMore.show" :title="dialogMore.title"    > -->
+    <el-container >
       <el-main>
         <el-row  class="_row1">
           <el-col :span="24" class="col2">
@@ -36,7 +37,10 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" class="_el_col">
-                  <el-form-item label="进境关别:">
+                  <el-form-item v-if="formData.ieflag =='I'" label="进境关别:">
+                   <el-input readonly  v-model="formData.ieportValue" />
+                  </el-form-item>
+                  <el-form-item v-else  label="出境关别:">
                    <el-input readonly  v-model="formData.ieportValue" />
                   </el-form-item>
                 </el-col>
@@ -56,9 +60,13 @@
               </el-row>
               <el-row>
                 <el-col :span="12" class="_el_col">
-                  <el-form-item label="进口日期:">
+                  <el-form-item v-if="formData.ieflag =='I'" label="进口日期:">
                    <el-input readonly  v-model="formData.iedate" />
                   </el-form-item>
+                  <el-form-item  v-else label="出口日期:">
+                   <el-input readonly  v-model="formData.iedate" />
+                  </el-form-item>
+
                 </el-col>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="申报日期:">
@@ -98,7 +106,10 @@
               <el-row>
                 
                 <el-col :span="6" class="_el_col">
-                  <el-form-item label="消费使用单位:">
+                  <el-form-item v-if="formData.ieflag =='I'" label="消费使用单位:">
+                   <el-input readonly  v-model="formData.ownercodescc" />
+                  </el-form-item>
+                  <el-form-item v-else label="生产销售单位:">
                    <el-input readonly  v-model="formData.ownercodescc" />
                   </el-form-item>
                 </el-col>
@@ -172,12 +183,20 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
-                  <el-form-item label="启运国(地区):">
+                  <el-form-item v-if="formData.ieflag =='I'" label="启运国(地区):">
                    <el-input readonly  v-model="formData.tradecountryValue" />
                   </el-form-item>
+                  <el-form-item v-else label="运抵国(地区):">
+                   <el-input readonly  v-model="formData.tradecountryValue" />
+                  </el-form-item>
+
+
                 </el-col>
                 <el-col :span="6" class="_el_col">
-                  <el-form-item label="经停港:">
+                  <el-form-item v-if="formData.ieflag =='I'" label="经停港:">
+                   <el-input readonly  v-model="formData.distinateportValue" />
+                  </el-form-item>
+                  <el-form-item v-else label="指运港:">
                    <el-input readonly  v-model="formData.distinateportValue" />
                   </el-form-item>
                 </el-col>
@@ -275,9 +294,15 @@
 
               <el-row>
                 <el-col :span="6" class="_el_col">
-                  <el-form-item label="入境口岸:">
+                  <el-form-item v-if="formData.ieflag =='I'" label="入境口岸:">
                    <el-input readonly  v-model="formData.entyportcodeValue" />
                   </el-form-item>
+
+                  <el-form-item v-else label="离境口岸:">
+                   <el-input readonly  v-model="formData.entyportcodeValue" />
+                  </el-form-item>
+
+
                 </el-col>
                 
                 <el-col :span="12" class="_el_col">
@@ -286,7 +311,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="_el_col">
-                  <el-form-item label="启运港:">
+                  <el-form-item v-if="formData.ieflag =='I'" label="启运港:">
                    <el-input readonly  v-model="formData.despportcodeValue" />
                   </el-form-item>
                 </el-col>
@@ -336,7 +361,7 @@
         <el-row class="_row2">
           <el-col :span="24" class="col3">
             <el-tabs v-model="activeName" type="card" class="tabs" @tab-click="handleTabClick">
-              <el-tab-pane label="补充信息" name="extra">
+              <el-tab-pane label="检验检疫信息" name="extra">
                 <ExtraInfoForm
                   
                
@@ -344,22 +369,22 @@
                 
                 />
               </el-tab-pane>
-              <el-tab-pane label="商品列表" name="good">
+              <el-tab-pane label="商品信息" name="good">
                 <GoodListForm   :table-data="formDataGood"/>
               </el-tab-pane>
-              <el-tab-pane label="集装箱详情" name="container" >
+              <el-tab-pane label="集装箱信息" name="container" >
             <ContainerListForm
               :table-data="formDataContainer"
             />
           </el-tab-pane>
 
-          <el-tab-pane label="单证信息" name="document">
+          <el-tab-pane label="随附单证信息" name="document">
             <DocumentListForm
                :table-data="formDataDocument"
             />
           </el-tab-pane>
 
-           <el-tab-pane label="备案详情" name="record">
+           <el-tab-pane label="其他详情" name="record">
             <RecordForm
                 :form-data="formDataRecord"
             />
@@ -382,6 +407,8 @@
        :form-data="formBussinessOpt"
         />
 
+  <!-- </el-dialog> -->
+
  </div>  
 </template>
 
@@ -393,6 +420,20 @@ import DocumentListForm from './component/DocumentListForm.vue'
 import RecordForm from './component/RecordForm.vue'
 import {showOne } from "@/api/qpDec";
 
+import { dialogTy } from '~/dialog'
+import { PropType } from 'vue'
+
+
+
+const props = defineProps({
+    
+    dialogMore: {
+        require: false,
+        default: null,
+        type: Object as PropType < dialogTy >
+    },
+    
+})
 
 
 
@@ -597,7 +638,7 @@ const RecordFormRef = ref<InstanceType<typeof RecordForm>>()
 
 
 
-
+defineExpose({ getData })
 
 const handleTabClick = (tab) => {
   // if (currentId?.value > 0) {
@@ -622,6 +663,46 @@ const dialogData: Ref<dialogTy> = ref({}) //ts的规范写法，定义变量的�
 
 
 <style scoped lang="scss">
+.el-dialog__wrapper {
+    display: flex;
+    padding: 24px; //添加上下间隙，可为任意值
+    .el-dialog {
+        margin: auto !important;
+    }
+}
+
+.abow_dialog {
+  // height:1024px
+}
+  
+// .abow_dialog {
+//     display: flex;
+//     justify-content: center;
+//     align-items: Center;
+//     overflow: hidden;
+//     .el-dialog {
+//         margin: 0 auto !important;
+//         height: 60%;
+//         overflow: hidden;
+//         .el-dialog__body {
+//             position: absolute;
+//             left: 0;
+//             top: 54px;
+//             bottom: 0;
+//             right: 0;
+//             padding: 0;
+//             z-index: 1;
+//             overflow: hidden;
+//             overflow-y: auto;
+//         }
+//     }
+//     }
+
+ 
+
+._container{
+  //  height: 100% !important;
+}
 ._el_col {
   height: 8px !important;
 }
@@ -630,8 +711,9 @@ const dialogData: Ref<dialogTy> = ref({}) //ts的规范写法，定义变量的�
    overflow: auto;
 }
 ._row2{
-  //  height: 260px !important;
-   overflow: auto;
+  //  height: 200px !important;
+  // height:calc(100vh - 600px);
+  //  overflow: auto;
 }
 .el-col {
   // height: 30px;

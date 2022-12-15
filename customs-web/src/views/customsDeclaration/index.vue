@@ -16,8 +16,8 @@
           </el-date-picker>
           </el-form-item>
 
-             
-              <el-form-item label="进出口类型">
+          
+          <el-form-item label="进出口类型">
             <el-select v-model="listQuery.ieFlag" placeholder="进出口类型" clearable
                        @change="handleFilter">
               <el-option
@@ -131,6 +131,17 @@
         />
 
 
+       <!-- <Detail ref="detailRef" 
+       :dialog-more="dialogDetailData"
+       
+        /> -->
+
+
+        
+
+
+
+
 
   </div>
 </template>
@@ -142,6 +153,11 @@ import {dialogTy} from '~/dialog'
 import DialogState from './dialogState.vue'
 import {Ref} from 'vue'
 import {ElMessage} from 'element-plus'
+
+import Detail from './detail.vue'
+
+const dialogDetailData: Ref<dialogTy> = ref({})
+
 // import { ElMessage } from "element-plus/es";
 import {parseTime, deepClone} from '@/utils/dateTime'
 
@@ -163,9 +179,36 @@ const listQuery: any = ref({
   page: 1,
   limit: 10
 })
+
+import {getCurrentInstance} from 'vue';
+
+const instance = getCurrentInstance();
 onMounted(() => {
-  getRoles()
+  console.log("********************************************9")
+  let customs = sessionStorage.getItem('customs');
+   console.log(789)
+      console.log(customs)
+  if(customs){
+      var data = JSON.parse(customs)
+       listQuery.value =  data
+      instance.ctx.$forceUpdate();
+  }
+  // nextTick(() => {
+    getRoles()
+  // })
+  
 })
+
+
+onUnmounted(() => {
+  console.log(router.currentRoute.value.path)
+      if (router.currentRoute.value.path == "/customsDeclarationDetail") {
+          //不清除
+      } else {
+        sessionStorage.removeItem('customs')
+      }
+    })
+
 
 
 let multipleSelection = ref([])
@@ -205,11 +248,19 @@ const formatIeFlag= (row) => {
 import { useRouter } from 'vue-router';
 const router = useRouter()
 
+ const detailRef = ref<InstanceType<typeof Detail>>()
+
+
+
 const goDetail = (id) =>{
-  console.log(id)
+  //todo
+
+sessionStorage.setItem('customs', JSON.stringify(listQuery._rawValue));
+  // console.log(id)
 
   let routeData
     // const routeData
+
       const _path =  '/customsDeclarationDetail'
       const pramSelf = { headId: id };
        routeData = router.resolve({ //使用resolve
@@ -219,10 +270,13 @@ const goDetail = (id) =>{
       query: pramSelf,
       })
       window.open(routeData.href, '_self')
+
+  //   dialogDetailData.value = {
+  //   show: true,
+  //   title: '报关单详情',
     
-
-
-
+  // }
+  // detailRef.value.getData(id);
 }
 const stateRecordRef = ref<InstanceType<typeof DialogState>>()
 const showState = (id) =>{
@@ -243,6 +297,8 @@ const permissionsDialog: Ref<dialogTy> = ref({})//ts的规范写法，定义变�
 
 // 获取角色列表
 const getRoles = () => {
+   console.log(8888)
+  console.log(listQuery._rawValue)
   let params = Object.assign(deepClone(listQuery._rawValue),
            {
              startTime: parseTime(listQuery._rawValue.declarationData?.length > 0 ? listQuery._rawValue.declarationData[0] : ""),
@@ -279,7 +335,13 @@ const handlePrint = () => {
   })
  
   if(rowDeleteIdArr && rowDeleteIdArr.length != 1){
-      alert("请选择一天记录打印!")
+      // alert("请选择一天记录打印!")
+       ElMessage({
+            message: '请选择一条记录打印!',
+            type: 'error',
+            showClose: true,
+            offset: 50
+          });
       return;
   } 
   // params  = qs.stringify({ids:rowDeleteIdArr} , { arrayFormat: 'indices',allowDots: true })
@@ -336,13 +398,13 @@ const exportExcel = (_isMerge) => {
   // }else{
     if(!listQuery._rawValue.ieFlag){
     // ElMessage({ message: '请选择进出口类型', type: 'error' })
-    // ElMessage({
-    //         message: '请选择进出口类型',
-    //         type: 'error',
-    //         showClose: true,
-    //         offset: 50
-    //       });
-    alert("请选择进出口类型")
+    ElMessage({
+            message: '请选择进出口类型',
+            type: 'error',
+            showClose: true,
+            offset: 50
+          });
+    // alert("请选择进出口类型")
     //  elMessage.error("请选择进出口类型")
     return;
   }

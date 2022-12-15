@@ -18,7 +18,7 @@
     const myChart = echarts.init(currentInstance.ctx.$refs.lineChart);
     //series数据
     let seriesData = [];
-
+    let xAxisData=[];
     props.list.map((item) => {
       seriesData.push({
         name: item.title,
@@ -50,22 +50,12 @@
         data: item.data
       })
     })
-    // 创建图标
-    myChart.setOption({
-      tooltip: {
-          trigger: 'axis'
-      },
-      grid: {
-          top:'30',
-          left: '0',
-          right: '10',
-          bottom: '0',
-          containLabel: true
-      },
-      xAxis: {
+    props.list.map((item0) => {
+      xAxisData.push({
         type: 'category',
         boundaryGap: false,//坐标轴两边留白
-        data: ['01月', '02月', '03月','04月','05月','06月','07月', '08月', '09月','10月','11月','12月'],
+        // data: ['01月', '02月', '03月','04月','05月','06月','07月', '08月', '09月','10月','11月','12月'],
+        data:item0.mon,
         axisLabel: { //坐标轴刻度标签的相关设置。
           interval: 0,//设置为 1，表示『隔一个标签显示一个标签』
           textStyle: {
@@ -91,7 +81,21 @@
           opacity:0.6
         }
       }
+      })
+    })
+    // 创建图标
+    myChart.setOption({
+      tooltip: {
+          trigger: 'axis'
       },
+      grid: {
+          top:'30',
+          left: '10',
+          right: '30',
+          bottom: '0',
+          containLabel: true
+      },
+      xAxis: xAxisData,
       yAxis: [
       {
         name: '资产（万）',

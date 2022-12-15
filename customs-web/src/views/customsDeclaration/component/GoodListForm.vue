@@ -7,6 +7,13 @@
             </template> -->
           </el-table-column>
           <el-table-column prop="codets" label="商品编号" align="center">
+            <template  #default="scope">
+                
+                 <a class="text_self_blue" href="javascript:;" @click="showDetail(scope.row)">{{scope.row.codets}}</a>
+                
+             </template>
+
+
           </el-table-column>
           <el-table-column prop="gname" label="商品名称" align="center">
           </el-table-column>
@@ -91,7 +98,8 @@ const resetForm = () => {
   formRef.value?.resetFields()
 }
 
-const showDetail = (row, column, event) => {
+const showDetail = (row) => {
+  console.log(123)
   console.log(row)
   console.log(row.destcodeValue)
   
@@ -154,4 +162,9 @@ const showDetail = (row, column, event) => {
 .upload-demo {
   width: 60%;
 }
+
+.text_self_blue {
+  color: var(--el-color-primary);
+}
+
 </style>

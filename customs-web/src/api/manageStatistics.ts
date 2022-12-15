@@ -79,3 +79,36 @@ export function getKeyCompanyDataByCode(data: ObjTy) {
   })
 
 }
+export function getAreaDataDash(data: ObjTy) {
+  return request({
+    url: '/manageStatistics/queryAreaDataDash',
+    data,
+    method: 'get',
+    bfLoading: true,
+    isParams: true,
+    isAlertErrorMsg: true
+  })
+
+}
+export function getCustomDataDash(data: ObjTy) {
+  return request({
+    url: '/manageStatistics/queryCustomDataDash',
+    data,
+    method: 'get',
+    bfLoading: true,
+    isParams: true,
+    isAlertErrorMsg: true
+  })
+
+}
+export function getQyUseDataDash(data: ObjTy) {
+  return request({
+    url: '/manageStatistics/queryQyUseDataDash',
+    data,
+    method: 'get',
+    bfLoading: true,
+    isParams: true,
+    isAlertErrorMsg: true
+  })
+
+}

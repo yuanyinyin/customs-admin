@@ -1,13 +1,10 @@
 <template>
     <div>
     
-        <el-dialog  v-model="dialogGood.show" :title="dialogGood.title" width="45%" center>
+        <el-dialog class="dialogClass" v-model="dialogGood.show"  :title="dialogGood.title" width="45%" center>
             <template #header>
-    
               <div class="clearfix">
-    
                 <span>检验检疫申报要素</span>
-    
               </div>
             </template>
 
@@ -162,6 +159,11 @@ const props = defineProps({
 const  initData = () =>{
   tableData.value = dataOrigin;
 }
+
+type TableInstance = InstanceType<typeof ElTable>
+const tableRef = ref<TableInstance>()
+
+
 // // 获取角色列表
 const getList = (_headId) => {
     // console.log(123)
@@ -182,6 +184,7 @@ const getList = (_headId) => {
                     if(_items != null){
                         var isExsit = false;
                         for(var j =0; j < _items.length;j++){
+
                             if(data.appCertCode == _items[j].appcertcode){
                                 isExsit = true;
                                 data.isSelect = true;
@@ -200,18 +203,44 @@ const getList = (_headId) => {
             }
 
             tableData.value = dataOrigin;
-            tableRef.value.toggleRowSelection(this.tableData.find(item=>{
-      		return row.isSelect ;  // 注意这里寻找的字段要唯一，示例仅参考
-   		}),true);
+       
 
+                        if (tableRef) {
+                            tableRef.value.clearSelection();
+                        }
+                        tableData.value.forEach(row => {
+                             
+                                if (row.isSelect == true) {
+                                  console.log(9876)
+                                  console.log(row)
+                                  nextTick(() => {
+                                    tableRef.value.toggleRowSelection(row,true);
+                                  })
+                                }
+                            
+                        })
         })
-        .catch((response) => {})
+        .catch((response) => {console.log(response)})
 }
  
 defineExpose({ getList })
 </script>
 
 <style scoped lang="scss">
+.dialogClass {
+  .el-dialog {
+    .el-dialog__body {
+      //border-top: 1px solid #dcdfe6;
+      //border-bottom: 1px solid #dcdfe6;
+      max-height: 500px !important;
+      min-height: 100px;
+      overflow-y: hidden;
+    }
+  }
+}
+
+
+
 ._el_col {
   height: 16px !important;
 }
