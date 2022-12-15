@@ -9,7 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-@TableName(value = "QP_DECCONTAINER")
+@TableName(value = "NSW.QP_DECCONTAINER")
 public class QpDecContainer  implements Serializable {
 
 	@TableId(type = IdType.ASSIGN_UUID)

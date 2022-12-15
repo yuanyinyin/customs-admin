@@ -11,7 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@TableName(value = "QP_DECLIST")
+@TableName(value = "NSW.QP_DECLIST")
 
 public class QpDecList implements Serializable {
 

@@ -40,9 +40,9 @@
               <el-form-item>
               <span class="filter-item">
                 <el-button type="success" :icon="Search" @click="handleFilter">查询</el-button>
-                <el-button type="primary" :icon="Plus" @click="exportExcel('T')">导出</el-button>
-                 <el-button type="primary" :icon="Plus" @click="exportExcel('F')">导出(不合并表头)</el-button>
-                <el-button type="primary" :icon="Plus" @click="handlePrint">打印</el-button>
+                <el-button type="primary" :icon="Download" @click="exportExcel('T')">导出</el-button>
+                 <el-button type="primary" :icon="Download" @click="exportExcel('F')">导出(不合并表头)</el-button>
+                <el-button type="primary" :icon="Printer" @click="handlePrint">打印</el-button>
               </span>
               </el-form-item>
             </el-form>
@@ -148,7 +148,7 @@
 
 <script setup lang="ts">
 import {Plus} from '@element-plus/icons-vue'
-import {Search} from '@element-plus/icons-vue'
+import {Search , Download ,Printer} from '@element-plus/icons-vue'
 import {dialogTy} from '~/dialog'
 import DialogState from './dialogState.vue'
 import {Ref} from 'vue'
@@ -269,7 +269,9 @@ sessionStorage.setItem('customs', JSON.stringify(listQuery._rawValue));
       path: _path,
       query: pramSelf,
       })
-      window.open(routeData.href, '_self')
+      // window.open(routeData.href, '_self')
+      window.open(routeData.href, '_parent')
+     
 
   //   dialogDetailData.value = {
   //   show: true,
