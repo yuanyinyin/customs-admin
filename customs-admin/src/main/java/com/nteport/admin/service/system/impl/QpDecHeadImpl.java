@@ -103,6 +103,8 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
         params.remove("endTime");
 
         QueryWrapper<QpDecHead> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("orgid", user.getDeptId());
+
         if(StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)){
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
             queryWrapper.ge("declarationdata",  simpleDateFormat.format(new Date(Timestamp.valueOf(startTime).getTime())));
