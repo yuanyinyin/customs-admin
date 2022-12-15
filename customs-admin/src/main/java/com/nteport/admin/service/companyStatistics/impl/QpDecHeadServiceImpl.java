@@ -1073,7 +1073,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
         try {
             QueryWrapper<NoticeInfo> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("NOTICE_USER_ID", user.getId());
-            queryWrapper.eq("TYPE",1);
+            queryWrapper.eq("TYPE",2);
             List<NoticeInfo> list = noticeInfoMapper.selectList(queryWrapper);
 
 
