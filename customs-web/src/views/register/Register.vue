@@ -102,9 +102,9 @@
       <el-button :loading="loading" type="warning" class="register-btn" size="default" @click.prevent="handleRegister" :disabled = "!agreeFlag">
         提 交
       </el-button>
-      <el-button :loading="loading" type="warning" class="register-btn" size="default" @click.prevent="initForm">
-        赋 值
-      </el-button>
+<!--      <el-button :loading="loading" type="warning" class="register-btn" size="default" @click.prevent="initForm">-->
+<!--        赋 值-->
+<!--      </el-button>-->
     </el-form>
   </div>
 </template>
@@ -153,36 +153,40 @@ const sendVerifyCode = () => {
   if (formInline.telephone == '') {
     ElMessage({message: '请填写手机号', type: 'error'})
   } else {
-    loading.value = true;
-    sendYzm(formInline).then(res => {
-      console.log(res);
-      if (res.code==200){
-        if(res.data==1){
-          ElMessage({message: '手机验证码已发送！', type: 'success'})
+    // 验证手机号码
+    const isPhone = /^(13[0-9]|14[014-9]|15[0-35-9]|16[25-7]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/
+    if (!isPhone.test(formInline.telephone)) {
+      ElMessage({message: '不符合手机号码格式', type: 'error'})
+    } else {
+      loading.value = true;
+      sendYzm(formInline).then(res => {
+        console.log(res);
+        if (res.code==200){
+          if(res.data==1){
+            ElMessage({message: '手机验证码已发送！', type: 'success'})
+          }else{
+            // ElMessage({message: '手机验证码发送失败！', type: 'fail'})
+            ElMessage({message: res.data, type: 'fail'})
+          }
         }else{
-          // ElMessage({message: '手机验证码发送失败！', type: 'fail'})
-          ElMessage({message: res.data, type: 'fail'})
+          ElMessage({message: '手机验证码发送失败！', type: 'fail'})
         }
-      }else{
-        ElMessage({message: '手机验证码发送失败！', type: 'fail'})
+        loading.value = false;
+      })
+      if (!timer.value) {
+        count.value = TIME_COUNT
+        show.value = false
+        timer.value = setInterval(() => {
+          if (count.value > 0 && count.value <= TIME_COUNT) {
+            count.value--
+          } else {
+            show.value = true
+            clearInterval(timer.value) // 清除定时器
+            timer.value = null
+          }
+        }, 1000)
       }
-      loading.value = false;
-    })
-    if (!timer.value) {
-      count.value = TIME_COUNT
-      show.value = false
-      timer.value = setInterval(() => {
-        if (count.value > 0 && count.value <= TIME_COUNT) {
-          count.value--
-        } else {
-          show.value = true
-          clearInterval(timer.value) // 清除定时器
-          timer.value = null
-        }
-      }, 1000)
     }
-
-    //todo 这里去发送验证码
   }
 }
 
@@ -223,7 +227,7 @@ const handleRemove = uploadFile => {
 const handleUploadSuccess = (response, file) => {
   file.uid = response.data
   // console.log(response.data);
-  // formInline.registerPicId=response.data;
+  formInline.registerPicId=response.data;
 }
 
 //文件预览
@@ -393,6 +397,7 @@ const validateVerifyCode = (rule, value, callback) => {
       }
       // formData.value = res.data;
     })
+    // callback();
   }
 }
 

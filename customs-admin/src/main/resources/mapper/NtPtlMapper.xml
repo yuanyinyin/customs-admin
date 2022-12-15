@@ -13,7 +13,7 @@
     </select>
 
     <select id="selectDept" parameterType="java.lang.String" resultType="hashMap">
-        select ID,ORG_NAME_CN,UNION_NO,AREA_NAME from ORG_BASEINFO@NT_PTL t
+        select ID,ORG_NAME_CN,UNION_NO,AREA_NAME,REGISTER_PIC_ID from ORG_BASEINFO@NT_PTL t
         where t.id=#{depId,jdbcType=VARCHAR}
     </select>
 
