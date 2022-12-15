@@ -55,7 +55,7 @@ const consRoutes: RouterTy = [
             {
                 path: 'dashboard',
                 name: 'Dashboard',
-                component: () => import('@/views/dashboard/index.vue'),
+                component: () => import('@/views/companyStatistics/companyDashboard/index.vue'),
                 meta: {title: '首页', elSvgIcon: 'Fold'}
             }
         ]
