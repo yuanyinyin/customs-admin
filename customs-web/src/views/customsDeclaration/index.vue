@@ -16,7 +16,7 @@
           </el-date-picker>
           </el-form-item>
 
-          
+
           <el-form-item label="进出口类型">
             <el-select v-model="listQuery.ieFlag" placeholder="进出口类型" clearable
                        @change="handleFilter">
@@ -52,7 +52,7 @@
           <div class="clearfix">
             <span>报关单列表</span>
           </div>
-          
+
 
         </template>
         <el-table :data="tableData" v-loading="loading"  row-key="id" lazy  fit stripe style="width: 100%"  @selection-change="handleSelectionChange">
@@ -66,9 +66,9 @@
 
           <el-table-column prop="entryid" label="报关单号" align="center">
             <template  #default="scope">
-                
+
                  <a class="text_self_blue" href="javascript:;" @click="goDetail(scope.row.id)">{{scope.row.entryid}}</a>
-                
+
              </template>
           </el-table-column>
           <el-table-column prop="tradename" label="收发货人" align="center">
@@ -91,9 +91,9 @@
           </el-table-column>
           <el-table-column prop="customstatename" label="回执状态" align="center">
              <template  #default="scope">
-              
+
                  <a class="text_self_blue" href="javascript:;" @click="showState(scope.row.id)">{{scope.row.customstatename}}</a>
-                
+
              </template>
 
           </el-table-column>
@@ -102,7 +102,7 @@
               {{ parseTime(scope.row.createTime) }}
             </template>
           </el-table-column>
-         
+
         </el-table>
         <div class="block columnCC mt-2">
           <el-pagination
@@ -119,25 +119,25 @@
         </div>
       </el-card>
 
-        <DialogState ref="stateRecordRef" 
+        <DialogState ref="stateRecordRef"
        :dialog-roles="dialogData"
        :head-id="currentId"
         />
 
 
-         <DialogPrint ref="dialogPrintRef" 
+         <DialogPrint ref="dialogPrintRef"
        :dialog-good="dialogPrintData"
        :form-data="formPrint"
         />
 
 
-       <!-- <Detail ref="detailRef" 
+       <!-- <Detail ref="detailRef"
        :dialog-more="dialogDetailData"
-       
+
         /> -->
 
 
-        
+
 
 
 
@@ -196,7 +196,7 @@ onMounted(() => {
   // nextTick(() => {
     getRoles()
   // })
-  
+
 })
 
 
@@ -238,7 +238,7 @@ const formatIeFlag= (row) => {
       return "进口";
     case "E":
       return "出口";
-    
+
   }
 }
 
@@ -270,13 +270,14 @@ sessionStorage.setItem('customs', JSON.stringify(listQuery._rawValue));
       query: pramSelf,
       })
       // window.open(routeData.href, '_self')
-      window.open(routeData.href, '_parent')
-     
+      router.push(routeData);
+      //window.open(routeData.href, '_parent')
+
 
   //   dialogDetailData.value = {
   //   show: true,
   //   title: '报关单详情',
-    
+
   // }
   // detailRef.value.getData(id);
 }
@@ -335,7 +336,7 @@ const handlePrint = () => {
   rowDeleteIdArr = multipleSelection.value.map((mItem: any) => {
     return mItem.id
   })
- 
+
   if(rowDeleteIdArr && rowDeleteIdArr.length != 1){
       // alert("请选择一天记录打印!")
        ElMessage({
@@ -345,19 +346,19 @@ const handlePrint = () => {
             offset: 50
           });
       return;
-  } 
+  }
   // params  = qs.stringify({ids:rowDeleteIdArr} , { arrayFormat: 'indices',allowDots: true })
-  
+
     formPrint.value = rowDeleteIdArr[0];
     console.log(formPrint)
     dialogPrintData.value = {
     show: true,
     title: '选择打印类型',
-    
+
   }
 
 
-  //todo 
+  //todo
   let params = Object.assign(deepClone(listQuery._rawValue),
            {
              startTime: parseTime(listQuery._rawValue.declarationData?.length > 0 ? listQuery._rawValue.declarationData[0] : ""),
@@ -367,7 +368,7 @@ const handlePrint = () => {
 
   // }
 
- 
+
 }
 const getDateTime = () => {
    var dateObj = new Date(); //表示当前系统时间的Date对象
@@ -379,17 +380,17 @@ const getDateTime = () => {
 }
 
 const dateFilter = (date) => {
- if(date < 10){return "0"+date;} 
+ if(date < 10){return "0"+date;}
     return date;
 }
 
- 
 
-         
+
+
 
 
 const exportExcel = (_isMerge) => {
-  
+
   let rowDeleteIdArr: Array<any> = []
   rowDeleteIdArr = multipleSelection.value.map((mItem: any) => {
     return mItem.id
@@ -410,7 +411,7 @@ const exportExcel = (_isMerge) => {
     //  elMessage.error("请选择进出口类型")
     return;
   }
-  //todo 
+  //todo
    params = Object.assign(deepClone(listQuery._rawValue),
            {
              startTime: parseTime(listQuery._rawValue.declarationData?.length > 0 ? listQuery._rawValue.declarationData[0] : ""),

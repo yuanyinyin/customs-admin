@@ -3,7 +3,7 @@
         <div class="digitalDiv">
             <div class="digitalSingle">
                 <div class="imgDiv">
-                    <img src="../../../img/test.png" alt="" style="width:42px;height:42px;">
+<!--                    <img src="../../../img/test.png" alt="" style="width:42px;height:42px;">-->
                 </div>
                 <div class="fontDiv" style="width: 80%;">
                     <div><span>进口单量</span></div>
@@ -15,7 +15,7 @@
             </div>
             <div class="digitalSingle">
                 <div class="imgDiv">
-                    <img src="../../../img/test.png" alt="" style="width:42px;height:42px;">
+<!--                    <img src="../../../img/test.png" alt="" style="width:42px;height:42px;">-->
                 </div>
                 <div class="fontDiv" style="width: 80%;">
                     <div><span>出口单量</span></div>
@@ -27,7 +27,7 @@
             </div>
             <div class="digitalSingle">
                 <div class="imgDiv">
-                    <img src="../../../img/test.png" alt="" style="width:42px;height:42px;">
+<!--                    <img src="../../../img/test.png" alt="" style="width:42px;height:42px;">-->
                 </div>
                 <div class="fontDiv" style="width: 80%;">
                     <div><span>人民币进口货值</span></div>
@@ -36,10 +36,10 @@
                         <span class="unit">元</span>
                     </div>
                 </div>
-            </div>            
+            </div>
             <div class="digitalSingle">
                 <div class="imgDiv">
-                    <img src="../../../img/test.png" alt="" style="width:42px;height:42px;">
+<!--                    <img src="../../../img/test.png" alt="" style="width:42px;height:42px;">-->
                 </div>
                 <div class="fontDiv" style="width: 80%;">
                     <div><span>美元进口货值</span></div>
@@ -48,10 +48,10 @@
                         <span class="unit">美元</span>
                     </div>
                 </div>
-            </div>            
+            </div>
             <div class="digitalSingle">
                 <div class="imgDiv">
-                    <img src="../../../img/test.png" alt="" style="width:42px;height:42px;">
+<!--                    <img src="../../../img/test.png" alt="" style="width:42px;height:42px;">-->
                 </div>
                 <div class="fontDiv" style="width: 80%;">
                     <div><span>人民币出口货值</span></div>
@@ -60,10 +60,10 @@
                         <span class="unit">元</span>
                     </div>
                 </div>
-            </div>            
+            </div>
             <div class="digitalSingle">
                 <div class="imgDiv">
-                    <img src="../../../img/test.png" alt="" style="width:42px;height:42px;">
+<!--                    <img src="../../../img/test.png" alt="" style="width:42px;height:42px;">-->
                 </div>
                 <div class="fontDiv" style="width: 80%;">
                     <div><span>美元出口货值</span></div>
@@ -78,7 +78,7 @@
 
     <div class="workflow-container " >
 
-        
+
 
       <el-card shadow="hover" :body-style="{ padding: '20px 20px 5px  20px ' }">
         <div class="export-search mb-1">
@@ -108,7 +108,7 @@
                     </el-form-item>
                     </el-form>
                 </div>
- 
+
         <div class="workflow-table mb-1">
           <el-table :data="tableData" style="width: 100%" :height="`calc(100vh - ${windowSpanceHeight})`"  fit border highlight-current-row>
             <el-table-column type="index" label="序号" align="center" width="55">
@@ -121,7 +121,7 @@
                <div>
                  <a href="javascript:;" @click="getCompanyDataDetail(scope.row)">{{scope.row.ORGID}}</a>
                </div>
-             </template> 
+             </template>
              </el-table-column>
             <el-table-column prop="ORG_NAME" label="企业名称"   align="center" />
             <el-table-column prop="NUMBI" label="累计进口单量"  align="center"/>
@@ -148,23 +148,23 @@
       </el-card>
       <div>
     <!-- <el-dialog v-model="tablemodel"  :dataTmp="dataTmp" :dataname="dataname"    @open="openFun"
-    width="75%" 
+    width="75%"
     align-center>
-   
+
             <div id="main3" style="width: 100%;height:400px;"></div>
-        
+
     </el-dialog> -->
     <el-dialog v-model="tablemodel"  :dataTmp="dataTmp" :dataname="dataname"   @open="openFun"
-    width="75%" 
+    width="75%"
     align-center>
-   
+
         <div id="main3" style="width: 100%;height:400px;"></div>
-    
+
 </el-dialog>
     </div>
     </div>
   </template>
-  
+
   <script lang="ts" setup>
   import { Plus, Edit, Delete, Search, Share, Money } from '@element-plus/icons-vue'
   import Record from './components/ChangeRecord.vue'
@@ -174,7 +174,7 @@
   import {Ref} from "vue";
   import { parseDateWithoutDayNew,parseDateWithoutDay } from '@/utils/dateTime'
   import * as echarts from 'echarts'
-  
+
   const store = useStore()
   const dialogVisible = ref(false)
   const radio = ref(1)
@@ -192,13 +192,13 @@
   // 角色总数
   const total = ref(null)
   // 查询配置 [pageNum 当前页数, pageSize 每页大小]
-  
+
   const route = useRoute()
   let id = ref(null)
   onMounted(() => {
-  
+
     initPick();
-  
+
   })
   const initPick = () => {
     const end = new Date();
@@ -214,18 +214,18 @@
 
     }, 500)
 }
- 
+
 const dataname = ref(null)
 const dataTmp = ref(null)
 const rowData = ref(null)
 const getCompanyDataDetail = (row) => {
     rowData.value=row
     tablemodel.value = true ;
-  
+
 }
 let canvasI: any = null//document.getElementById('canvas')
-const openFun = () => { 
- 
+const openFun = () => {
+
  nextTick(() => {
     let date1=parseDateWithoutDay(listQuery.startDate);
     let date2=parseDateWithoutDay(listQuery.endDate);
@@ -236,7 +236,7 @@ const openFun = () => {
         startDate: date1,
         endDate: date2,
         }
-    console.log(1111,params) 
+    console.log(1111,params)
     tablemodel.value = true ;
   store
     .dispatch('manageStatistics/getKeyCompanyDataByCode',params)
@@ -265,7 +265,7 @@ let monthValueArry4=[];
  let data={month:monthArry,val1:monthValueArry1,val2:monthValueArry2,val3:monthValueArry3,val4:monthValueArry4};
  let totalType=''
      let mainType=''
-   
+
      const option = {
          title: {
              text: gname+'       '+date1+'~'+date2+totalType+'进出口单量货值统计'
@@ -333,7 +333,7 @@ let monthValueArry4=[];
                     data: data.val4,
                     barGap: '20%',
                     barCategoryGap: '30%',
-                    barMaxWidth:'25', 
+                    barMaxWidth:'25',
                     },
                 ],
      };
@@ -353,14 +353,14 @@ myChartI.setOption(option);
 
 
 
-    
+
 }
-  
+
   const windowSpanceHeight = ref('300px') //这个变量用来控制页面表格的大小，来让分页和查询都一直可见
-  
-  
+
+
   /**按钮部分 -end */
-  
+
   /**查询部分 */
   const listQuery = reactive({
     startDate:'',
@@ -368,7 +368,7 @@ myChartI.setOption(option);
     page: 1,
     limit: 10
   })
-  
+
   const onSearch = () => {
     if(listQuery.startDate===null||listQuery.startDate===''||listQuery.endDate===null||listQuery.endDate===''){
         ElMessage({ message: '请填写统计起始日期', type: 'error' })
@@ -383,10 +383,10 @@ myChartI.setOption(option);
     handleSizeChange()
 }
   /**查询部分 end*/
-  
+
   // 获取备用金借款申请列表
-  
-  
+
+
   /*以下是分页部分*/
   const page = ref(1)
   const limit = ref(20)
@@ -395,8 +395,8 @@ myChartI.setOption(option);
   const pageSizeOption = ref([10, 25, 50, 100])
   const pageLayout = ref('total, sizes, prev, pager, next, jumper') //设置分页展示的元素
   const pageTotal = ref(0)
-   
-  
+
+
   const handleSizeChange = () => {
    handleCurrentChange();
   }
@@ -441,10 +441,10 @@ myChartI.setOption(option);
       .catch((response) => {})
   }
   /*分页结束*/
-   
+
   /*tab页面 结束 */
   </script>
-  
+
   <style scoped lang="scss">
 .mb-1{
     margin-top: -10px !important;
@@ -460,7 +460,7 @@ myChartI.setOption(option);
       width: 90px;
     }
   }
-  
+
   .digitalDiv{
     background-color:rgb(223, 220, 220);
     margin: 5px 5px;
@@ -501,7 +501,6 @@ myChartI.setOption(option);
         }
     }
 
-    
+
   }
   </style>
-  
