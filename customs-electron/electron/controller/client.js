@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 const is = require('electron-is');
 const { exec } = require('child_process');
 const Controller = require('ee-core').Controller;
@@ -12,6 +13,7 @@ const {dialog, webContents, shell, BrowserWindow, BrowserView,
   Notification, powerMonitor, screen, nativeTheme} = require('electron');
 const autoLaunchManager = require('../library/autoLaunch');
 const dayjs = require('dayjs');
+const xmlreader = require('xmlreader');
 
 let myTimer = null;
 let browserViewObj = null;
@@ -28,24 +30,156 @@ class ClientController extends Controller {
   }
 
   /**
-   * 所有方法接收两个参数
-   * @param args 前端传的参数
-   * @param event - ipc通信时才有值。invoke()方法时，event == IpcMainInvokeEvent; send()/sendSync()方法时，event == IpcMainEvent
+   * 新增或修改报关单报文目录
+   * @param args
+   * @returns {Promise<*>}
    */
+  async updateBgdFileDir(args) {
+    const {service} = this;
+    const data = await service.storage.updateBgdReportFileData(args.bgd_path);
+    return data;
+  }
 
   /**
-   * test
+   * 获取报关单报文目录
+   * @returns {Promise<string>}
    */
-  async test () {
-    const result = await this.service.example.test('electron');
-
-    let tmpDir = Utils.getLogDir();
-    console.log('tmpDir:', tmpDir);
-
-    console.log('this.app.request:', this.app.request.query);
-
-    return result;
+  async getBgdFileDir() {
+    const {service} = this;
+    const data = await service.storage.getBgdReportFileData();
+    return data;
   }
+
+  /**
+   * 自动获取报关单报文目录
+   * @param args
+   * @returns {Promise<*>}
+   */
+  async autoGetReportDir() {
+    const returnData = {
+      flag: false,
+      msg: '',
+      fileDir: '',
+    }
+    const homedir = os.homedir();
+    const xmlPath = path.join(homedir, "/AppData/Local/SIC/UserSetting/", "DFWJobSettings.xml");
+    const xmlStr = fs.readFileSync(xmlPath, "utf8");
+    if(!xmlStr){
+      returnData.msg="获取失败，未查找到配置文件，请确认是否已安装单一窗口客户端！";
+    }
+    /*const xmlStr ="<?xml version=\"1.0\"?>\n" +
+        "<Settings xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n" +
+        "  <FormSettings>\n" +
+        "    <FormSetting Key=\"OTHERS\" SystemId=\"None\" DisplayRow=\"-5\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"OTHERS\" OutBox=\"C:\\ImpPath\\Others\\OutBox\" InBox=\"C:\\ImpPath\\Others\\InBox\" SentBox=\"C:\\ImpPath\\Others\\SentBox\" FailBox=\"C:\\ImpPath\\Others\\FailBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "    <FormSetting Key=\"DEC\" SystemId=\"DXPDSWDEC0000002|DXPDSWDECEDOC002\" DisplayRow=\"1\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"DECCUS001\" OutBox=\"C:\\ImpPath\\Deccus001\\OutBox\" InBox=\"C:\\ImpPath\\Deccus001\\InBox\" SentBox=\"C:\\ImpPath\\Deccus001\\SentBox\" FailBox=\"C:\\ImpPath\\Deccus001\\FailBox\" TempBox=\"C:\\ImpPath\\Deccus001\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "      <SubFormSetting FormId=\"DECCUS201\" OutBox=\"C:\\ImpPath\\Deccus201\\OutBox\" InBox=\"C:\\ImpPath\\Deccus201\\InBox\" SentBox=\"C:\\ImpPath\\Deccus201\\SentBox\" FailBox=\"C:\\ImpPath\\Deccus201\\FailBox\" TempBox=\"C:\\ImpPath\\Deccus201\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "      <SubFormSetting FormId=\"DECCUS301\" OutBox=\"C:\\ImpPath\\Deccus301\\OutBox\" InBox=\"C:\\ImpPath\\Deccus301\\InBox\" SentBox=\"C:\\ImpPath\\Deccus301\\SentBox\" FailBox=\"C:\\ImpPath\\Deccus301\\FailBox\" TempBox=\"C:\\ImpPath\\Deccus301\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "      <SubFormSetting FormId=\"DECCUS401\" OutBox=\"C:\\ImpPath\\Deccus401\\OutBox\" InBox=\"C:\\ImpPath\\Deccus401\\InBox\" SentBox=\"C:\\ImpPath\\Deccus401\\SentBox\" FailBox=\"C:\\ImpPath\\Deccus401\\FailBox\" TempBox=\"C:\\ImpPath\\Deccus401\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "      <SubFormSetting FormId=\"DECCIQ001\" OutBox=\"C:\\ImpPath\\Decciq001\\OutBox\" InBox=\"C:\\ImpPath\\Decciq001\\InBox\" SentBox=\"C:\\ImpPath\\Decciq001\\SentBox\" FailBox=\"C:\\ImpPath\\Decciq001\\FailBox\" TempBox=\"C:\\ImpPath\\Decciq001\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "      <SubFormSetting FormId=\"DECCIQ101\" OutBox=\"C:\\ImpPath\\Decciq101\\OutBox\" InBox=\"C:\\ImpPath\\Decciq101\\InBox\" SentBox=\"C:\\ImpPath\\Decciq101\\SentBox\" FailBox=\"C:\\ImpPath\\Decciq101\\FailBox\" TempBox=\"C:\\ImpPath\\Decciq101\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "      <SubFormSetting FormId=\"DECCIQ201\" OutBox=\"C:\\ImpPath\\Decciq201\\OutBox\" InBox=\"C:\\ImpPath\\Decciq201\\InBox\" SentBox=\"C:\\ImpPath\\Decciq201\\SentBox\" FailBox=\"C:\\ImpPath\\Decciq201\\FailBox\" TempBox=\"C:\\ImpPath\\Decciq201\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "    <FormSetting Key=\"EDOC\" SystemId=\"DXPDSWDECEDOC002\" DisplayRow=\"3\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"DECEDOC001\" OutBox=\"C:\\ImpPath\\Decedoc001\\OutBox\" InBox=\"C:\\ImpPath\\Decedoc001\\InBox\" SentBox=\"C:\\ImpPath\\Decedoc001\\SentBox\" FailBox=\"C:\\ImpPath\\Decedoc001\\FailBox\" TempBox=\"C:\\ImpPath\\Decedoc001\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "    <FormSetting Key=\"MFT\" SystemId=\"DXPDSWMFT0000001\" DisplayRow=\"5\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"MFT\" OutBox=\"C:\\ImpPath\\Mft\\OutBox\" InBox=\"C:\\ImpPath\\Mft\\InBox\" SentBox=\"C:\\ImpPath\\Mft\\SentBox\" FailBox=\"C:\\ImpPath\\Mft\\FailBox\" TempBox=\"C:\\ImpPath\\Mft\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "    <FormSetting Key=\"RMFT\" SystemId=\"DXPDSWRMFT000001\" DisplayRow=\"7\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"RMFT\" OutBox=\"C:\\ImpPath\\Rmft\\OutBox\" InBox=\"C:\\ImpPath\\Rmft\\InBox\" SentBox=\"C:\\ImpPath\\Rmft\\SentBox\" FailBox=\"C:\\ImpPath\\Rmft\\FailBox\" TempBox=\"C:\\ImpPath\\Rmft\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "    <FormSetting Key=\"TMFT\" SystemId=\"DXPDSWTMFT000001\" DisplayRow=\"9\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"TMFT\" OutBox=\"C:\\ImpPath\\Tmft\\OutBox\" InBox=\"C:\\ImpPath\\Tmft\\InBox\" SentBox=\"C:\\ImpPath\\Tmft\\SentBox\" FailBox=\"C:\\ImpPath\\Tmft\\FailBox\" TempBox=\"C:\\ImpPath\\Tmft\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "    <FormSetting Key=\"CDS\" SystemId=\"DXPDSWCDS0000001\" DisplayRow=\"11\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"CDS\" OutBox=\"C:\\ImpPath\\Cds\\OutBox\" InBox=\"C:\\ImpPath\\Cds\\InBox\" SentBox=\"C:\\ImpPath\\Cds\\SentBox\" FailBox=\"C:\\ImpPath\\Cds\\FailBox\" TempBox=\"C:\\ImpPath\\Cds\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "    <FormSetting Key=\"CDSAL\" SystemId=\"DXPDSWCDSAL00001\" DisplayRow=\"13\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"CDSAL\" OutBox=\"C:\\ImpPath\\Cdsal\\OutBox\" InBox=\"C:\\ImpPath\\Cdsal\\InBox\" SentBox=\"C:\\ImpPath\\Cdsal\\SentBox\" FailBox=\"C:\\ImpPath\\Cdsal\\FailBox\" TempBox=\"C:\\ImpPath\\Cdsal\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "    <FormSetting Key=\"TCDS\" SystemId=\"DXPDSWTCDS000001\" DisplayRow=\"15\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"TCDS\" OutBox=\"C:\\ImpPath\\Tcds\\OutBox\" InBox=\"C:\\ImpPath\\Tcds\\InBox\" SentBox=\"C:\\ImpPath\\Tcds\\SentBox\" FailBox=\"C:\\ImpPath\\Tcds\\FailBox\" TempBox=\"C:\\ImpPath\\Tcds\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "    <FormSetting Key=\"NEMS\" SystemId=\"DXPDSWNEMS000001\" DisplayRow=\"17\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"NEMS\" OutBox=\"C:\\ImpPath\\Nems\\OutBox\" InBox=\"C:\\ImpPath\\Nems\\InBox\" SentBox=\"C:\\ImpPath\\Nems\\SentBox\" FailBox=\"C:\\ImpPath\\Nems\\FailBox\" TempBox=\"C:\\ImpPath\\Nems\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "    <FormSetting Key=\"ACMP\" SystemId=\"DXPDSWACMP000001\" DisplayRow=\"19\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"ACMP\" OutBox=\"C:\\ImpPath\\Acmp\\OutBox\" InBox=\"C:\\ImpPath\\Acmp\\InBox\" SentBox=\"C:\\ImpPath\\Acmp\\SentBox\" FailBox=\"C:\\ImpPath\\Acmp\\FailBox\" TempBox=\"C:\\ImpPath\\Acmp\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "    <FormSetting Key=\"AIL\" SystemId=\"DXPDSWLICENCE001\" DisplayRow=\"21\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"AIL\" OutBox=\"C:\\ImpPath\\Ail\\OutBox\" InBox=\"C:\\ImpPath\\Ail\\InBox\" SentBox=\"C:\\ImpPath\\Ail\\SentBox\" FailBox=\"C:\\ImpPath\\Ail\\FailBox\" TempBox=\"C:\\ImpPath\\Ail\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "    <FormSetting Key=\"EXB\" SystemId=\"DXPDSWEXB0000001\" DisplayRow=\"23\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"EXB\" OutBox=\"C:\\ImpPath\\Exb\\OutBox\" InBox=\"C:\\ImpPath\\Exb\\InBox\" SentBox=\"C:\\ImpPath\\Exb\\SentBox\" FailBox=\"C:\\ImpPath\\Exb\\FailBox\" TempBox=\"C:\\ImpPath\\Exb\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "    <FormSetting Key=\"NJCF\" SystemId=\"DXPDSWNJCF000001\" DisplayRow=\"25\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"NJCF\" OutBox=\"C:\\ImpPath\\Njcf\\OutBox\" InBox=\"C:\\ImpPath\\Njcf\\InBox\" SentBox=\"C:\\ImpPath\\Njcf\\SentBox\" FailBox=\"C:\\ImpPath\\Njcf\\FailBox\" TempBox=\"C:\\ImpPath\\Njcf\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "    <FormSetting Key=\"SAS\" SystemId=\"DXPDSWSAS0000001\" DisplayRow=\"27\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"SAS\" OutBox=\"C:\\ImpPath\\Sas\\OutBox\" InBox=\"C:\\ImpPath\\Sas\\InBox\" SentBox=\"C:\\ImpPath\\Sas\\SentBox\" FailBox=\"C:\\ImpPath\\Sas\\FailBox\" TempBox=\"C:\\ImpPath\\Sas\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "    <FormSetting Key=\"NPTS\" SystemId=\"DXPDSWNPTS000001\" DisplayRow=\"29\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"NPTS\" OutBox=\"C:\\ImpPath\\Npts\\OutBox\" InBox=\"C:\\ImpPath\\Npts\\InBox\" SentBox=\"C:\\ImpPath\\Npts\\SentBox\" FailBox=\"C:\\ImpPath\\Npts\\FailBox\" TempBox=\"C:\\ImpPath\\Npts\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "    <FormSetting Key=\"DECSUB\" SystemId=\"DXPDSWDECSUB0001\" DisplayRow=\"31\" RetNameAffixFlag=\"0\">\n" +
+        "      <SubFormSetting FormId=\"DECSUB\" OutBox=\"C:\\ImpPath\\Decsub\\OutBox\" InBox=\"C:\\ImpPath\\Decsub\\InBox\" SentBox=\"C:\\ImpPath\\Decsub\\SentBox\" FailBox=\"C:\\ImpPath\\Decsub\\FailBox\" TempBox=\"C:\\ImpPath\\Decsub\\TempBox\" MaxDegreeOfParallelism=\"1\" SendBeforeEnable=\"false\" IsPdfCheck=\"false\" />\n" +
+        "    </FormSetting>\n" +
+        "  </FormSettings>\n" +
+        "  <UserPin>LZkdOyDzyKkggjYZb27iTA==</UserPin>\n" +
+        "  <EncryptorSetting EncryptorType=\"15\">\n" +
+        "    <EncryptorConfigFile />\n" +
+        "    <DeviceLibs>XASJ_SDF,DJ_SDF,SGD_Dll,swsds</DeviceLibs>\n" +
+        "    <Device>hsm</Device>\n" +
+        "    <CertIndex>0</CertIndex>\n" +
+        "    <EportCertFile />\n" +
+        "    <EportCardID />\n" +
+        "    <CreateCfgFile>10</CreateCfgFile>\n" +
+        "    <IpAddr />\n" +
+        "    <Port>0</Port>\n" +
+        "  </EncryptorSetting>\n" +
+        "  <Notification UseEmailNotification=\"false\" UseHttpNotification=\"false\">\n" +
+        "    <EmailNotification>\n" +
+        "      <SmtpPort>25</SmtpPort>\n" +
+        "      <EnableSsl>false</EnableSsl>\n" +
+        "    </EmailNotification>\n" +
+        "  </Notification>\n" +
+        "  <TimeInterval>15</TimeInterval>\n" +
+        "  <RetentionDays>7</RetentionDays>\n" +
+        "  <LogPath>%LOCALAPPDATA%/SIC/Log/</LogPath>\n" +
+        "  <JobsAutoStart>DXP</JobsAutoStart>\n" +
+        "  <StpReceipt2File>true</StpReceipt2File>\n" +
+        "</Settings>";*/
+    //const xmlStr = "";
+    xmlreader.read(xmlStr, function (err, res) {
+      if (err){
+        returnData.msg = "获取失败，读取配置文件出错，请联系管理员！";
+        return err;
+      }
+
+      if (res&& res.Settings&& res.Settings.FormSettings&& res.Settings.FormSettings.FormSetting){
+        for (var i = 0; i < res.Settings.FormSettings.FormSetting.count(); i++) {
+          const key = res.Settings.FormSettings.FormSetting.at(i).attributes().Key;
+          if (key == "DECSUB") {
+            const SubFormSetting = res.Settings.FormSettings.FormSetting.at(i).SubFormSetting;
+            if (SubFormSetting) {
+              returnData.fileDir = SubFormSetting.attributes().InBox;
+              break;
+            }
+          }
+        }
+      }
+      if (!returnData.fileDir){
+        returnData.msg="获取失败，请在单一窗口中确认是否已勾选报关单订阅！";
+      }else{
+        returnData.flag = true;
+      }
+    });
+    return returnData;
+  }
+
 
   /**
    * json数据库操作
@@ -65,13 +199,13 @@ class ClientController extends Controller {
         data.result = await service.storage.addTestData(paramsObj.info);;
         break;
       case 'del' :
-        data.result = await service.storage.delTestData(paramsObj.delete_name);;
+        data.result = await service.storage.delTestData(paramsObj.delete_key);;
         break;
       case 'update' :
-        data.result = await service.storage.updateTestData(paramsObj.update_name, paramsObj.update_age);
+        data.result = await service.storage.updateTestData(paramsObj.update_key, paramsObj.update_value);
         break;
       case 'get' :
-        data.result = await service.storage.getTestData(paramsObj.search_age);
+        data.result = await service.storage.getTestData(paramsObj.search_key);
         break;
     }
 
@@ -79,6 +213,7 @@ class ClientController extends Controller {
 
     return data;
   }
+
 
   /**
    * sqlite数据库操作
