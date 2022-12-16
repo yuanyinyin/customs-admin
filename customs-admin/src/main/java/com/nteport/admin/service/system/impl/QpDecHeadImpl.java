@@ -86,15 +86,7 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
     @Autowired
     private IQpDecUserService qpDecUserService;
 
-//    @Autowired
-//    private IDecNativeService decNativeService;
-//    @Autowired
-//    private IDecFileService decFileService;
 
-
-
-//    @Autowired
-//    private IDecReceiptLogService decReceiptLogService;
 
 
 
