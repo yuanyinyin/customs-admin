@@ -22,7 +22,7 @@ module.exports = async (app) => {
 
   security.install(app);
 
-  awaken.install(app);
+  //awaken.install(app);
 
   loadUpdate(app);
 

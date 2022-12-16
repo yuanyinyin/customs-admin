@@ -70,13 +70,13 @@ const consRoutes: RouterTy = [
       component: () => import('@/views/register/RegisterAgree.vue'),
       hidden: true
     },
-    {   name:'报关单详情',
-        
+   /* {   name:'报关单详情',
+
         meta: {title: '报关单详情', elSvgIcon: 'Fold'},
         path: '/customsDeclarationDetail',
         component: () => import('@/views/customsDeclaration/detail.vue'),
         hidden: true
-      },
+      },*/
 
 ]
 

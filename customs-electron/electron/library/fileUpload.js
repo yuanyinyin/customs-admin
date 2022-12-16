@@ -6,15 +6,26 @@ const path = require('path')
 const schedule = require('node-schedule')
 const moment = require('moment');
 const {rabbitmq} = require("./rabbitmq.js");
+const {reportFileUtil} = require("./reportFileUtil");
 /**
  * 报文附件上传模块
  */
 module.exports = {
     install(eeApp) {
-        // eeApp.logger.info('[task] load  module');
         showLog("开始执行报文附件上传模块");
         let taskOne;
-        let folder = "D:\\data\\receipt\\bgd\\";
+        let folder;
+        const localData = reportFileUtil.getBgdFileDir();
+        if (!localData){
+            let localGetData = reportFileUtil.autoGetReportDir();
+            if (localGetData&&localGetData.flag){
+                folder = reportFileUtil.updateBgdFileDir(localGetData.fileDir);
+            }else{
+                showLog("未能自动识别报文目录，"+localGetData.msg);
+            }
+        }else{
+            folder = localData;
+        }
         taskStart();
         let count=0;
         function taskStart() {
@@ -24,15 +35,6 @@ module.exports = {
                 showLog('定时器执行次数：'+ count++);
                 uploadAction(folder);
             });
-            /*taskOne = schedule.scheduleJob(folder, () => {
-                uploadAction(folder);
-                /!*if (client.getConnectionStatus() == 'connected') {
-                    uploadAction(args.folder)
-                } else {
-                    client.reconnect()
-                    uploadAction(args.folder)
-                }*!/
-            })*/
         }
 
         function uploadAction(fromDir) {
@@ -52,10 +54,6 @@ module.exports = {
                 for (var i = 0; i < pathLen; i++) {
                     let srcPath = paths[i];
                     let fileName = srcPath.substr(dirLen);
-                    // let destPathStr = srcPath.substr(dirLen);
-                    // let destPath = destPathStr.replace(/\\/g, '/');
-                    // let dirPath = path.dirname(destPath);
-                    // let filename = path.basename(destPath);
                     if (srcPath) {
                         //TODO 此处要添加对文件类型的判断  哪些文件被允许解析
                         //读取文件内容,发送到rabbitmq
@@ -77,39 +75,12 @@ module.exports = {
                         });
                         //再备份
                         var today=getCurrentDate("yyyy-MM-dd");
-                        // var srcPath_bak=bak_dir+today+"\\"+fileName;
-                        // showLog("srcPath="+srcPath);
-                        // showLog("bak_dir+today="+bak_dir+today);
-                        // showLog("fileName="+fileName);
                         foperator.copyFile(srcPath,bak_dir+today,fileName);
                         showLog("备份文件成功，路径:"+srcPath);
                         //最后删除
                         foperator.deleteFile(srcPath);
                         // eeApp.logger.info(' delete ' + srcPath + ' 成功。');
                         showLog("删除文件成功，路径:"+srcPath);
-
-
-                        // 判断文件夹是否存在
-                        /*client.cwd(dirPath)
-                            .then(function (cwdDir) {
-                                client.put(srcPath, destPath)
-                                    .then(function () {
-                                        mainWindow.webContents.send('record-info', 'success', ' upload ' + srcPath)
-                                    })
-                                    .then(function () {
-                                        fs.unlinkSync(srcPath)
-                                    })
-                                    .then(function () {
-                                        mainWindow.webContents.send('record-info', 'default', ' delete ' + srcPath)
-                                    })
-                                    .catch(function (err) {
-                                        mainWindow.webContents.send('record-info', 'danger', srcPath + '上传FTP服务器失败。')
-                                    })
-                            }).catch(function (err) {
-                            mainWindow.webContents.send('record-info', 'warning',
-                                '无法上传[' + filename + ']文件<br/>FTP服务器没有[' + dirPath + ']文件夹<br>或检查网络'
-                            )
-                        })*/
                     }
                 }
             }
@@ -129,7 +100,6 @@ module.exports = {
                         fileDirectory_bak+=i==dirs.length-1?dirs[i]+"_bak\\":dirs[i]+"\\";
                     }
                 }
-                // showLog("fileDirectory_bak="+fileDirectory_bak);
                 return fileDirectory_bak;
             }
             return fileDirectory;

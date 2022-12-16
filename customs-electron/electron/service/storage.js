@@ -18,91 +18,34 @@ class StorageService extends Service {
     let lowdbOptions = {
       driver: 'lowdb'
     }
-    this.demoDB = Storage.JsonDB.connection('demo', lowdbOptions);  
+    this.customsDB = Storage.JsonDB.connection('customs', lowdbOptions);
     this.systemDBKey = {
       cache: 'cache'
     };
-    this.demoDBKey = {
-      preferences: 'preferences',
-      test_data: 'test_data'
+    this.customsDBKey = {
+      bgdFileDir:'bgdFileDir',
     };
-
-    // sqlite数据库
-    let sqliteOptions = {
-      driver: 'sqlite',
-      default: {
-        timeout: 6000,
-        verbose: console.log // 打印sql语法
-      }
-    }
-    this.demoSqliteDB = Storage.JsonDB.connection('sqlite-demo.db', sqliteOptions);
   }
 
   /*
    * 增 Test data
    */
-  async addTestData(user) {
-    const key = this.demoDBKey.test_data;
-    if (!this.demoDB.db.has(key).value()) {
-      this.demoDB.db.set(key, []).write();
-    }
-    
-    const data = this.demoDB.db
-    .get(key)
-    .push(user)
-    .write();
-
-    return data;
-  }
-
-  /*
-   * 删 Test data
-   */
-  async delTestData(name = '') {
-    const key = this.demoDBKey.test_data;
-    const data = this.demoDB.db
-    .get(key)
-    .remove({name: name})
-    .write();
-
-    return data;
-  }
-
-  /*
-   * 改 Test data
-   */
-  async updateTestData(name= '', age = 0) {
-    const key = this.demoDBKey.test_data;
-    const data = this.demoDB.db
-    .get(key)
-    .find({name: name}) // 修改找到的第一个数据，貌似无法批量修改 todo
-    .assign({age: age})
-    .write();
-
+  async updateBgdReportFileData(fileDir) {
+    const data =  this.customsDB.db.set(this.customsDBKey.bgdFileDir, fileDir).write();
     return data;
   }
 
   /*
    * 查 Test data
    */
-  async getTestData(age = 0) {
-    const key = this.demoDBKey.test_data;
-    let data = this.demoDB.db
-    .get(key)
-    //.find({age: age}) 查找单个
-    .filter(function(o) {
-      let isHas = true;
-      isHas = age === o.age ? true : false;
-      return isHas;
-    })
-    //.orderBy(['age'], ['name']) 排序
-    //.slice(0, 10) 分页
+  async getBgdReportFileData() {
+    let data = this.customsDB.db
+    .get(this.customsDBKey.bgdFileDir)
     .value();
 
     if (_.isEmpty(data)) {
-      data = []
+      data = ""
     }
-
     return data;
   }
 
@@ -195,7 +138,7 @@ class StorageService extends Service {
     updateUser.run(age, name);
 
     return true;
-  }  
+  }
 
   /*
    * 查 Test data (sqlite)
@@ -210,8 +153,8 @@ class StorageService extends Service {
     const users = selectUser.all({age: age});
     //console.log("select users:", users);
     return users;
-  }  
-  
+  }
+
   /*
    * all Test data (sqlite)
    */
@@ -225,7 +168,7 @@ class StorageService extends Service {
     const allUser =  selectAllUser.all();
     //console.log("select allUser:", allUser);
     return allUser;
-  }  
+  }
 }
 
 StorageService.toString = () => '[class StorageService]';
