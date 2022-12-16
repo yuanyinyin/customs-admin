@@ -337,6 +337,11 @@ const handlePrint = () => {
     return mItem.id
   })
 
+  let rowDeletIeFlagArr: Array<any> = []
+  rowDeletIeFlagArr =  multipleSelection.value.map((mItem: any) => {
+    return mItem.ieflag
+  })
+
   if(rowDeleteIdArr && rowDeleteIdArr.length != 1){
       // alert("请选择一天记录打印!")
        ElMessage({
@@ -349,7 +354,8 @@ const handlePrint = () => {
   }
   // params  = qs.stringify({ids:rowDeleteIdArr} , { arrayFormat: 'indices',allowDots: true })
 
-    formPrint.value = rowDeleteIdArr[0];
+    // formPrint.value = rowDeleteIdArr[0];
+    formPrint.value = {id: rowDeleteIdArr[0] , ieFlag : rowDeletIeFlagArr[0]} ;
     console.log(formPrint)
     dialogPrintData.value = {
     show: true,

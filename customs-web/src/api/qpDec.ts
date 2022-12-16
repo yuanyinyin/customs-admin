@@ -129,6 +129,21 @@ export function listCert(data: ObjTy) {
   })
 }
 
+export function printDec(data: ObjTy){
+  return request({
+    url:`/qpDecHead/printDec`,
+    data,
+    method:'get',
+    isParams: true,
+    bfLoading: true,
+    // isDownLoadFile:true,
+    isAlertErrorMsg: true
+  })
+}
+
+
+
+
 
  
 

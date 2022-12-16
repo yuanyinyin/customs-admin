@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
-@TableName(value = "NSW.QP_DECCOPLIMIT")
+@TableName(value = "NSW.QP_DECOTHERPACK")
 public class QpDecOtherPack  implements Serializable {
 	public String getId() {
 		return id;

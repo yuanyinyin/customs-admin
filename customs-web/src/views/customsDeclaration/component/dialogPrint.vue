@@ -20,7 +20,7 @@
     >
                <el-row>
                 <el-col :span="24" class="_el_col">
-                   <el-checkbox-group v-model="formData.checkList"  >
+                   <el-checkbox-group v-model="checkList"  >
           <el-checkbox
             v-for="(item, index) in tenderGroup"
             :key="index"
@@ -38,6 +38,14 @@
               
     </el-form>
        
+        <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="resetForm">取消</el-button>
+          <el-button type="primary" @click="handlePrint()">确定</el-button>
+        </span>
+      </template>
+
+
     <br>
      <br>
     </el-dialog>
@@ -58,6 +66,94 @@ onMounted(() => {
     // getList()
 })
 
+const formRef: any = ref(null)  
+const resetForm = () => {
+  props.dialogGood.show = false
+  formRef.value.resetFields()
+}
+import {printDec } from "@/api/qpDec";
+import {ElMessage} from 'element-plus'
+import { useRouter } from 'vue-router';
+ const router = useRouter()
+
+const handlePrint = () => {
+     let params ;
+    
+   if(checkList && checkList.value.length == 0){
+      ElMessage({
+            message: '请选择至少一种打印类型',
+            type: 'error',
+            showClose: true,
+            offset: 50
+          });
+          return;
+   }
+  //  return;  
+   params = {
+     id:props.formData.id ,
+     printType:checkList.value.join(","),
+     ieFlag: props.formData.ieFlag,
+     cusType: ''
+   }
+
+
+   printDec(params).then(res => {
+ 
+     var resp = res.data
+     if(resp.res == 'success'){
+        let _data = JSON.parse(resp.data)
+
+
+         var a = document.createElement('a')
+        //  a.setAttribute('href', baseUrl.value + '/file/downLoad/' + file.id)
+         let printUrl = 'http://172.16.24.197:8090/common-print/bgdPtFile/dowloadFile?path=' + _data.fileNameWithPath + '&isPrewView=1&fileName=fileName'
+        //   // a.setAttribute('href', 'http://172.16.24.197:8090/common-print/bgdPtFile/dowloadFile?path=printTemp/2022/12/13/WI2010231002_1670893249952.pdf&isPrewView=1&fileName=1.pdf')
+        //  a.setAttribute('href', printUrl)
+
+        //  document.body.appendChild(a)
+        //  a.click()
+        // window.location.href = printUrl
+
+        window.open(printUrl, '_self')
+
+        //   router.push({
+        //     name: '报关单打印',
+        //   path: 'customsPrint',
+        //   url: printUrl
+        // //  query: pramSelf,
+        // })
+        
+
+
+
+
+         props.dialogGood.show = false
+         formRef.value.resetFields()
+
+     }else{ 
+        ElMessage({
+            message: resp.res,
+            type: 'error',
+            showClose: true,
+            offset: 50
+          });
+     }
+    // let blob = new Blob([res.data], {type: 'application/octet-stream'});
+    // let url = URL.createObjectURL(blob);
+    // const link = document.createElement('a'); //创建a标签
+    // link.href = url;
+    // link.download = '报关单'+ getDateTime() +'.xlsx'; //重命名文件
+    // link.click();
+    // URL.revokeObjectURL(url);
+  })
+    
+
+}
+
+
+
+
+const checkList = ref([])
 // // 查询配置 [pageNum 当前页数, pageSize 每页大小]
 
 
@@ -75,15 +171,18 @@ const props = defineProps({
     }
 })
 
+
 //定义变量
 const tenderGroup = [
-  { id: '1', realName: '报关单核对单',},
-  { id: '2', realName: '报关单商品附加联', },
-  { id: '3', realName: '集装箱', },
-  { id: '4', realName: '检验检疫', },
-  { id: '5', realName: '放行通知书', },
-  { id: '6', realName: '报关单', },
+  { id: 'bgdHdd', realName: '报关单核对单',},
+  { id: 'goodsFjy', realName: '报关单商品附加联', },
+  { id: 'jzx', realName: '集装箱', },
+  { id: 'jyjy', realName: '检验检疫', },
+  { id: 'fxtzs', realName: '放行通知书', },
+  { id: 'bgdm', realName: '报关单', },
 ]
+
+
 
 // // 获取角色列表
  
