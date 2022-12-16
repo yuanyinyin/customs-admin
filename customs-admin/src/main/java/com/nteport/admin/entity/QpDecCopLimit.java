@@ -11,7 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@TableName(value = "NSW.QP_DECUSER")
+@TableName(value = "NSW.QP_DECCOPLIMIT")
 public class QpDecCopLimit  implements Serializable  {
 	public String getId() {
 		return id;

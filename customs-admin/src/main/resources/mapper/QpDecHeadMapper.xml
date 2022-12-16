@@ -99,17 +99,17 @@
             qft.relid,
             qft.relmanno
         FROM
-            QP_DecHead h
-                LEFT JOIN QP_declist l ON h.id = l.headid
+        nsw.QP_DecHead h
+                LEFT JOIN nsw.QP_declist l ON h.id = l.headid
                 LEFT JOIN (
                 SELECT
                     listagg ( t.certcode || ':' || t.docucode_value, ',' ) WITHIN GROUP ( ORDER BY t.headid ) sfdzs,  t.headid
                 FROM
-                    QP_DECLICENSEDOCU t
+        nsw.QP_DECLICENSEDOCU t
                 GROUP BY
                     t.headid
             ) tt ON tt.headid = h.id
-                LEFT JOIN qp_decfreetxt qft ON qft.id = h.decfreetxtid
+                LEFT JOIN nsw.qp_decfreetxt qft ON qft.id = h.decfreetxtid
         WHERE
             1 = 1
 
