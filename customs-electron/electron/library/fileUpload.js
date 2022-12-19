@@ -6,7 +6,7 @@ const path = require('path')
 const schedule = require('node-schedule')
 const moment = require('moment');
 const {rabbitmq} = require("./rabbitmq.js");
-const {reportFileUtil} = require("./reportFileUtil");
+const reportFileUtil = require("./reportFileUtil");
 /**
  * 报文附件上传模块
  */
@@ -18,7 +18,9 @@ module.exports = {
         const localData = reportFileUtil.getBgdFileDir();
         if (!localData){
             let localGetData = reportFileUtil.autoGetReportDir();
+            showLog("localGetData"+ localGetData);
             if (localGetData&&localGetData.flag){
+                showLog("localGetData" + localGetData.fileDir);
                 folder = reportFileUtil.updateBgdFileDir(localGetData.fileDir);
             }else{
                 showLog("未能自动识别报文目录，"+localGetData.msg);

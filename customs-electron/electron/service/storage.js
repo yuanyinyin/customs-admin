@@ -18,35 +18,10 @@ class StorageService extends Service {
     let lowdbOptions = {
       driver: 'lowdb'
     }
-    this.customsDB = Storage.JsonDB.connection('customs', lowdbOptions);
     this.systemDBKey = {
       cache: 'cache'
     };
-    this.customsDBKey = {
-      bgdFileDir:'bgdFileDir',
-    };
-  }
 
-  /*
-   * 增 Test data
-   */
-  async updateBgdReportFileData(fileDir) {
-    const data =  this.customsDB.db.set(this.customsDBKey.bgdFileDir, fileDir).write();
-    return data;
-  }
-
-  /*
-   * 查 Test data
-   */
-  async getBgdReportFileData() {
-    let data = this.customsDB.db
-    .get(this.customsDBKey.bgdFileDir)
-    .value();
-
-    if (_.isEmpty(data)) {
-      data = ""
-    }
-    return data;
   }
 
   /*

@@ -140,7 +140,7 @@ export function getCalculateCustomDataDash(data: ObjTy) {
 export function getNoticeInfoDash(data: ObjTy) {
 
   return request({
-    url: '/companyStatistics/queryNoticeInfoDash',
+    url: '/notice/listPageDashBoard',
     data,
     method: 'get',
     bfLoading: true,
