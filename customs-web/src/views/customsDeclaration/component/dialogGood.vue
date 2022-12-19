@@ -19,7 +19,7 @@
       :model="formData"
       label-width="120px"
       :label-position="labelPosition"
-      class="demo-ruleForm ml-3"
+      class="demo-ruleForm ml-3" size="small"
     >
                <el-row>
                 <el-col :span="6" class="_el_col">

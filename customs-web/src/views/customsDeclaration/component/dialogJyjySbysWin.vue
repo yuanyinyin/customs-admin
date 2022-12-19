@@ -8,7 +8,7 @@
               </div>
             </template>
 
-            <el-table  ref="tableRef" height="300" v-model:data="tableData" v-loading="loading" stripe style="width: 100%">
+            <el-table  ref="tableRef" height="300" v-model:data="tableData" v-loading="loading" stripe style="width: 100%"  size="small">
           <el-table-column type="selection" align="center" width="50" />
           <el-table-column type="index" label="序号" align="center" width="55">
             <template #default="scope">
@@ -33,7 +33,7 @@
       :model="formData"
       label-width="210px"
       :label-position="labelPosition"
-      class="demo-ruleForm ml-3"
+      class="demo-ruleForm ml-3" size="small"
      >
               <el-row>
                 <el-col :span="24" class="_el_col">

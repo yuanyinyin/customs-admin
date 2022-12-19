@@ -14,12 +14,12 @@
         <el-form
       ref="formRef"
       :model="formData"
-      label-width="210px"
+      label-width="10px"
       :label-position="labelPosition"
-      class="demo-ruleForm ml-3"
+      class="demo-ruleForm ml-3"  size="small"
     >
-               <el-row>
-                <el-col :span="24" class="_el_col">
+    <el-form-item>
+               
             <el-checkbox-group v-model="formData.checkList"  disabled>
           <el-checkbox
             v-for="(item, index) in formData.tenderGroup"
@@ -28,10 +28,8 @@
           >{{ item.realName }}
           </el-checkbox>
         </el-checkbox-group>
-                </el-col>
-              
-              </el-row>
-
+               
+</el-form-item>
               
 
               

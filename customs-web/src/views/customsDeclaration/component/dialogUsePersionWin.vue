@@ -11,7 +11,7 @@
               </div>
             </template>
 
-            <el-table  height="240" v-model:data="tableData" v-loading="loading" stripe style="width: 100%">
+            <el-table  height="240" v-model:data="tableData" v-loading="loading" stripe style="width: 100%"  size="small">
           <el-table-column type="selection" align="center" width="50" />
           <el-table-column type="index" label="序号" align="center" width="55">
             <template #default="scope">

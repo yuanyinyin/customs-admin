@@ -7,7 +7,7 @@
       :model="formData"
       label-width="160px"
       :label-position="labelPosition"
-      class="demo-ruleForm ml-3"
+      class="demo-ruleForm ml-3"  size="small"
     >
                <el-row>
                 <el-col :span="12" class="_el_col">
