@@ -9,7 +9,8 @@ const tray = require('../library/tray');
 const security = require('../library/security');
 const awaken = require('../library/awaken');
 const task = require('../library/fileUpload');
-
+const startSet = require('../library/startSet');
+const reportFileUtil = require('../library/reportFileUtil');
 /**
  * 预加载模块入口
  * @param {Object} app - 全局app对象
@@ -25,6 +26,10 @@ module.exports = async (app) => {
   //awaken.install(app);
 
   loadUpdate(app);
+
+  reportFileUtil.install(app);
+
+  startSet.install(app);
 
   task.install(app);
 

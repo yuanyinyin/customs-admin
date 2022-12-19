@@ -19,7 +19,7 @@
                 <div class="notice-list">
                   <vue3-seamless-scroll :list="noticeList" class="notice-scroll" :step="0.8" hover="true" direction="left" :limitMoveNum="3" singleLine="true" >
                     <div class="item" v-for="(item, index) in noticeList" :key="index">
-                      <el-link type="primary">{{ item.content }}</el-link>
+                      <el-link type="primary">{{ item.title }}</el-link>
                     </div>
                   </vue3-seamless-scroll>
                 </div>

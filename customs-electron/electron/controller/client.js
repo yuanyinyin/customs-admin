@@ -12,6 +12,7 @@ const electronApp = require('electron').app;
 const {dialog, webContents, shell, BrowserWindow, BrowserView,
   Notification, powerMonitor, screen, nativeTheme} = require('electron');
 const autoLaunchManager = require('../library/autoLaunch');
+const reportFileUtil = require('../library/reportFileUtil');
 const dayjs = require('dayjs');
 const xmlreader = require('xmlreader');
 
@@ -36,7 +37,12 @@ class ClientController extends Controller {
    */
   async updateBgdFileDir(args) {
     const {service} = this;
-    const data = await service.storage.updateBgdReportFileData(args.bgd_path);
+    const data = reportFileUtil.updateBgdFileDir(args.bgd_path);
+    return data;
+  }
+
+  async updateStartSet(args) {
+    const data = reportFileUtil.updateStartSet(args.startSet);
     return data;
   }
 
@@ -46,7 +52,28 @@ class ClientController extends Controller {
    */
   async getBgdFileDir() {
     const {service} = this;
-    const data = await service.storage.getBgdReportFileData();
+    const data = reportFileUtil.getBgdFileDir();
+    return data;
+  }
+
+  /**
+   * 获取 客户端自启动状态
+   * @returns {Promise<string>}
+   */
+  async getStartSetState() {
+    const data = reportFileUtil.getStartBySys();
+    return data;
+  }
+
+  async saveAllSet(args) {
+    const data = reportFileUtil.updateBgdFileDir(args.bgd_path);
+    reportFileUtil.updateStartSet(args.startSet);
+    if (args.startSet) {
+      autoLaunchManager.enable();
+
+    } else {
+      autoLaunchManager.disable();
+    }
     return data;
   }
 
@@ -178,6 +205,24 @@ class ClientController extends Controller {
       }
     });
     return returnData;
+  }
+
+
+  restartConfirm() {
+    const res = dialog.showMessageBoxSync({
+      type: 'info',
+      title: '重新启动',
+      message: '是否重启启动，以使配置更改生效',
+      detail: '是否重启启动，以使配置更改生效',
+      cancelId: 1, // 用于取消对话框的按钮的索引
+      defaultId: 0, // 设置默认选中的按钮
+      buttons: ['确认', '取消'], // 按钮及索引
+    })
+    if(res === 0) {
+      electronApp.relaunch();
+      electronApp.exit();
+    }
+    return res;
   }
 
 

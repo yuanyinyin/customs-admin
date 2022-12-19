@@ -1,7 +1,7 @@
 // 采用 promise 形式的AP
 'use strict';
 
-const {app} = require('electron');
+const {app} = require('ee-core');
 const os = require("os");
 const path = require("path");
 const fs = require("fs");
@@ -14,23 +14,51 @@ let lowdbOptions = {
 }
 const customsDB = Storage.JsonDB.connection('customs', lowdbOptions);
 customsDB.customsDBKey = {
-    bgdFileDir: 'bgdFileDir',
+      bgdFileDir: 'bgdFileDir',
+      startSet: 'startSet',
 };
 
-function getBgdFileDir()
-{
-    let data = customsDB.db
-        .get(customsDB.customsDBKey.bgdFileDir)
-        .value();
 
+module.exports = {
+
+    install(eeApp){
+        let isBgdFileDir = customsDB.getItem(customsDB.customsDBKey.bgdFileDir);
+        if (!isBgdFileDir) {
+            customsDB.setItem(customsDB.customsDBKey.bgdFileDir,"")
+        }
+
+        let isStartSet = customsDB.getItem(customsDB.customsDBKey.startSet);
+        if (!isStartSet) {
+            customsDB.setItem(customsDB.customsDBKey.startSet, true)
+        }
+    },
+
+    /**
+     * 获取 本机报关单报文目录
+     * @returns {string}
+     */
+    getBgdFileDir(){
+    let data = customsDB.getItem(customsDB.customsDBKey.bgdFileDir);
     if (_.isEmpty(data)) {
         data = ""
     }
     return data;
-}
+},
 
-function autoGetReportDir()
-{
+/**
+ * 获取 本机是否自启动
+ * @returns {string}
+ */
+getStartBySys() {
+    let data = customsDB.getItem(customsDB.customsDBKey.startSet);
+    return data;
+},
+
+/**
+ * 自动获取报关单报文目录
+ * @returns {{msg: string, flag: boolean, fileDir: string}}
+ */
+ autoGetReportDir() {
     let returnData = {
         flag: false,
         msg: '',
@@ -67,17 +95,26 @@ function autoGetReportDir()
         }
     });
     return returnData;
-}
+},
 
-function updateBgdFileDir(fileDir)
-{
-    const data = customsDB.db.set(customsDB.customsDBKey.bgdFileDir, fileDir).write();
+/**
+ * 修改报关单报文目录
+ * @param fileDir
+ * @returns {*}
+ */
+ updateBgdFileDir(fileDir) {
+    let data = customsDB.setItem(customsDB.customsDBKey.bgdFileDir, fileDir);
     return data;
+},
+
+/**
+ * 修改 自启动设置
+ * @param flag
+ * @returns {*}
+ */
+ updateStartSet(flag) {
+    let data = customsDB.setItem(customsDB.customsDBKey.startSet, flag);
+    return data;
+},
 }
 
-
-exports.reportFileUtil = {
-    getBgdFileDir: getBgdFileDir,
-    autoGetReportDir: autoGetReportDir,
-    updateBgdFileDir: updateBgdFileDir
-}
