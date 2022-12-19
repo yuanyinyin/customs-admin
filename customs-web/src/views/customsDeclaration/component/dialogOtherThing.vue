@@ -17,9 +17,9 @@
         <el-form
       ref="formRef"
       :model="formData"
-      label-width="210px"
+      label-width="auto"
       :label-position="labelPosition"
-      class="demo-ruleForm ml-3"
+      class="demo-ruleForm ml-3"  size="small"
     >
                <el-row>
                 <el-col :span="24" class="_el_col">

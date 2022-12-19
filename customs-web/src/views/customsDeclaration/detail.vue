@@ -5,7 +5,7 @@
       <el-main>
         <el-row  class="_row1">
           <el-col :span="24" class="col2">
-            <el-form :model="formData" label-width="160px">
+            <el-form :model="formData" label-width="160px" size="small">
               <el-row>
                 <el-col :span="12" class="_el_col">
                   <el-form-item label="报关/转关:">
@@ -489,8 +489,31 @@ onMounted(() => {
       getData(route.query.headId);
       // getData("4028b881827b43cd01827b4b0bd40e38");
     }
+
+    //
+    // window.onresize = () => {
+		// 	    return (() => {
+		// 	      this.setDialogWidth()
+		// 	    })()
+		// 	  }
+
+
+
   })
 })
+
+// const setDialogWidth = () => {
+// 			    var val = document.body.clientWidth
+// 			    const def = 450 // 默认宽度
+// 			    if (val < def) {
+// 			      this.dialogWidth = '100%'
+// 			    } else {
+// 			      this.dialogWidth = def + 'px'
+// 			    }
+// 			  }
+
+
+
 
 
 const otherThing = () => {

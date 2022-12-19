@@ -3,7 +3,7 @@
         <!--工具栏-->
         <div class="head-container m-1 mr-3 rowSS">
             <!-- 搜索 -->
-          <el-form :inline="true" :model="listQuery" class="demo-form-inline">
+          <el-form :inline="true" :model="listQuery" class="demo-form-inline" size="small">
           <el-form-item label="申报日期">
           <el-date-picker
             v-model="listQuery.declarationData"
@@ -55,7 +55,7 @@
 
 
         </template>
-        <el-table :data="tableData" v-loading="loading"  row-key="id" lazy  fit stripe style="width: 100%"  @selection-change="handleSelectionChange">
+        <el-table :data="tableData" v-loading="loading"  row-key="id" lazy  fit stripe style="width: 100%"  @selection-change="handleSelectionChange" size="small">
           <el-table-column type="selection" align="center" width="50" />
           <el-table-column type="index" label="序号" align="center" width="55">
             <template #default="scope">

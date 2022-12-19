@@ -14,12 +14,12 @@
         <el-form
       ref="formRef"
       :model="formData"
-      label-width="210px"
+      label-width="20px"
       :label-position="labelPosition"
-      class="demo-ruleForm ml-3"
-    >
-               <el-row>
-                <el-col :span="24" class="_el_col">
+       class="demo-form-inline"  size="small"
+    >  <el-form-item>
+
+                
                    <el-checkbox-group v-model="checkList"  >
           <el-checkbox
             v-for="(item, index) in tenderGroup"
@@ -28,21 +28,24 @@
           >{{ item.realName }}
           </el-checkbox>
         </el-checkbox-group>
-                </el-col>
-              
-              </el-row>
+       
 
-              
-
-              
+         </el-form-item>      
+ 
               
     </el-form>
        
         <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="resetForm">取消</el-button>
-          <el-button type="primary" @click="handlePrint()">确定</el-button>
+           <!-- <el-row>
+                <el-col :span="24" class="_el_col"> -->
+        <span class="dialog-footer" size="small">
+          <el-button @click="resetForm" size="small">取消</el-button>
+          <el-button type="primary" @click="handlePrint()" size="small">确定</el-button>
+          
         </span>
+        <!-- </el-col>
+              
+              </el-row> -->
       </template>
 
 
@@ -107,14 +110,14 @@ const handlePrint = () => {
          var a = document.createElement('a')
         //  a.setAttribute('href', baseUrl.value + '/file/downLoad/' + file.id)
          let printUrl = 'http://172.16.24.197:8090/common-print/bgdPtFile/dowloadFile?path=' + _data.fileNameWithPath + '&isPrewView=1&fileName=fileName'
-        //   // a.setAttribute('href', 'http://172.16.24.197:8090/common-print/bgdPtFile/dowloadFile?path=printTemp/2022/12/13/WI2010231002_1670893249952.pdf&isPrewView=1&fileName=1.pdf')
-        //  a.setAttribute('href', printUrl)
+          // a.setAttribute('href', 'http://172.16.24.197:8090/common-print/bgdPtFile/dowloadFile?path=printTemp/2022/12/13/WI2010231002_1670893249952.pdf&isPrewView=1&fileName=1.pdf')
+         a.setAttribute('href', printUrl)
 
-        //  document.body.appendChild(a)
-        //  a.click()
-        // window.location.href = printUrl
+         document.body.appendChild(a)
+         a.click()
+        window.location.href = printUrl
 
-        window.open(printUrl, '_self')
+        // window.open(printUrl, '_self')
 
         //   router.push({
         //     name: '报关单打印',
