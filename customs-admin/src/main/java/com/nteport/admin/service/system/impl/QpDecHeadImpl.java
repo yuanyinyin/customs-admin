@@ -84,6 +84,15 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
 
 
     @Autowired
+    private IQpDecMarkLobService qpDecMarkLobService;
+    @Autowired
+    private IQpDecResultService qpDecResultService;
+
+
+
+
+
+    @Autowired
     private IQpDecUserService qpDecUserService;
 
 
@@ -138,7 +147,7 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
         params.remove("endTime");
 
         QueryWrapper<QpDecHead> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("orgid", user.getDeptId());
+//        queryWrapper.eq("orgid", user.getDeptId());
 
         if(StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)){
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -257,12 +266,14 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
 
 
     @Override
-    public void exportExcel(Map<String, String> params, HttpServletRequest request ,HttpServletResponse response) {
+    public void exportExcel(Map<String, String> params, HttpServletRequest request ,HttpServletResponse response,UserEntity user) {
         try {
             //设置excel表头
             HashMap param = new HashMap<>();
 
             //
+            params.put("orgid", user.getDeptId());
+
 
             String startTime =  params.get("startTime");
             params.remove("startTime");
@@ -390,19 +401,21 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
      * @throws IllegalAccessException
      */
     public Map<String, Object> modelToMap(QpDecHead decHead) throws Exception {
-        Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap(JSON.parseObject(JSON.toJSONString(decHead)));
 
-        BeanInfo beanInfo = Introspector.getBeanInfo(decHead.getClass());
-        PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-        for (PropertyDescriptor property : propertyDescriptors) {
-            String key = property.getName();
-            if (key.compareToIgnoreCase("class") == 0) {
-                continue;
-            }
-            Method getter = property.getReadMethod();
-            Object value = getter != null ? getter.invoke(decHead) : null;
-            result.put(key, value);
-        }
+//        JSON.parseObject(JSON.toJSONString(decHead));
+//        BeanInfo beanInfo = Introspector.getBeanInfo(decHead.getClass());
+//        PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+//        for (PropertyDescriptor property : propertyDescriptors) {
+//            String key = property.getName();
+//
+//            if (key.compareToIgnoreCase("class") == 0) {
+//                continue;
+//            }
+//            Method getter = property.getReadMethod();
+//            Object value = getter != null ? getter.invoke(decHead) : null;
+//            result.put(key, value);
+//        }
 
         //使用联系人
         String useOrgPersonCode = "";
@@ -413,8 +426,56 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
         qpDecUserQueryWrapper.eq("headid", id);
         List<QpDecUser>  qpDecUserList =  qpDecUserService.list(qpDecUserQueryWrapper);
 
+        //
+
+
+
+
+        QueryWrapper<QpDecCopLimit> qpDecCopLimitQueryWrapper = new QueryWrapper<>();
+        qpDecCopLimitQueryWrapper.eq("headid", id);
+        List<QpDecCopLimit>  decCopLimits =  qpDecCopLimitService.list(qpDecCopLimitQueryWrapper);
+        if(!CollectionUtils.isEmpty(decCopLimits)){
+            result.put("decCopLimits", JSONArray.parseArray(JSON.toJSONString(decCopLimits)));
+        }
+
+
+        QueryWrapper<QpDecCopPromise> qpDecCopPromiseQueryWrapper = new QueryWrapper<>();
+        qpDecCopPromiseQueryWrapper.eq("headid", id);
+        List<QpDecCopPromise>  decCopPromises =  qpDecCopPromiseService.list(qpDecCopPromiseQueryWrapper);
+        if(!CollectionUtils.isEmpty(decCopPromises)){
+            result.put("decCopPromises", JSONArray.parseArray(JSON.toJSONString(decCopPromises)));
+        }
+
+
+        QueryWrapper<QpDecMarkLob> qpDecMarkLobQueryWrapper = new QueryWrapper<>();
+        qpDecMarkLobQueryWrapper.eq("headid", id);
+        List<QpDecMarkLob>  decMarkLobs =  qpDecMarkLobService.list(qpDecMarkLobQueryWrapper);
+        if(!CollectionUtils.isEmpty(decMarkLobs)){
+            result.put("decMarkLobs", JSONArray.parseArray(JSON.toJSONString(decMarkLobs)));
+        }
+
+
+        QueryWrapper<QpDecRequestCert> qpDecRequestCertQueryWrapper = new QueryWrapper<>();
+        qpDecRequestCertQueryWrapper.eq("headid", id);
+        List<QpDecRequestCert>  decRequestCerts =  qpDecRequestCertService.list(qpDecRequestCertQueryWrapper);
+        if(!CollectionUtils.isEmpty(decRequestCerts)){
+            result.put("decRequestCerts", JSONArray.parseArray(JSON.toJSONString(decRequestCerts)));
+        }
+
+//        QueryWrapper<QpDecCopLimit> qpDecCopLimitQueryWrapper = new QueryWrapper<>();
+//        qpDecCopLimitQueryWrapper.eq("headid", id);
+//        List<QpDecCopLimit>  decCopLimits =  qpDecCopLimitService.list(qpDecCopLimitQueryWrapper);
+//        if(!CollectionUtils.isEmpty(decCopLimits)){
+//            result.put("decCopLimits", JSONArray.parseArray(JSON.toJSONString(decCopLimits)));
+//        }
+
+        //////
+
+
+
 
         if(!CollectionUtils.isEmpty(qpDecUserList)){
+            result.put("decUsers", JSONArray.parseArray(JSON.toJSONString(qpDecUserList)));
             useOrgPersonCode = qpDecUserList.get(0).getUseorgpersoncode()  == null ? "" : qpDecUserList.get(0).getUseorgpersoncode();
             useOrgPersonTel = qpDecUserList.get(0).getUseorgpersontel() == null ? "" : qpDecUserList.get(0).getUseorgpersontel();
         }
@@ -502,7 +563,7 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
         String wrapTypeMo="", wrapType_valueMo="";
         if(StringUtils.isNotEmpty(decHead.getWraptype())){
             wrapTypeMo+= decHead.getWraptype();
-            wrapType_valueMo+=decHead.getWraptypeValue();
+            wrapType_valueMo += decHead.getWraptypeValue();
         }
 
 
@@ -513,6 +574,7 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
 
 //        List<QpDecOtherPack> decOtherPacks = decHead.getDecOtherPacks();
         if(null != decOtherPacks && decOtherPacks.size()>0){
+            result.put("decOtherPacks", JSONArray.parseArray(JSON.toJSONString(decOtherPacks)));
             for (int i = 0; i < decOtherPacks.size(); i++) {
                 wrapTypeMo +="/"+ decOtherPacks.get(i).getPacktype();
                 wrapType_valueMo += "/" + decOtherPacks.get(i).getPacktypeValue();
@@ -534,6 +596,7 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
 //        QpDecFreeTxt decFreeTxt = decHead.getDecFreetxt();
         String glbgdh="", glbah="";
         if(null!= decFreeTxt){
+            result.put("decFreeTxt", JSON.toJSONString(decOtherPacks));
             if(StringUtils.isNotEmpty(decFreeTxt.getRelid())){//关联报关单号
                 glbgdh= "关联报关单号:"+ decFreeTxt.getRelid();
             }
@@ -548,7 +611,7 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
         /****集装箱 和备注 ****/
         String bjmm_noteS = "备注: ", bzmm= "备注: ";
         if(StringUtils.isNotEmpty(decHead.getNotes())){
-//            bjmm_noteS+= rePlaceMoreEmpty(decHead.getRelmanno());
+            bjmm_noteS+= rePlaceMoreEmpty(decHead.getNotes());
         }
         if(StringUtils.isNotEmpty(decHead.getMarkno())){
             bjmm_noteS+=" "+ rePlaceMoreEmpty(decHead.getMarkno());
@@ -562,7 +625,7 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
 
 //        List<QpDecContainer> containers = decHead.getDecContainers();
         if(null!=containers && containers.size()>0){
-
+            result.put("decContainers", JSONArray.parseArray(JSON.toJSONString(containers)));
             bjmm_noteS +="  集装箱标箱数及号码："+decHead.getDeccontainernum()+";";
 
             for (int k = 0; k < containers.size(); k++) {
@@ -603,6 +666,7 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
 
 //        List<DecLicenseDocu> decLicenseDocus = decHead.getDecLicenseDocus();
         if(null!=decLicenseDocus&& decLicenseDocus.size()>0){
+            result.put("decLicenseDocus", JSONArray.parseArray(JSON.toJSONString(decLicenseDocus)));
             for (int i = 0; i < decLicenseDocus.size(); i++) {
                 dz+= decLicenseDocus.get(i).getDocucodeValue()+ decLicenseDocus.get(i).getCertcode()+" ";
             }
@@ -610,20 +674,25 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
         /**原产地证明 包含在商品中 begin */
         QueryWrapper<QpDecList> qpDecListQueryWrapper = new QueryWrapper<>();
         qpDecListQueryWrapper.eq("headid", id);
+        qpDecListQueryWrapper.orderByAsc("gno");
+
         List<QpDecList>  decLists =  qpDecListService.list(qpDecListQueryWrapper);
 
 
 //        List<DecList> decLists = decHead.getDecLists();
         String sfdz1 = "";
-
-        for (int i = 0; i < decLists.size(); i++) {
-            QpDecList decList = decLists.get(i);
-            //TODO  不存在字段
-//            if(StringUtils.isNotEmpty(decList.getCerttype())){
-//                sfdz1="原产地证明"+"<"+decList.getCerttype()+">"+decList.getEcocertNo()+" ";
-//                break;
-//            }
+        if(!CollectionUtils.isEmpty(decLists)){
+            result.put("decLists", JSONArray.parseArray(JSON.toJSONString(decLists)));
+            for (int i = 0; i < decLists.size(); i++) {
+                QpDecList decList = decLists.get(i);
+                //TODO  不存在字段
+                if(StringUtils.isNotEmpty(decList.getCertType())){
+                    sfdz1="原产地证明"+"<"+decList.getCertType()+">"+decList.getEcoCertNo()+" ";
+                    break;
+                }
+            }
         }
+
         /**原产地证明 包含在商品中 end*/
         if(StringUtils.isNotEmpty(dz)||StringUtils.isNotEmpty(sfdz1)){
             dz_bh="随附单证1:"+sfdz1+dz;
@@ -698,9 +767,9 @@ public class QpDecHeadImpl extends ServiceImpl<QpDecHeadMapper, QpDecHead> imple
         for (int i = 0; i < decLists.size(); i++) {
             QpDecList decList = decLists.get(i);
             //TODO
-//            if(StringUtils.isNotEmpty(decList.getCerttype())){
-//                ycdGoodsRelation+=decList.getGno()+"-"+decList.getCertificateNo()+",";
-//            }
+            if(StringUtils.isNotEmpty(decList.getCertType())){
+                ycdGoodsRelation+=decList.getGno()+"-"+decList.getCertificateNo()+",";
+            }
         }
         if(StringUtils.isNotEmpty(ycdGoodsRelation)){
             ycdGoodsRelation=ycdGoodsRelation.substring(0,ycdGoodsRelation.length()-1);

@@ -111,13 +111,13 @@ const handlePrint = () => {
         //  a.setAttribute('href', baseUrl.value + '/file/downLoad/' + file.id)
          let printUrl = 'http://172.16.24.197:8090/common-print/bgdPtFile/dowloadFile?path=' + _data.fileNameWithPath + '&isPrewView=1&fileName=fileName'
           // a.setAttribute('href', 'http://172.16.24.197:8090/common-print/bgdPtFile/dowloadFile?path=printTemp/2022/12/13/WI2010231002_1670893249952.pdf&isPrewView=1&fileName=1.pdf')
-         a.setAttribute('href', printUrl)
+        //  a.setAttribute('href', printUrl)
 
-         document.body.appendChild(a)
-         a.click()
-        window.location.href = printUrl
+        //  document.body.appendChild(a)
+        //  a.click()
+        // window.location.href = printUrl
 
-        // window.open(printUrl, '_self')
+        window.open(printUrl, '_self')
 
         //   router.push({
         //     name: '报关单打印',

@@ -17,7 +17,7 @@
           </el-table-column>
           <el-table-column prop="gname" label="商品名称" align="center">
           </el-table-column>
-           <el-table-column prop="manualno" label="检验检疫名称" align="center">
+           <el-table-column prop="ciqname" label="检验检疫名称" align="center">
           </el-table-column>
           <el-table-column prop="contritem" label="备案序号" align="center">
           </el-table-column>

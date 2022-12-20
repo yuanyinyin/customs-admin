@@ -1,11 +1,13 @@
 package com.nteport.admin.entity;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -60,513 +62,514 @@ public class QpDecHead  implements Serializable {
         this.updateTime = updateTime;
     }
 
+    @JSONField(name="tradeCountry_Value")
     private String tradecountryValue;
 
-
+    @JSONField(name = "tradeMode")
         private String trademode;
 
-
+    @JSONField(name = "tradeMode_value")
         private String trademodeValue;
 
-
+    @JSONField(name = "tradeName")
         private String tradename;
 
-
+    @JSONField(name = "trafMode")
         private String trafmode;
 
-
+    @JSONField(name = "trafMode_value")
         private String trafmodeValue;
 
-
+    @JSONField(name = "trafName")
         private String trafname;
 
-
+    @JSONField(name = "transMode")
         private String transmode;
 
-
+    @JSONField(name = "transMode_value")
         private String transmodeValue;
 
 
         private String type;
 
-
+    @JSONField(name = "type_value")
         private String typeValue;
-
-
+    //TODO
+    @JSONField(name = "typistno")
         private String typistno;
-
-
+    //TODO
+    @JSONField(name = "userid")
         private String userid;
-
-
+    //TODO
+    @JSONField(name = "username")
         private String username;
 
-
+    @JSONField(name = "voyNo")
         private String voyno;
 
-
+    @JSONField(name = "wrapType")
         private String wraptype;
 
-
+    @JSONField(name = "wrapType_value")
         private String wraptypeValue;
 
-
+    @JSONField(name = "decFreeTxtId")
         private String decfreetxtid;
 
-
+    @JSONField(name = "trnHeadId")
         private String trnheadid;
 
-
+    @JSONField(name = "blNo")
         private String blno;
 
-
+    @JSONField(name = "checkFlow")
         private String checkflow;
 
-
+    @JSONField(name = "ciqdecStatus")
         private String ciqdecstatus;
 
-
+    @JSONField(name = "ciqDecStatusName")
         private String ciqdecstatusname;
-
-
+    //TODO
+    @JSONField(name = "cmpldschrgdt")
         private String cmpldschrgdt;
 
-
+    @JSONField(name = "consigneeCode")
         private String consigneecode;
 
-
+    @JSONField(name = "copLimitsNames")
         private String coplimitsnames;
 
-
+    @JSONField(name = "correlationNo")
         private String correlationno;
 
-
+    @JSONField(name = "correlationReasonFlag")
         private String correlationreasonflag;
 
-
+    @JSONField(name = "correlationReasonFlag_value")
         private String correlationreasonflagValue;
 
-
+    @JSONField(name = "dataType")
         private String datatype;
 
-
+    @JSONField(name = "declGoodSeNames")
         private String declgoodsenames;
 
-
+    @JSONField(name = "declRegNo")
         private String declregno;
 
-
+    @JSONField(name = "declareName")
         private String declarename;
 
-
+    @JSONField(name = "despDate")
         private String despdate;
 
-
+    @JSONField(name = "despPortCode")
         private String despportcode;
 
-
+    @JSONField(name = "despPortCode_value")
         private String despportcodeValue;
-
-
+    //
+    @JSONField(name = "domesticConsigneeEname")
         private String domesticconsigneeename;
 
-
+    @JSONField(name = "ediRemark")
         private String ediremark;
 
-
+    @JSONField(name = "ediRemark2")
         private String ediremark2;
 
-
+    @JSONField(name = "entyPortCode")
         private String entyportcode;
 
-
+    @JSONField(name = "entyPortCode_value")
         private String entyportcodeValue;
 
-
+    @JSONField(name = "goodsPlace")
         private String goodsplace;
 
-
+    @JSONField(name = "inspOrgCode")
         private String insporgcode;
 
-
+    @JSONField(name = "inspOrgCode_value")
         private String insporgcodeValue;
 
-
+    @JSONField(name = "markNo")
         private String markno;
 
-
+    @JSONField(name = "noOtherPack")
         private String nootherpack;
 
-
+    @JSONField(name = "orgCode")
         private String orgcode;
 
-
+    @JSONField(name = "orgCode_value")
         private String orgcodeValue;
 
-
+    @JSONField(name = "origBoxFlag")
         private String origboxflag;
 
-
+    @JSONField(name = "origBoxFlag_value")
         private String origboxflagValue;
 
-
+    @JSONField(name = "overseasConsigneeCode")
         private String overseasconsigneecode;
 
-
+    @JSONField(name = "overseasConsigneeEname")
         private String overseasconsigneeename;
 
-
+    @JSONField(name = "overseasConsignorAddr")
         private String overseasconsignoraddr;
 
-
+    @JSONField(name = "overseasConsignorCname")
         private String overseasconsignorcname;
 
-
+    @JSONField(name = "overseasConsignorCode")
         private String overseasconsignorcode;
 
-
+    @JSONField(name = "overseasConsignorEname")
         private String overseasconsignorename;
 
-
+    @JSONField(name = "ownerCiqCode")
         private String ownerciqcode;
 
-
+    @JSONField(name = "partenerID")
         private String partenerid;
 
-
+    @JSONField(name = "pdate")
         private String pdate;
 
-
+    @JSONField(name = "purpOrgCode")
         private String purporgcode;
 
-
+    @JSONField(name = "purpOrgCode_value")
         private String purporgcodeValue;
 
-
+    @JSONField(name = "specDeclFlag")
         private String specdeclflag;
 
-
+    @JSONField(name = "specdeclFlag_value")
         private String specdeclflagValue;
 
-
+    @JSONField(name = "sxdz")
         private String sxdz;
 
-
+    @JSONField(name = "taxAaminMark")
         private String taxaaminmark;
 
-
+    @JSONField(name = "viewModel")
         private String viewmodel;
 
-
+    @JSONField(name = "vsaOrgCode")
         private String vsaorgcode;
 
-
+    @JSONField(name = "vsaOrgCode_value")
         private String vsaorgcodeValue;
 
-
+    @JSONField(name = "noSyncMark")
         private String nosyncmark;
 
-
+    @JSONField(name = "spDecSeqNo")
         private String spdecseqno;
 
-
+    @JSONField(name = "syncType")
         private String synctype;
 
-
+    @JSONField(name = "agentCode")
         private String agentcode;
 
-
+    @JSONField(name = "agentCodeScc")
         private String agentcodescc;
 
-
+    @JSONField(name = "agentName")
         private String agentname;
 
-
+    @JSONField(name = "apprNo")
         private String apprno;
 
-
+    @JSONField(name = "billNo")
         private String billno;
 
-
+    @JSONField(name = "billType")
         private String billtype;
 
-
+    @JSONField(name = "billType_value")
         private String billtypeValue;
 
-
+    @JSONField(name = "buss_sw")
         private String bussSw;
 
-
+    @JSONField(name = "buss_syzz")
         private String bussSyzz;
 
-
+    @JSONField(name = "buss_zb")
         private String bussZb;
 
-
+    @JSONField(name = "buss_zbzj")
         private String bussZbzj;
 
-
+    @JSONField(name = "chkShunt")
         private String chkshunt;
 
-
+    @JSONField(name = "chkSurety")
         private String chksurety;
 
-
+    @JSONField(name = "chkSurety_value")
         private String chksuretyValue;
 
-
+    @JSONField(name = "clientNo")
         private String clientno;
 
-
+    @JSONField(name = "company_type")
         private String companyType;
 
-
+    @JSONField(name = "tradeMode")
         private String contrno;
 
-
+    @JSONField(name = "contrNo")
         private String copcode;
 
-
+    @JSONField(name = "copCodeScc")
         private String copcodescc;
 
-
+    @JSONField(name = "copName")
         private String copname;
 
-
+    @JSONField(name = "cusType")
         private String custype;
 
-
+    @JSONField(name = "customMaster")
         private String custommaster;
 
-
+    @JSONField(name = "customMaster_value")
         private String custommasterValue;
 
-
+    @JSONField(name = "customState")
         private String customstate;
 
-
+    @JSONField(name = "customStateName")
         private String customstatename;
 
-
+    @JSONField(name = "cutMode")
         private String cutmode;
 
-
+    @JSONField(name = "cutmode_value")
         private String cutmodeValue;
 
-
+    @JSONField(name = "dataSource")
         private String datasource;
 
-
+    @JSONField(name = "decContainerNum")
         private String deccontainernum;
 
-
+    @JSONField(name = "declTrnRel")
         private String decltrnrel;
 
-
+    @JSONField(name = "declTrnRel_value")
         private String decltrnrelValue;
 
-
+    @JSONField(name = "declarationData")
         private String declarationdata;
 
-
+    @JSONField(name = "distinatePort")
         private String distinateport;
 
-
+    @JSONField(name = "distinatePort_value")
         private String distinateportValue;
 
-
+    @JSONField(name = "districtCode")
         private String districtcode;
 
-
+    @JSONField(name = "districtCode_value")
         private String districtcodeValue;
 
-
+    @JSONField(name = "ediId")
         private String ediid;
 
-
+    @JSONField(name = "entryId")
         private String entryid;
 
-
+    @JSONField(name = "entryType")
         private String entrytype;
 
-
+    @JSONField(name = "entryType_value")
         private String entrytypeValue;
 
-
+    @JSONField(name = "feeCurr")
         private String feecurr;
 
-
+    @JSONField(name = "feeCurr_value")
         private String feecurrValue;
 
-
+    @JSONField(name = "feeMark")
         private String feemark;
 
-
+    @JSONField(name = "feeMark_value")
         private String feemarkValue;
 
-
+    @JSONField(name = "feeRate")
         private String feerate;
 
-
+    @JSONField(name = "grossWet")
         private String grosswet;
 
-
+    @JSONField(name = "ieDate")
         private String iedate;
 
-
+    @JSONField(name = "ieFlag")
         private String ieflag;
 
-
+    @JSONField(name = "iePort")
         private String ieport;
 
-
+    @JSONField(name = "iePort_value")
         private String ieportValue;
 
-
+    @JSONField(name = "inRatio")
         private String inratio;
 
-
+    @JSONField(name = "inputerName")
         private String inputername;
 
-
+    @JSONField(name = "insurCurr")
         private String insurcurr;
 
-
+    @JSONField(name = "insurCurr_value")
         private String insurcurrValue;
 
-
+    @JSONField(name = "insurMark")
         private String insurmark;
 
-
+    @JSONField(name = "insurMark_value")
         private String insurmarkValue;
 
-
+    @JSONField(name = "insurRate")
         private String insurrate;
 
-
+    @JSONField(name = "isDelete")
         private String isdelete;
 
-
+    @JSONField(name = "licenseNo")
         private String licenseno;
 
+    @JSONField(name = "manualNo")
+            private String manualno;
 
-        private String manualno;
-
-
+    @JSONField(name = "netWt")
         private String netwt;
 
-
+    @JSONField(name = "noteS")
         private String notes;
 
-
+    @JSONField(name = "odtType")
         private String odttype;
 
-
+    @JSONField(name = "odtType_value")
         private String odttypeValue;
 
-
+    @JSONField(name = "operateCode")
         private String operatecode;
 
-
+    @JSONField(name = "operateCodeScc")
         private String operatecodescc;
 
-
+    @JSONField(name = "operateName")
         private String operatename;
 
-
+    @JSONField(name = "operaterUserId")
         private String operateruserid;
 
-
+    @JSONField(name = "operaterUserName")
         private String operaterusername;
 
-
+    @JSONField(name = "orgId")
         private String orgid;
 
-
+    @JSONField(name = "orgName")
         private String orgname;
 
-
+    @JSONField(name = "otherCurr")
         private String othercurr;
 
-
+    @JSONField(name = "otherCurr_value")
         private String othercurrValue;
 
-
+    @JSONField(name = "otherMark")
         private String othermark;
 
-
+    @JSONField(name = "otherMark_value")
         private String othermarkValue;
 
-
+    @JSONField(name = "otherRate")
         private String otherrate;
 
-
+    @JSONField(name = "ownerCode")
         private String ownercode;
 
-
+    @JSONField(name = "ownerCodeScc")
         private String ownercodescc;
 
-
+    @JSONField(name = "ownerName")
         private String ownername;
 
-
+    @JSONField(name = "packNo")
         private String packno;
 
-
+    @JSONField(name = "payWay")
         private String payway;
 
-
+    @JSONField(name = "payWay_value")
         private String paywayValue;
 
-
+    @JSONField(name = "paymentMark")
         private String paymentmark;
 
-
+    @JSONField(name = "paymentMark_value")
         private String paymentmarkValue;
 
-
+    @JSONField(name = "preEntryId")
         private String preentryid;
 
-
+    @JSONField(name = "printDate")
         private String printdate;
 
-
+    @JSONField(name = "promiseItmes")
         private String promiseitmes;
 
-
+    @JSONField(name = "risk")
         private String risk;
 
-
+    @JSONField(name = "sendRoate")
         private String sendroate;
 
-
+    @JSONField(name = "sendState")
         private String sendstate;
 
-
+    @JSONField(name = "sendTime")
         private String sendtime;
 
-
+    @JSONField(name = "seqNo")
         private String seqno;
 
-
+    @JSONField(name = "tradeMode")
         private String sfdz;
 
-
+    @JSONField(name = "tgdNo")
         private String tgdno;
 
-
+    @JSONField(name = "tradeAreaCode")
         private String tradeareacode;
 
-
+    @JSONField(name = "tradeAreaCode_value")
         private String tradeareacodeValue;
 
-
+    @JSONField(name = "tradeCode")
         private String tradecode;
 
-
+    @JSONField(name = "tradeCodeScc")
         private String tradecodescc;
 
-
+    @JSONField(name = "tradeCountry")
         private String tradecountry;
 
 

@@ -1,6 +1,7 @@
 package com.nteport.admin.entity;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -55,24 +56,25 @@ public class QpDecFreeTxt implements Serializable {
 		this.updateTime = updateTime;
 	}
 
+	@JSONField(name = "bonNo")
 	private String bonno;
 
-
+	@JSONField(name = "cusFie")
     private String cusfie;
 
-
+	@JSONField(name = "decBpNo")
     private String decbpno;
 
-
+	@JSONField(name = "decNo")
     private String decno;
 
-
+	@JSONField(name = "headId")
     private String headid;
 
-
+	@JSONField(name = "relId")
     private String relid;
 
-
+	@JSONField(name = "relManNo")
     private String relmanno;
 
 

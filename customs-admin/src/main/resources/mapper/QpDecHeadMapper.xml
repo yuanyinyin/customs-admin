@@ -113,6 +113,11 @@
         WHERE
             1 = 1
 
+
+        <if test="orgid != null and orgid != ''" >
+            and h.orgid =  #{orgid,jdbcType=VARCHAR}
+        </if>
+
         <if test="ieFlag != null and ieFlag != ''" >
             and h.ieFlag =  #{ieFlag,jdbcType=VARCHAR}
         </if>

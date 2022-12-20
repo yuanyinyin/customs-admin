@@ -64,7 +64,7 @@ onMounted(() => {
 // // 查询配置 [pageNum 当前页数, pageSize 每页大小]
 const listQuery: any = ref({
   page: 1,
-  limit: 10
+  limit: 100
 })
 
 // //定义组件的属性
@@ -97,15 +97,15 @@ const props = defineProps({
 // }
 
 // // 获取角色列表
-const getList = () => {
-  // console.log(123)
-  //  console.log(props.headId)
-  if (!props.headId) {
+const getList = (seqno) => {
+  console.log(123)
+   console.log(seqno)
+  if (!seqno) {
       return;
   }
   let params = Object.assign(deepClone(listQuery._rawValue),
             {
-             headid: props.headId 
+             cusCiq_no: seqno 
              
              }
              )

@@ -25,4 +25,21 @@ public class PageHelperImpl<T> implements IPageHelper<T> {
         return queryWrapper;
     }
 
+    @Override
+    public QueryWrapper<T> queryEq(Map<String, String> params) {
+        params.remove("page");
+        params.remove("limit");
+        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if(StringUtils.isBlank(value)){
+                continue;
+            }
+            queryWrapper.eq(MyStringUtil.humpToLineUp(key), value);
+        }
+        return queryWrapper;
+    }
+
+
 }
