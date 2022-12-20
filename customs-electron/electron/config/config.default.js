@@ -40,14 +40,14 @@ module.exports = (appInfo) => {
    * boolean | string
    * true, false, 'dev-show'(dev环境显示，prod环境隐藏)
    */
-  config.openAppMenu = true;
+  config.openAppMenu = 'dev-show';
 
   /**
    * 主窗口
    */
   config.windowsOption = {
-    width: 1200,
-    height: 950,
+    width: 1300,
+    height: 1000,
     minWidth: 800,
     minHeight: 650,
     webPreferences: {

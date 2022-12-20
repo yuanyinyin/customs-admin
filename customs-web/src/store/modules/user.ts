@@ -3,6 +3,7 @@ import { getUsersList, addUser, delUser, getAllDepts } from '@/api/user'
 import { setToken, removeToken } from '@/utils/auth'
 import { UserTy } from '~/store'
 import { ObjTy } from '~/common'
+import ipcRenderer from "@/utils/ipcRenderer";
 
 const getDefaultState = () => {
   return {
@@ -149,6 +150,7 @@ const actions = {
           if (res.code === 200) {
             commit('SET_TOKEN', res.data)
             setToken(res.data)
+            console.log(res);
             resolve(null)
           } else {
             reject(res)
@@ -206,14 +208,24 @@ const actions = {
               localStorage.setItem('roles', JSON.stringify(data.roles))
             }
             const { roles, userName,realName, id } = data
-            console.log(id)
+            console.log(data)
             commit('M_id', id)
             commit('M_username', userName)
             commit('M_roles', roles)
             commit('M_realName',realName)
             // commit('SET_AVATAR', avatar)
-            resolve(data)
-
+            const account = {
+              userName: data.userName,
+              realName: data.realName,
+              orgId: data.deptId,
+              orgName: data.deptName,
+              orgCode: "",
+            }
+            ipcRenderer.invoke('controller.client.updateAccount', account).then(res => {
+              console.log("持久化本地账户信息");
+              resolve(data)
+            })
+            //resolve(data)
           } else {
             return reject('Verification failed, please Login again.')
           }

@@ -61,6 +61,8 @@ module.exports = {
                 for (var i = 0; i < pathLen; i++) {
                     let srcPath = paths[i];
                     let fileName = srcPath.substr(dirLen);
+                    fileName =  fileName.replace("\\","");
+                    showLog("fileName========:" + fileName);
                     if (srcPath) {
                         //TODO 此处要添加对文件类型的判断  哪些文件被允许解析
                         //读取文件内容,发送到rabbitmq
@@ -79,15 +81,16 @@ module.exports = {
                         showLog("开始推送文件数据至rabbitmq:"+getCurrentDate("yyyy-MM-dd HH:mm:ss"));
                         rabbitmq.sendQueueMsg(mqParams,function (s){
                             showLog("执行结果:"+s);
+                            //再备份
+                            var today = getCurrentDate("yyyy-MM-dd");
+                            foperator.copyFile(srcPath, bak_dir + today, fileName);
+                            showLog("备份文件成功，路径:" + srcPath);
+                            //最后删除
+                            foperator.deleteFile(srcPath);
+                            // eeApp.logger.info(' delete ' + srcPath + ' 成功。');
+                            showLog("删除文件成功，路径:" + srcPath);
                         });
-                        //再备份
-                        var today=getCurrentDate("yyyy-MM-dd");
-                        foperator.copyFile(srcPath,bak_dir+today,fileName);
-                        showLog("备份文件成功，路径:"+srcPath);
-                        //最后删除
-                        foperator.deleteFile(srcPath);
-                        // eeApp.logger.info(' delete ' + srcPath + ' 成功。');
-                        showLog("删除文件成功，路径:"+srcPath);
+
                     }
                 }
             }

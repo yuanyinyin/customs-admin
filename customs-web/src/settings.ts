@@ -22,7 +22,7 @@ interface SettingTy {
 }
 
 const setting: SettingTy = {
-  title: '报关单数据订阅系统',
+  title: '外贸帮',
   /**
    * @type {boolean} true | false
    * @description Whether show the logo in sidebar
