@@ -1,6 +1,7 @@
 package com.nteport.admin.entity;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -17,6 +18,59 @@ public class QpDecList implements Serializable {
 
 	@TableId(type = IdType.ASSIGN_UUID)
 	private String id;
+
+	//new
+//	@ModelAttr("原产地证明项号")
+	@TableField("CERTIFICATENO")
+	private String certificateNo;
+	@TableField("CERTTYPE")
+	private String certType;//单据类型
+	@TableField("CERTTYPE_VALUE")
+	private String certType_value;//单据类型
+	@TableField("ECOCERTNO")
+	private String ecoCertNo;//单据证书号
+	@TableField("EXTENDFILED")
+	private String extendFiled;  //扩展字段
+
+	public String getCertificateNo() {
+		return certificateNo;
+	}
+
+	public void setCertificateNo(String certificateNo) {
+		this.certificateNo = certificateNo;
+	}
+
+	public String getCertType() {
+		return certType;
+	}
+
+	public void setCertType(String certType) {
+		this.certType = certType;
+	}
+
+	public String getCertType_value() {
+		return certType_value;
+	}
+
+	public void setCertType_value(String certType_value) {
+		this.certType_value = certType_value;
+	}
+
+	public String getEcoCertNo() {
+		return ecoCertNo;
+	}
+
+	public void setEcoCertNo(String ecoCertNo) {
+		this.ecoCertNo = ecoCertNo;
+	}
+
+	public String getExtendFiled() {
+		return extendFiled;
+	}
+
+	public void setExtendFiled(String extendFiled) {
+		this.extendFiled = extendFiled;
+	}
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
@@ -54,222 +108,223 @@ public class QpDecList implements Serializable {
 	@TableField("UPDATETIME")
 	private LocalDateTime updateTime;
 
+	@JSONField(name = "currentrate")
     private String currentrate;
 
-
+	@JSONField(name = "agreementId")
     private String agreementid;
 
-
+	@JSONField(name = "agreementId_value")
     private String agreementidValue;
 
-
+	@JSONField(name = "classMark")
     private String classmark;
 
-
+	@JSONField(name = "codeTS")
     private String codets;
 
-
+	@JSONField(name = "codeTS_value")
     private String codetsValue;
 
-
+	@JSONField(name = "contrItem")
     private String contritem;
 
+	@JSONField(name = "declPrice")
+		private String declprice;
 
-    private String declprice;
-
-
+	@JSONField(name = "declTotal")
     private String decltotal;
 
-
+	@JSONField(name = "destinationCountry")
     private String destinationcountry;
 
-
+	@JSONField(name = "destinationCountry_value")
     private String destinationcountryValue;
 
-
+	@JSONField(name = "dutyMode")
     private String dutymode;
 
-
+	@JSONField(name = "dutyMode_value")
     private String dutymodeValue;
 
-
+	@JSONField(name = "exgNo")
     private String exgno;
 
-
+	@JSONField(name = "exgVersion")
     private String exgversion;
 
-
+	@JSONField(name = "extraCode")
     private String extracode;
 
-
+	@JSONField(name = "factor")
     private String factor;
 
-
+	@JSONField(name = "firstQty")
     private String firstqty;
 
-
+	@JSONField(name = "firstQty_value")
     private String firstqtyValue;
 
-
+	@JSONField(name = "firstunit")
     private String firstunit;
 
-
+	@JSONField(name = "firstUnit_value")
     private String firstunitValue;
 
-
+	@JSONField(name = "gmodel")
     private String gmodel;
 
-
+	@JSONField(name = "gmodel_mood")
     private String gmodelMood;
 
-
+	@JSONField(name = "gname")
     private String gname;
 
-
+	@JSONField(name = "gno")
     private String gno;
 
-
+	@JSONField(name = "gqty")
     private String gqty;
 
-
+	@JSONField(name = "gunit")
     private String gunit;
 
-
+	@JSONField(name = "gunit_value")
     private String gunitValue;
 
-
+	@JSONField(name = "headId")
     private String headid;
 
-
+	@JSONField(name = "jgzj")
     private String jgzj;
 
-
+	@JSONField(name = "originCountry")
     private String origincountry;
 
-
+	@JSONField(name = "originCountry_value")
     private String origincountryValue;
 
-
+	@JSONField(name = "secondQty")
     private String secondqty;
 
-
+	@JSONField(name = "headId")
     private String secondqtyValue;
 
-
+	@JSONField(name = "headId")
     private String secondunit;
 
-
+	@JSONField(name = "secondQty_value")
     private String secondunitValue;
 
-
+	@JSONField(name = "tradeCurr")
     private String tradecurr;
 
-
+	@JSONField(name = "tradeCurr_value")
     private String tradecurrValue;
 
+	@JSONField(name = "useTo")
+		private String useto;
 
-    private String useto;
-
-
+	@JSONField(name = "workUsd")
     private String workusd;
 
-
+	@JSONField(name = "ciqCode")
     private String ciqcode;
 
-
+	@JSONField(name = "ciqName")
     private String ciqname;
 
+	@JSONField(name = "dangName")
+		private String dangname;
 
-    private String dangname;
-
-
+	@JSONField(name = "headId")
     private String dangpackspec;
 
-
+	@JSONField(name = "dangPackSpec")
     private String dangpacktype;
 
+	@JSONField(name = "dangPackType_value")
+		private String dangpacktypeValue;
 
-    private String dangpacktypeValue;
-
-
+	@JSONField(name = "dangerFlag")
     private String dangerflag;
 
-
+	@JSONField(name = "declGoodsEname")
     private String declgoodsename;
 
+	@JSONField(name = "destcode")
+		private String destcode;
 
-    private String destcode;
-
-
+	@JSONField(name = "destCode_value")
     private String destcodeValue;
 
-
+	@JSONField(name = "districtCode")
     private String districtcode;
 
-
+	@JSONField(name = "districtCode_value")
     private String districtcodeValue;
 
-
+	@JSONField(name = "engManEntCnm")
     private String engmanentcnm;
 
-
+	@JSONField(name = "goodsAttr")
     private String goodsattr;
 
-
+	@JSONField(name = "goodsAttr_value")
     private String goodsattrValue;
 
-
+	@JSONField(name = "goodsBrand")
     private String goodsbrand;
 
-
+	@JSONField(name = "goodsModel")
     private String goodsmodel;
 
-
+	@JSONField(name = "goodsSpec")
     private String goodsspec;
 
-
+	@JSONField(name = "jyjyGgxh")
     private String jyjyggxh;
 
-
+	@JSONField(name = "mnufctrRegName")
     private String mnufctrregname;
 
-
+	@JSONField(name = "mnufctrRegno")
     private String mnufctrregno;
 
-
+	@JSONField(name = "noDangFlag")
     private String nodangflag;
 
-
+	@JSONField(name = "noDangFlag_value")
     private String nodangflagValue;
 
-
+	@JSONField(name = "origPlaceCode")
     private String origplacecode;
 
-
+	@JSONField(name = "origPlaceCode_value")
     private String origplacecodeValue;
 
-
+	@JSONField(name = "prodBatchNo")
     private String prodbatchno;
 
-
+	@JSONField(name = "prodQgp")
     private String prodqgp;
 
-
+	@JSONField(name = "prodValidDt")
     private String prodvaliddt;
 
-
+	@JSONField(name = "produceDate")
     private String producedate;
 
-
+	@JSONField(name = "purpose")
     private String purpose;
 
-
+	@JSONField(name = "purpose_value")
     private String purposeValue;
 
-
+	@JSONField(name = "stuff")
     private String stuff;
 
-
+	@JSONField(name = "unCode")
     private String uncode;
 
 

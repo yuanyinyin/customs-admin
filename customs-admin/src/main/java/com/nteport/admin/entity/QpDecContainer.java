@@ -1,5 +1,6 @@
 package com.nteport.admin.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -52,27 +53,28 @@ public class QpDecContainer  implements Serializable {
 		this.updateTime = updateTime;
 	}
 
+	@JSONField(name = "containerId")
 	private String containerid;
 
-
+	@JSONField(name = "containerMd")
     private String containermd;
 
-
+	@JSONField(name = "containerMd_value")
     private String containermdValue;
 
-
+	@JSONField(name = "containerWt")
     private String containerwt;
 
-
+	@JSONField(name = "headId")
     private String headid;
 
-
+	@JSONField(name = "goodsNo")
     private String goodsno;
 
-
+	@JSONField(name = "lclFlag")
     private String lclflag;
 
-
+	@JSONField(name = "lclFlag_value")
     private String lclflagValue;
 
 

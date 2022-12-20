@@ -8,5 +8,7 @@ public interface IPageHelper<T> {
 
     QueryWrapper<T> query(Map<String, String> params);
 
+    QueryWrapper<T> queryEq(Map<String, String> params);
+
 }
 

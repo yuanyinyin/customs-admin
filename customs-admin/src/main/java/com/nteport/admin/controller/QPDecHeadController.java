@@ -70,8 +70,8 @@ public class QPDecHeadController {
      * 导出excel
      */
     @GetMapping("/exportExcel")
-    public void exportExcel(@RequestParam Map<String, String> params, HttpServletRequest request, HttpServletResponse response){
-        qpDecHeadService.exportExcel(params,request,response);
+    public void exportExcel(@RequestParam Map<String, String> params, HttpServletRequest request, HttpServletResponse response, UserEntity user){
+        qpDecHeadService.exportExcel(params,request,response,user);
     }
 
 

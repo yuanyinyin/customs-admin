@@ -1,6 +1,7 @@
 package com.nteport.admin.entity;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -53,15 +54,17 @@ public class QpDecOtherPack  implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
 	@TableField("UPDATETIME")
 	private LocalDateTime updateTime;
+
+	@JSONField(name = "headId")
     private String headid;
 
-
+	@JSONField(name = "packQty")
     private String packqty;
 
-
+	@JSONField(name = "packType")
     private String packtype;
 
-
+	@JSONField(name = "packType_value")
     private String packtypeValue;
 
 

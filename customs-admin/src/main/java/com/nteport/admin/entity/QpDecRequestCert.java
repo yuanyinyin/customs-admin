@@ -1,6 +1,7 @@
 package com.nteport.admin.entity;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -30,6 +31,7 @@ public class QpDecRequestCert implements Serializable {
     @TableField("UPDATETIME")
     private LocalDateTime updateTime;
 
+    @JSONField(name = "appCertCode")
     private String appcertcode;
 
     public String getId() {
@@ -96,15 +98,16 @@ public class QpDecRequestCert implements Serializable {
         this.headid = headid;
     }
 
+    @JSONField(name = "appCertCode_value")
     private String appcertcodeValue;
 
-
+    @JSONField(name = "applCopyQuan")
     private String applcopyquan;
 
-
+    @JSONField(name = "applOri")
     private String applori;
 
-
+    @JSONField(name = "headId")
     private String headid;
 
 

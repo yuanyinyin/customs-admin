@@ -1,6 +1,7 @@
 package com.nteport.admin.entity;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -53,15 +54,16 @@ public class QpDecCopLimit  implements Serializable  {
 	@TableField("UPDATETIME")
 	private LocalDateTime updateTime;
 
+	@JSONField(name = "entQualifNo")
     private String entqualifno;
 
-
+	@JSONField(name = "entQualifTypeCode")
     private String entqualiftypecode;
 
-
+	@JSONField(name = "entQualifTypeCode_value")
     private String entqualiftypecodeValue;
 
-
+	@JSONField(name = "headId")
     private String headid;
 
 
