@@ -16,6 +16,11 @@ const customsDB = Storage.JsonDB.connection('customs', lowdbOptions);
 customsDB.customsDBKey = {
       bgdFileDir: 'bgdFileDir',
       startSet: 'startSet',
+      userName: 'userName',
+      realName: 'realName',
+      orgCode: 'orgCode',
+      orgName: 'orgName',
+      orgId: 'orgId',
 };
 
 
@@ -30,6 +35,31 @@ module.exports = {
         let isStartSet = customsDB.getItem(customsDB.customsDBKey.startSet);
         if (!isStartSet) {
             customsDB.setItem(customsDB.customsDBKey.startSet, true)
+        }
+
+        let isUserName = customsDB.getItem(customsDB.customsDBKey.userName);
+        if (!isUserName) {
+            customsDB.setItem(customsDB.customsDBKey.userName, "")
+        }
+
+        let isRealName = customsDB.getItem(customsDB.customsDBKey.realName);
+        if (!isRealName) {
+            customsDB.setItem(customsDB.customsDBKey.realName, "")
+        }
+
+        let isOrgId = customsDB.getItem(customsDB.customsDBKey.orgId);
+        if (!isOrgId) {
+            customsDB.setItem(customsDB.customsDBKey.orgId, "")
+        }
+
+        let isOrgCode = customsDB.getItem(customsDB.customsDBKey.orgCode);
+        if (!isOrgCode) {
+            customsDB.setItem(customsDB.customsDBKey.orgCode, "")
+        }
+
+        let isOrgName = customsDB.getItem(customsDB.customsDBKey.orgName);
+        if (!isOrgName) {
+            customsDB.setItem(customsDB.customsDBKey.orgName, "")
         }
     },
 
@@ -53,6 +83,27 @@ getStartBySys() {
     let data = customsDB.getItem(customsDB.customsDBKey.startSet);
     return data;
 },
+
+
+    /**
+     * 获取 本地用户以及企业信息
+     * @returns {string}
+     */
+    getAccount() {
+        let data = {
+            userName:"",
+            realName: "",
+            orgId: "",
+            orgName: "",
+            orgCode: "",
+        }
+        data.userName = customsDB.getItem(customsDB.customsDBKey.userName);
+        data.realName = customsDB.getItem(customsDB.customsDBKey.realName);
+        data.orgId = customsDB.getItem(customsDB.customsDBKey.orgId);
+        data.orgName = customsDB.getItem(customsDB.customsDBKey.orgName);
+        data.orgCode = customsDB.getItem(customsDB.customsDBKey.orgCode);
+        return data;
+    },
 
 /**
  * 自动获取报关单报文目录
@@ -116,5 +167,19 @@ getStartBySys() {
     let data = customsDB.setItem(customsDB.customsDBKey.startSet, flag);
     return data;
 },
+
+    /**
+     * 修改 账号设置
+     * @param flag
+     * @returns {*}
+     */
+    updateAccount(account) {
+        customsDB.setItem(customsDB.customsDBKey.userName, account.userName);
+        customsDB.setItem(customsDB.customsDBKey.realName, account.realName);
+        customsDB.setItem(customsDB.customsDBKey.orgId, account.orgId);
+        customsDB.setItem(customsDB.customsDBKey.orgCode, account.orgCode);
+        customsDB.setItem(customsDB.customsDBKey.orgName, account.orgName);
+        return true
+    },
 }
 

@@ -15,6 +15,7 @@ module.exports = {
         showLog("开始执行报文附件上传模块");
         let taskOne;
         let folder;
+        let account =reportFileUtil.getAccount();
         const localData = reportFileUtil.getBgdFileDir();
         if (!localData){
             let localGetData = reportFileUtil.autoGetReportDir();
@@ -35,11 +36,15 @@ module.exports = {
             schedule.scheduleJob('0 * * * * ?', function () {  //执行定时器任务   https://www.jb51.net/article/257867.htm
                 // eeApp.logger.info('start'+ count++);
                 showLog('定时器执行次数：'+ count++);
-                uploadAction(folder);
+                if (account&&account.userName){
+                    uploadAction(folder, account);
+                }else{
+                    account = reportFileUtil.getAccount();
+                }
             });
         }
 
-        function uploadAction(fromDir) {
+        function uploadAction(fromDir, account) {
             let fileDirectory = fromDir;
             if (fs.existsSync(fileDirectory)) {
                 let paths = foperator.getPaths(fileDirectory);
@@ -56,13 +61,15 @@ module.exports = {
                 for (var i = 0; i < pathLen; i++) {
                     let srcPath = paths[i];
                     let fileName = srcPath.substr(dirLen);
+                    fileName =  fileName.replace("\\","");
+                    showLog("fileName========:" + fileName);
                     if (srcPath) {
                         //TODO 此处要添加对文件类型的判断  哪些文件被允许解析
                         //读取文件内容,发送到rabbitmq
                         var fileContent = fs.readFileSync(srcPath,"utf-8");//注意一定要用readFileSync同步方法   如果用异步方法 写法要大改
                         showLog("读取文件内容成功，文件内容:"+fileContent);
                             //把文件内容和文件名拼接成json字符串，用于推送
-                        var messageObj={"fileName":fileName,"fileContent":fileContent};
+                        var messageObj={"fileName":fileName,"fileContent":fileContent,"userName": account.userName, "realName":account.realName,"orgId":account.orgId,"orgName":account.orgName};
                         var message=JSON.stringify(messageObj);
                             //往rabbitmq中推送数据
                         var mqParams={
@@ -74,15 +81,16 @@ module.exports = {
                         showLog("开始推送文件数据至rabbitmq:"+getCurrentDate("yyyy-MM-dd HH:mm:ss"));
                         rabbitmq.sendQueueMsg(mqParams,function (s){
                             showLog("执行结果:"+s);
+                            //再备份
+                            var today = getCurrentDate("yyyy-MM-dd");
+                            foperator.copyFile(srcPath, bak_dir + today, fileName);
+                            showLog("备份文件成功，路径:" + srcPath);
+                            //最后删除
+                            foperator.deleteFile(srcPath);
+                            // eeApp.logger.info(' delete ' + srcPath + ' 成功。');
+                            showLog("删除文件成功，路径:" + srcPath);
                         });
-                        //再备份
-                        var today=getCurrentDate("yyyy-MM-dd");
-                        foperator.copyFile(srcPath,bak_dir+today,fileName);
-                        showLog("备份文件成功，路径:"+srcPath);
-                        //最后删除
-                        foperator.deleteFile(srcPath);
-                        // eeApp.logger.info(' delete ' + srcPath + ' 成功。');
-                        showLog("删除文件成功，路径:"+srcPath);
+
                     }
                 }
             }

@@ -21,7 +21,7 @@
         <el-divider content-position="left">自启动设置</el-divider>
     <el-form-item label="是否开机启动">
       <el-switch
-        v-model="startSet"
+        v-model="setForm.startSet"
         size="large"
         active-text="是"
         inactive-text="否"
