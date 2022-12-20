@@ -4,7 +4,8 @@ const amqp = require('amqplib');
 
 let serverConfig = {
   protocol: 'amqp',
-  hostname: '172.16.22.11',
+  // hostname: '172.16.22.11',
+  hostname: '58.221.159.202',
   port: 5672,
   username: '',
   password: '',
@@ -34,7 +35,7 @@ function sendQueueMsg(params, callbackfun) {
   amqp.connect(serverConfig).then(function(conn) {
     return conn.createChannel().then(function(ch) {
       var ex = exchange;
-      var ok = ch.assertExchange(ex, exchange_type, {durable: false});
+      var ok = ch.assertExchange(ex, exchange_type, {durable: true});
       // 交换器类型direct、fanout、topic、headers
       return ok.then(function() {
         ch.publish(ex, '', Buffer.from(body), { //注意第一个参数为交换机名称  第二个参数为Routing key(1、当交换器类型为direct时 该值只能为'' 不能为null  2、当对应交换机类型绑定queue时有Routing key配置时才需要填写)
