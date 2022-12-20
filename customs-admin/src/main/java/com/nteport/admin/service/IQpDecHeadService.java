@@ -23,7 +23,7 @@ public interface IQpDecHeadService extends IService<QpDecHead> {
     ApiResponse showOne(String headId, UserEntity user);
 
 
-    void exportExcel(Map<String, String> params, HttpServletRequest request , HttpServletResponse response) ;
+    void exportExcel(Map<String, String> params, HttpServletRequest request , HttpServletResponse response ,UserEntity user) ;
 
 
     ApiResponse printDec(Map<String, String> params);

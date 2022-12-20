@@ -47,7 +47,7 @@ export function getLogList(data: ObjTy) {
    * @return Json[list 角色列表，total 结果总数] 或 状态码
    */
   return request({
-    url: '/qpDecLog/listPage',
+    url: '/qpDecResult/listPage',
     data,
     method: 'get',
     bfLoading: true,
@@ -105,7 +105,8 @@ export function exportHead(data: ObjTy){
      isParams: true,
      bfLoading: true,
      isDownLoadFile:true,
-     isAlertErrorMsg: true
+     isAlertErrorMsg: true,
+     timeout: 120000
    })
 }
 

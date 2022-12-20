@@ -1,6 +1,7 @@
 package com.nteport.admin.entity;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -32,25 +33,25 @@ public class QpDecLog implements Serializable {
 	@TableField("UPDATETIME")
 	private LocalDateTime updateTime;
 
-
+	@JSONField(name = "headId")
     private String headid;
 
-
+	@JSONField(name = "operCode")
     private String opercode;
 
-
+	@JSONField(name = "operContent")
     private String opercontent;
 
-
+	@JSONField(name = "operDate")
     private String operdate;
 
-
+	@JSONField(name = "operUser")
     private String operuser;
 
-
+	@JSONField(name = "operUserId")
     private String operuserid;
 
-
+	@JSONField(name = "receiptType")
     private String receipttype;
 
 	public String getId() {
