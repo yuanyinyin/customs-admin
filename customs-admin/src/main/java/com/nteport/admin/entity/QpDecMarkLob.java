@@ -10,10 +10,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-@TableName(value = "NSW.QP_DECLICENSEDOCU")
 
-public class QpDecLicenseDocu implements Serializable {
+
+@TableName(value = "NSW.QP_DECMARKLOB")
+public class QpDecMarkLob implements Serializable{
 
 	@TableId(type = IdType.ASSIGN_UUID)
 	private String id;
@@ -54,47 +56,86 @@ public class QpDecLicenseDocu implements Serializable {
 	public void setUpdateTime(LocalDateTime updateTime) {
 		this.updateTime = updateTime;
 	}
-	@JSONField(name = "certCode")
-	private String certcode;
+	@JSONField(name = "attachName")
+	private String attachname;
 
-	@JSONField(name = "docuCode")
-    private String docucode;
+	@JSONField(name = "attachType")
+    private String attachtype;
 
-	@JSONField(name = "docuCode_value")
-    private String docucodeValue;
+	@JSONField(name = "attachment")
+    private String attachment;
+
+	@JSONField(name = "filePath")
+    private String filepath;
+
+	@JSONField(name = "filePathPre")
+    private String filepathpre;
+
+	@JSONField(name = "fileSize")
+    private BigDecimal filesize;
 
 	@JSONField(name = "headId")
     private String headid;
 
+	@JSONField(name = "state")
+    private String state;
 
 
 
 
 
-	public String  getCertcode() {
-		return certcode;
+
+	public String  getAttachname() {
+		return attachname;
 	}
 	
-	public void setCertcode(String certcode) {
-		this.certcode = certcode;
-	}
-	
-
-	public String  getDocucode() {
-		return docucode;
-	}
-	
-	public void setDocucode(String docucode) {
-		this.docucode = docucode;
+	public void setAttachname(String attachname) {
+		this.attachname = attachname;
 	}
 	
 
-	public String  getDocucodeValue() {
-		return docucodeValue;
+	public String  getAttachtype() {
+		return attachtype;
 	}
 	
-	public void setDocucodeValue(String docucodeValue) {
-		this.docucodeValue = docucodeValue;
+	public void setAttachtype(String attachtype) {
+		this.attachtype = attachtype;
+	}
+	
+
+	public String  getAttachment() {
+		return attachment;
+	}
+	
+	public void setAttachment(String attachment) {
+		this.attachment = attachment;
+	}
+	
+
+	public String  getFilepath() {
+		return filepath;
+	}
+	
+	public void setFilepath(String filepath) {
+		this.filepath = filepath;
+	}
+	
+
+	public String  getFilepathpre() {
+		return filepathpre;
+	}
+	
+	public void setFilepathpre(String filepathpre) {
+		this.filepathpre = filepathpre;
+	}
+	
+
+	public BigDecimal  getFilesize() {
+		return filesize;
+	}
+	
+	public void setFilesize(BigDecimal filesize) {
+		this.filesize = filesize;
 	}
 	
 
@@ -104,6 +145,15 @@ public class QpDecLicenseDocu implements Serializable {
 	
 	public void setHeadid(String headid) {
 		this.headid = headid;
+	}
+	
+
+	public String  getState() {
+		return state;
+	}
+	
+	public void setState(String state) {
+		this.state = state;
 	}
 	
 

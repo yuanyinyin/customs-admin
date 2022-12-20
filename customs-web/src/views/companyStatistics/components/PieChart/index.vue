@@ -1,5 +1,5 @@
 <template>
-  <div class="report" ref="chart"></div>
+  <div class="report" ref="chart"  style="width:400px;height: 200px"></div>
 </template>
 <script lang="ts" setup>
   import * as echarts from 'echarts'
@@ -31,21 +31,23 @@
   // alert('pie')
   let total = 0;
   let currentInstance = ''
-  onMounted(() => {
+  onBeforeUpdate(() => {
+    console.log('pie')
+    console.log(124455,props.list)
     // 获取DOM元素并且进行初始化
     currentInstance = getCurrentInstance()
 
     total = props.list.reduce(( acc, cur ) => {
                   return acc + cur.value
               }, 0);
-              
+
     const myChart = echarts.init(currentInstance.ctx.$refs.chart);
     // 创建图标
     myChart.setOption({
       color: props.colors,
-      title: { 
+      title: {
         text: props.title,
-        x:'right',
+        x:'center',
         y: '10',
         padding: [0,20,0,0],
         textStyle: {
@@ -58,7 +60,7 @@
         show: true,
         trigger: 'item',
         textStyle: {
-            fontSize: 12, 
+            fontSize: 12,
         },
         // formatter: '{b}：{c}',
         formatter: function(params){
@@ -78,7 +80,7 @@
             fontSize: 12
         }
       },
-      series: [ 
+      series: [
         {
           name: '',
           type: 'pie',

@@ -29,9 +29,9 @@
             normal: {
                 barBorderRadius: [ 5, 5, 0, 0],
                 label: {
-                    show: false, 
-                    position: 'top', 
-                    textStyle: { 
+                    show: false,
+                    position: 'top',
+                    textStyle: {
                         color: item.colors[1],
                         fontSize: 12
                     }
@@ -48,14 +48,16 @@
         data: item.data
       })
     })
-    props.list.map((item0) => {
+    // props.list.map((item0) => {
       xAxisData.push({
         type: 'category',
         // boundaryGap: false,//坐标轴两边留白
         // data: ['崇川区', '海门区', '通州区','海安县','启东市','如皋市','如东县','开发区', '苏锡通','通州湾'],
-        data:item0.areaName,
+        data:props.list[0].areaName,
         axisLabel: { //坐标轴刻度标签的相关设置。
           interval: 0,//设置为 1，表示『隔一个标签显示一个标签』
+          margin:10,
+          rotate:15,
           textStyle: {
             fontStyle: 'normal',
             fontFamily: '微软雅黑',
@@ -80,8 +82,8 @@
         }
       }
       })
-    })
- 
+    // })
+
     // 创建图标
     myChart.setOption({
       tooltip: {
@@ -93,7 +95,7 @@
         icon:'rect',
         itemHeight:5,
         itemWidth:30,
-        textStyle: { 
+        textStyle: {
             color: '#333',
             fontSize: 12
         }
@@ -113,7 +115,7 @@
             color: "rgba(48,194,255,1)",
             fontSize:10,
             align: 'left'
-        }, 
+        },
         type: 'value',
         // splitNumber: 2,
         // interval:5,

@@ -4,11 +4,11 @@
         <el-tabs v-model="activeName" @tab-change="handleTabChange">
             <el-tab-pane label="进口贸易方式统计" name="first" >
                 <div class="dashboard-container">
-  
-                    <div class="dashboard-card"> 
+
+                    <div class="dashboard-card">
                         <div class="flex-between">
                         </div>
-                        <div id="main1" style="width: 100%;height:100%;"></div>             
+                        <div id="main1" style="width: 100%;height:100%;"></div>
                     </div>
 
                     <div class="dashboard-card">
@@ -19,7 +19,7 @@
                         </div>
                         <div class="dashboard-card-body">
                             <el-card>
-          
+
                                 <div class="import-search mb-1">
                                     <el-form :inline="true" :model="listQueryI" class="demo-form-inline">
                                     <el-form-item label="统计日期">
@@ -51,11 +51,11 @@
                         <div class="import-table mb-1">
                             <el-table tooltip-effect="dark"
                                 :data="tableData"
-                                style="width: 100%" 
+                                style="width: 100%"
                                 fit
                                 border
                                 height="200"
-                                :summary-method="getSummariesI"   show-summary 
+                                :summary-method="getSummariesI"   show-summary
                                 highlight-current-row
                                 >
                                 <el-table-column type="index" label="序号" align="center" width="55"/>
@@ -72,17 +72,17 @@
                                 </el-table-column>
 
                              </el-table>
-                            </div>           
+                            </div>
                           </el-card>
                        </div>
                     </div>
 
-                    <div class="dashboard-card"> 
+                    <div class="dashboard-card">
                         <div class="flex-between">
                         </div>
                         <div id="main2" style="width: 100%;height:100%;"></div>
-                      
-                        
+
+
                     </div>
 
                     <div class="dashboard-card">
@@ -97,19 +97,19 @@
                         <div class="import-table mb-1">
                             <el-table
                                 :data="tableData2"
-                                style="width: 100%" 
+                                style="width: 100%"
                                 fit
                                 border
                                 height="200"
                                 highlight-current-row
-                                :summary-method="getSummariesI"   show-summary 
+                                :summary-method="getSummariesI"   show-summary
                                 >
                                         <el-table-column type="index" label="序号" align="center" width="55"/>
                                         <el-table-column prop="TRADEMODE" label="贸易方式" align="center"/>
                                         <el-table-column prop="NUMB" label="单量" align="center"/>
                                         <el-table-column prop="rate" label="占比" align="center"/>
                             </el-table>
-                            </div>           
+                            </div>
                             </el-card>
                         </div>
                     </div>
@@ -118,11 +118,11 @@
             </el-tab-pane>
             <el-tab-pane label="出口贸易方式统计" name="second" >
                 <div class="dashboard-container">
-  
-                    <div class="dashboard-card"> 
+
+                    <div class="dashboard-card">
                         <div class="flex-between">
                         </div>
-                        <div id="main3" style="width: 100%;height:100%;"></div>             
+                        <div id="main3" style="width: 100%;height:100%;"></div>
                     </div>
 
                     <div class="dashboard-card">
@@ -165,11 +165,11 @@
                         <div class="export-table mb-1">
                             <el-table
                                 :data="tableData3"
-                                style="width: 100%" 
+                                style="width: 100%"
                                 fit
                                 border
                                 height="200"
-                                :summary-method="getSummariesI"   show-summary 
+                                :summary-method="getSummariesI"   show-summary
                                 highlight-current-row
                                 >
                                 <el-table-column type="index" label="序号" align="center" width="55"/>
@@ -185,17 +185,17 @@
                                         </template>
                                 </el-table-column>
                             </el-table>
-                            </div>           
+                            </div>
                             </el-card>
                         </div>
                     </div>
 
-                    <div class="dashboard-card"> 
+                    <div class="dashboard-card">
                         <div class="flex-between">
                         </div>
                         <div id="main4" style="width: 100%;height:100%;"></div>
-                        
-                        
+
+
                     </div>
 
                     <div class="dashboard-card">
@@ -210,19 +210,19 @@
                         <div class="import-table mb-1">
                             <el-table
                                 :data="tableData4"
-                                style="width: 100%" 
+                                style="width: 100%"
                                 fit
                                 border
                                 height="200"
                                 highlight-current-row
-                                :summary-method="getSummariesI"   show-summary 
+                                :summary-method="getSummariesI"   show-summary
                                 >
                                 <el-table-column type="index" label="序号" align="center" width="55"/>
                                 <el-table-column prop="TRADEMODE" label="贸易方式" align="center"/>
                                 <el-table-column prop="NUMB" label="单量" align="center"/>
                                 <el-table-column prop="rate" label="占比" align="center"/>
                             </el-table>
-                            </div>           
+                            </div>
                             </el-card>
                         </div>
                     </div>
@@ -233,7 +233,7 @@
 
     </div>
   </template>
-  
+
   <script setup lang="ts">
   import { ElMessage } from 'element-plus'
   import { useRouter } from 'vue-router';
@@ -277,7 +277,7 @@ const onSearchI = () => {
         return;
     }
     getImportTradeMode()
-} 
+}
 const onSearchE = () => {
     if(listQueryE.startDate===null||listQueryE.startDate===''||listQueryE.endDate===null||listQueryE.endDate===''){
         ElMessage({ message: '请填写统计起始日期', type: 'error' })
@@ -290,7 +290,7 @@ const onSearchE = () => {
         return;
     }
     getExportTradetMode()
-} 
+}
 const initPickI = () => {
     const end = new Date();
     const start = new Date(new Date().getFullYear(), 0);
@@ -355,7 +355,7 @@ const getCustomsData = (type) => {
       }else if(type=='E'){
         tableData3.value = response.items
       }
-    
+
       loadChar1(response.rs,type)
 
     })
@@ -383,7 +383,7 @@ const getExportTradetMode = () => {
 
     //进口贸易方式统计
 const loadChar2 = (_data,type) => {
-    
+
     let date1=parseDateWithoutDayNew(listQueryI.startDate);
     let date2=parseDateWithoutDayNew(listQueryI.endDate);
     // 指定图表的配置项和数据
@@ -452,7 +452,7 @@ const loadChar2 = (_data,type) => {
 }
 //绘制关单量柱状图
 const loadChar1= (_data,type) => {
-    
+
     let date1=parseDateWithoutDayNew(listQueryI.startDate);
     let date2=parseDateWithoutDayNew(listQueryI.endDate);
     // 指定图表的配置项和数据
@@ -499,6 +499,9 @@ const loadChar1= (_data,type) => {
                     name: '报关单量',
                     type: 'bar',
                     data: data.val,
+                    barGap: '20%',
+                    barCategoryGap: '30%',
+                    barMaxWidth:'25',
                     markLine:{ // 设置平均线
                         data:[
                             {
@@ -533,7 +536,7 @@ const getSummariesI = (param) => {
     if (index === 1) {
       sums[index] = '合计'
       return
-    } 
+    }
     if(data!=null){
         const values = data.map((item) =>
      Number(item[column.property]))
@@ -555,10 +558,9 @@ const getSummariesI = (param) => {
 
   return sums
 }
-  
+
   </script>
-  
+
   <style lang="scss" scoped>
   @import '@/styles/addNew.scss';
   </style>
-  

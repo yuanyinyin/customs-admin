@@ -69,8 +69,8 @@
             </el-pagination>
           </div>
           </el-card>
-          <el-dialog v-model="tablemodel"  :dataTmp="dataTmp" :dataname="dataname" :datatype="datatype"  
-            width="75%" 
+          <el-dialog v-model="tablemodel"  :dataTmp="dataTmp" :dataname="dataname" :datatype="datatype"
+            width="1700px"
             align-center>
             <div class="head-container">
           <el-form :inline="true" :model="listQueryD" class="demo-form-inline">
@@ -97,8 +97,8 @@
                 highlight-current-row @selection-change="handleSelectionChange"  :selectData="selectData" >
             <el-table-column type="selection" align="center" width="50" />
             <el-table-column type="index" label="序号" align="center" width="55"/>
-            <el-table-column property="ID" label="机构id" />  
-            <el-table-column property="CUSTOM_NO" label="海关十位编码" />  
+            <el-table-column property="ID" label="机构id" />
+            <el-table-column property="CUSTOM_NO" label="海关十位编码" />
             <el-table-column property="ORG_NAME_CN" label="企业名称" />
             <el-table-column property="AREA_NAME" label="地址" />>
             <!-- <el-table-column label="操作" align="center">
@@ -132,17 +132,17 @@
 
     </div>
     </template>
-    
+
     <script setup lang="ts">
     import { Plus } from '@element-plus/icons-vue'
     import { Search,Delete } from '@element-plus/icons-vue'
-    import { dialogTy } from '~/dialog' 
+    import { dialogTy } from '~/dialog'
     import {Ref} from 'vue'
     import {cancelKeyCompany,addCompany,cancelCompany} from "@/api/countSystemStatistics";
 
     import {ElMessage, ElMessageBox,ElTable} from 'element-plus'
     const store = useStore()
-    
+
     // table显示数组
     const tableData: any = ref(null)
     const tableDataD: any = ref(null)
@@ -161,15 +161,15 @@
     // 查询配置 [pageNum 当前页数, pageSize 每页大小]
     const listQuery: any = ref({
       page: 1,
-      limit: 10, 
+      limit: 10,
        })
     onMounted(() => {
       getKeyCompany()
-      
+
     })
 let handleAdd = () => {
     tablemodel.value=true;
-    getCompanyD()
+    // getCompanyD()
 }
 const  multipleSelection=[];
 const  multipleSelection1=[];
@@ -182,7 +182,7 @@ const handleCancel1 = () => {
         ElMessage({ message: '请选择一条记录', type: 'error' })
         return;
     }
-    let Ids1 = [] 
+    let Ids1 = []
     console.log(123,selectData1.value)
     let ids2 = ""
     let ids3 = ""
@@ -203,7 +203,7 @@ const handleCancel1 = () => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    
+
     let param={ids:ids2}
     cancelCompany(param)
     .then((res) => {
@@ -228,7 +228,7 @@ let handleAddD = () => {
         ElMessage({ message: '请选择一条记录', type: 'error' })
         return;
     }
-    let Ids = [] 
+    let Ids = []
     selectData.value.forEach(e => {
        Ids.push(e)
      })
@@ -249,22 +249,22 @@ let handleSelectionChange1 = (val) => {
 		// 假设取出 id 字段
 		val.forEach(item => {
 			const id = item.id
-			// 判断数组中是否包含这个 id 
+			// 判断数组中是否包含这个 id
 			if ( multipleSelection1.indexOf(id) == -1) {
 				 multipleSelection1.push(id)
 			}
-		}) 
+		})
         selectData1.value=val
 }
 let handleSelectionChange = (val) => {
 		// 假设取出 id 字段
 		val.forEach(item => {
 			const id = item.id
-			// 判断数组中是否包含这个 id 
+			// 判断数组中是否包含这个 id
 			if ( multipleSelection.indexOf(id) == -1) {
 				 multipleSelection.push(id)
 			}
-		}) 
+		})
         selectData.value=val
 }
 // 选择表格行
@@ -280,12 +280,16 @@ const listQueryD = reactive({
   limit: 10
 })
 const getCompanyD = () => {
+  if(listQueryD.customNo==''||listQueryD.customNo==''||listQueryD.orgName==''||listQueryD.orgName==null){
+    ElMessage({ message: '请填写查询条件', type: 'warning' })
+    return;
+  }
     let params={
     customNo: listQueryD.customNo,
     orgName: listQueryD.orgName,
       page: listQueryD.page,
       limit: listQueryD.limit,
-    } 
+    }
   store
     .dispatch('countSystemStatistics/getCompanyList',params)
     .then((response) => {
@@ -296,10 +300,10 @@ const getCompanyD = () => {
     })
     .catch((response) => {})
 }
- 
+
     // 列表展现已经设置重点企业的名单
 const getKeyCompany = () => {
- 
+
     store
     .dispatch('countSystemStatistics/getKeyCompany', listQuery._rawValue)
     .then((response) => {
@@ -357,8 +361,8 @@ const handleClick = (op: string, ...restPara: any) => {
   console.log(restPara)
   if (op == 'cancel') {
     handleCancelCompay(restPara[0])
-  } 
-}   
+  }
+}
  //按钮显示条件
 const checkBtnShow = (option:any, row:any) => {
 
@@ -368,8 +372,8 @@ const handleClickD = (op: string, ...restPara: any) => {
   console.log(restPara)
   if (op == 'add') {
     handleAddCompay(restPara[0])
-  } 
-}   
+  }
+}
  //按钮显示条件
 const checkBtnShowD = (option:any, row:any) => {
 
@@ -391,10 +395,9 @@ const handleCancelCompay = (row) => {
 
   })
 }
-     
-    
+
+
     </script>
-    
+
     <style scoped lang="scss"></style>
-    
-    
+

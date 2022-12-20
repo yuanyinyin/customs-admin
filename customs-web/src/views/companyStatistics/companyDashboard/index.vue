@@ -19,7 +19,7 @@
                 <div class="notice-list">
                   <vue3-seamless-scroll :list="noticeList" class="notice-scroll" :step="0.8" hover="true" direction="left" :limitMoveNum="3" singleLine="true" >
                     <div class="item" v-for="(item, index) in noticeList" :key="index">
-                      <el-link type="primary">{{ item.title }}</el-link>
+                      <el-link type="primary"  @click="openLink(item.title,item.text,item.updateTime)">{{ item.title }}</el-link>
                     </div>
                   </vue3-seamless-scroll>
                 </div>
@@ -179,10 +179,10 @@
             <el-card class="card-item" :body-style="{padding:'15px',height:'100%'}" >
               <div class="statistics">
                 <div class="statistics-item">
-                  <pie-chart summary="汇总" unit="单" :colors="['#DE6BFF','#FFD26F']" title="进出口单量占比" :list="listOne" v-if="flagTotalCustomDataNumb" />
+                  <pie-chart summary="汇总" unit="单" :colors="['#DE6BFF','#FFD26F']" title="进出口单量占比" :list="listOne" v-show="flagTotalCustomDataNumb" />
                 </div>
                 <div class="statistics-item">
-                  <pie-chart summary="汇总" unit="单" :colors="['#DE6BFF','#FFD26F']" title="进出口货值占比" :list="listTwo" v-if="flagTotalCustomDataSum"/>
+                  <pie-chart summary="汇总" unit="单" :colors="['#DE6BFF','#FFD26F']" title="进出口货值占比" :list="listTwo" v-show="flagTotalCustomDataSum"/>
                 </div>
               </div>
             </el-card>
@@ -225,10 +225,10 @@
                 </div>
               </template>
               <div v-if="activeName == 'first'" class="nav-report">
-                <line-chart :list="listThree"  v-if="flagCustomNumb"/>
+                <line-chart :list="listThree"  v-show="flagCustomNumb"/>
               </div>
               <div v-if="activeName == 'second'" class="nav-report">
-                <line-chart :list="listFour" v-if="flagCustomSum" />
+                <line-chart :list="listFour" v-show="flagCustomSum" />
               </div>
             </el-card>
           </el-col>
@@ -312,7 +312,7 @@
                 </div>
               </template>
               <div class="report-box">
-                <pie-chart unit="次" :colors="['#2C9AD5','#FFD26F']" :list="listFive" v-if="flagInpspectRate"/>
+                <pie-chart unit="次" :colors="['#2C9AD5','#FFD26F']" :list="listFive" v-show="flagInpspectRate"/>
               </div>
              </el-card>
           </el-col>
@@ -321,6 +321,13 @@
 
       </div>
     </div>
+  <el-dialog v-model="tablemodel"  :dataTmp="dataTmp" :dataname="dataname" :datatype="datatype"  @open="openFun"
+             width="75%"
+             align-center>
+
+    <div id="main3" style="width: 100%;height:400px;"></div>
+
+  </el-dialog>
   </template>
 
   <script lang="ts" setup>
@@ -329,29 +336,12 @@
   import PieChart from '../components/PieChart/index';
   import LineChart from '../components/LineChart/index';
   import { ElMessageBox, ElMessage } from 'element-plus'
-  import { parseDateWithoutDay} from '@/utils/dateTime'
+  import { parseDateWithoutDay,parseTimeThrid} from '@/utils/dateTime'
 import { fa } from 'element-plus/es/locale';
 
 
   const store = useStore()
-  //模拟数据
-  // const noticeList = reactive([
-  //   {
-  //     title: '南通跨境电商迎来实质性利好'
-  //   },
-  //   {
-  //     title: '关于建设“南通跨境电子商务综合试验区”的一点思考'
-  //   },
-  //   {
-  //     title: '总值超三千亿，同比增长13.2% 前10月南通外贸进出口数据出炉'
-  //   },
-  //   {
-  //     title: '南通电子口岸组织党员干部观看党的二十大开幕盛况'
-  //   },
-  //   {
-  //     title: 'RCEP生效6个月 ，海安市签发RCEP原产地证书164份'
-  //   }
-  // ])
+
   const noticeList = ref([])
   const listOne = ref([])
   const listTwo = ref([])
@@ -413,12 +403,11 @@ const onSearchInspectRate = () => {
         ElMessage({ message: '查验率查询     统计起始日期应为同一年份', type: 'error' })
         return;
     }
-
     getInspectRateDash();
 }
 //商品top10
   const onSearchTopGoods = () => {
-    if(listQueryTopGoods.applyDate?.length==0){
+    if(listQueryTopGoods.applyDate?.length==0||listQueryTopGoods.applyDate==null){
         ElMessage({ message: '申报商品货值TOP10查询     请填写统计起始日期', type: 'error' })
         return;
     }
@@ -502,6 +491,7 @@ const listQueryTopGoods = reactive({
   }
   const initNotice = () => {
     let params2={}
+
     store
       .dispatch('companyStatistics/getNoticeInfoDash',params2)
       .then((responseE) => {
@@ -595,7 +585,8 @@ const getTotalCustomData = () => {
         numbE.value=response.rs[0].NUMBE
         rmbI.value=response.rs[0].RMBI
         rmbE.value=response.rs[0].RMBE
-
+      flagTotalCustomDataNumb.value=false;
+      flagTotalCustomDataSum.value=false;
         listOne.value=[]
         listTwo.value=[]
         let nameI='进口单量';
@@ -645,12 +636,11 @@ const getCustomsDataNumb = () => {
         let monthValueArryI=[];
         let colorArryI= ['rgba(31,223,55,0)', '#26C6DA'];
         for (let i = 0; i < dataI1.length; i++) {
-          monthArryI.push(dataI1[i].MON);
-          monthValueArryI.push(dataI1[i].NUMB);
+          monthArryI.push(parseInt(dataI1[i].MON));
+          monthValueArryI.push(parseInt(dataI1[i].NUMB));
         }
         let dataI={month:monthArryI,data:monthValueArryI,title:'进口单量',colors:colorArryI};
         listThree.value.push(dataI)
-
       let params2={
       startDate: startDate1,
       endDate: endDate1,
@@ -709,7 +699,6 @@ store
      }
      let dataI={month:monthArryI,data:monthValueArryI,title:'进口货值',colors:colorArryI};
      listFour.value.push(dataI)
-     console.log(12222,listFour.value)
    let params2={
    startDate: startDate1,
    endDate: endDate1,
@@ -733,7 +722,6 @@ store
      let dataE={month:monthArryE,data:monthValueArryE,title:'出口货值',colors:colorArryE};
      listFour.value.push(dataE)
      }
-    console.log(12222111,listFour.value)
      flagCustomSum.value = true
 
  })
@@ -743,6 +731,7 @@ store
  .catch((response) => {})
 }
 const getInspectRateDash = () => {
+  flagInpspectRate.value = false
     let startDate1=  listQueryInspectRate.applyDate?.length>0 ?listQueryInspectRate.applyDate[0]:"" ;
     let endDate1=  listQueryInspectRate.applyDate?.length>0 ?listQueryInspectRate.applyDate[1]:"";
     let params={
@@ -754,23 +743,23 @@ const getInspectRateDash = () => {
   store
     .dispatch('companyStatistics/getInspectRateDash',params)
     .then((response) => {
-        console.log(111,response.rs)
+        console.log(177777,response.rs)
         let data = response.rs
         if(data) {
             for(let i=0;i<data.length;i++) {
 
                 let subJson = {}
+              subJson.value = parseInt(data[i].VALUE)
                 subJson.name = data[i].NAME
-                subJson.value = parseInt(data[i].VALUE)
+
                 console.log(subJson)
 
                 console.log(123,listFive)
                 listFive.value.push(subJson)
-                console.log(124,listFive)
+                console.log(124,listFive.value)
             }
         }
         flagInpspectRate.value = true
-
     })
     .catch((response) => {})
 }
@@ -795,6 +784,20 @@ const getTopGoods = (inittype) => {
     })
     .catch((response) => {})
 }
+  const openLink = (title,text,updateTime) => {
+    ElMessageBox({
+      // title: title, //MessageBox 标题
+      // message: `修改时间：`+updateTime+`<br/>`+text,
+      message:`<div class="article"  >`+
+            `<h2 style="color: #355e92;font-size: 20px; line-height: 2;text-align: center;">`+title+`</h2>`+
+            `<h3 class="tit-info" style="padding: 30px 0 20px; margin-bottom: 10px;border-bottom: 1px solid #ccc;color: #666;font-size: 15px;line-height: 1;
+                text-align: center;">发布时间：<span style="padding-left: 10px;">`+parseTimeThrid(updateTime)+`</span></h3>
+                <p style="line-height: 35px; margin-bottom: 5px; text-indent: 2em; text-align: left; font-size: 18px;color: #333;font-size: 16px; line-height: 2;">`+text+`</p>
+             </div>`,
+      dangerouslyUseHTMLString:true,
+      customClass: 'message-logout'
+    })
+  }
 onMounted(() => {
   initNotice();
     initCalculateData();
@@ -825,4 +828,16 @@ onMounted(() => {
     .nav-tabs >>>  .el-tabs__nav-wrap::after{
       height: 0;
     }
+
+
   </style>
+<style>
+
+.message-logout {
+  width: 55%;
+}
+.el-message-box{
+  max-width:none;
+  vertical-align: middle;
+}
+</style>

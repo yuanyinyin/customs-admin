@@ -49,4 +49,6 @@ public interface QpDecHeadStatisticsMapper extends BaseMapper<QpDecHead> {
 
     List querAllQyDataDash(HashMap hashMap);
 
+    List querAllQyDataDash1(HashMap hashMap);
+
 }
