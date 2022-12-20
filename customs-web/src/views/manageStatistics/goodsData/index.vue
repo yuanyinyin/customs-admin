@@ -1,18 +1,18 @@
 <template>
 
     <div class="customsData-container scroll-y p">
-        
+
         <el-tabs v-model="activeName" @tab-change="handleTabChange">
-        <el-tab-pane label="进口商品货值统计" name="first" >
+        <el-tab-pane label="进口商品货值TOP10统计" name="first" >
             <el-container >
                 <el-card style="width: 100%;">
-                    <el-header>进口商品货值统计</el-header>
+                    <el-header>进口商品货值TOP10统计</el-header>
                 <el-main style="width: 100%;height:500px;">
                         <div id="main1" style="width: 70%;height:100%;"></div>
                 </el-main>
                 </el-card>
                 <el-card style="width: 100%;">
-            <el-main style="width: 100%;">     
+            <el-main style="width: 100%;">
                 <div class="import-search mb-1">
                     <el-form :inline="true" :model="listQueryI" class="demo-form-inline">
                     <el-form-item label="统计日期">
@@ -44,10 +44,10 @@
 
             <el-table
                 :data="tableData"
-                style="width: 100%" 
+                style="width: 100%"
                 fit
                 border
-                :summary-method="getSummariesI"   show-summary 
+                :summary-method="getSummariesI"   show-summary
                 highlight-current-row
                 >
                 <el-table-column type="index" label="序号" align="center" width="55"/>
@@ -60,20 +60,20 @@
                     </el-table>
                  </div>
               </el-main>
-            </el-card>            
+            </el-card>
             </el-container>
         </el-tab-pane>
-        <el-tab-pane label="出口商品货值统计" name="second" >
+        <el-tab-pane label="出口商品货值TOP10统计" name="second" >
             <el-container>
                 <el-card style="width: 100%;">
-                    <el-header>出口商品货值统计</el-header>
+                    <el-header>出口商品货值TOP10统计</el-header>
                 <el-main style="width: 100%;height:500px;">
                         <div id="main2" style="width: 70%;height:100%;"></div>
                 </el-main>
                 </el-card>
                 <el-card style="width: 100%;">
             <el-main style="width: 100%;">
-           
+
                 <div class="export-search mb-1">
                     <el-form :inline="true" :model="listQueryE" class="demo-form-inline">
                     <el-form-item label="统计日期">
@@ -105,10 +105,10 @@
       <div class="export-table mb-1">
             <el-table
                 :data="tableData2"
-                style="width: 140%" 
+                style="width: 140%"
                 fit
                 border
-                :summary-method="getSummariesI"   show-summary 
+                :summary-method="getSummariesI"   show-summary
                 height="400px"
                 highlight-current-row
                 >
@@ -125,15 +125,15 @@
                </el-card>
             </el-container>
         </el-tab-pane>
-    </el-tabs>       
+    </el-tabs>
     </div>
 <div>
     <el-dialog v-model="tablemodel"  :dataTmp="dataTmp" :dataname="dataname" :datatype="datatype"  @open="openFun"
-    width="75%" 
+    width="75%"
     align-center>
-   
+
         <div id="main3" style="width: 100%;height:400px;"></div>
-    
+
 </el-dialog>
 </div>
 </template>
@@ -177,7 +177,7 @@ const handleTabChange = () =>{
        case "second": initPickE();break;
     }
 }
- 
+
 onMounted(() => {
     initPickI()
 })
@@ -242,7 +242,7 @@ const getSummariesI = (param) => {
     if (index === 1) {
       sums[index] = '汇总'
       return
-    } 
+    }
     if(data!=null){
         const values = data.map((item) =>
      Number(item[column.property]))
@@ -314,7 +314,7 @@ const getGoodsDataDetail = (CODETS,gname,type) => {
         endDate: date2,
         ieFlag:type
         }
-    console.log(params) 
+    console.log(params)
   store
     .dispatch('manageStatistics/getGoodsDataDetail',params)
     .then((response) => {
@@ -328,13 +328,13 @@ const getGoodsDataDetail = (CODETS,gname,type) => {
     })
     .catch((response) => {})
 }
- 
- 
-const openFun = () => { 
- 
+
+
+const openFun = () => {
+
     nextTick(() => {
         let qrBox = document.getElementById('main3')    // 获取到div元素
-        
+
         const _data = dataTmp.value
         const type = datatype.value
         const gname  = dataname.value
@@ -361,7 +361,7 @@ const openFun = () => {
         }
         const option = {
             title: {
-                text: gname+'       '+date1+'~'+date2+totalType+'商品货值统计'
+                text: gname+'       '+date1+'~'+date2+totalType+'商品货值TOP10统计'
             },
             tooltip: {},
             legend: {
@@ -419,13 +419,13 @@ const openFun = () => {
   myChartI.clear();
 
   myChartI.setOption(option);
- 
+
 })
 }
 let canvasI: any = null//document.getElementById('canvas')
     //绘制出口商品货值柱状图
 const loadChar = (_data,type) => {
-    
+
         let date1=parseDateWithoutDayNew(listQueryI.startDate);
         let date2=parseDateWithoutDayNew(listQueryI.endDate);
         // 指定图表的配置项和数据
@@ -449,20 +449,23 @@ const loadChar = (_data,type) => {
             }
         const option = {
             title: {
-                text: date1+'~'+date2+totalType+'商品货值统计'
+                text: date1+'~'+date2+totalType+'商品货值TOP10统计'
             },
             tooltip: {},
             legend: {
                 data: ['商品货值','平均值'],
                 top:'6%'
             },
+            grid: {
+              left: '70',
+            },
             xAxis: {
                 data:data.month,
                 triggerEvent:true,
                 axisLabel:{
                     interval:0,
-                    margin:20,
-                    rotate:-15
+                    margin:10,
+                    rotate:-45
                 }
             },
             yAxis: {
@@ -508,7 +511,7 @@ const loadChar = (_data,type) => {
         getGoodsDataDetail(str_before,str,type);
      })
     }
- 
+
 </script>
 
 <style scoped lang="scss"></style>

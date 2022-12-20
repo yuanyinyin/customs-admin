@@ -1,5 +1,5 @@
 <template>
-  <div class="report" ref="lineChart"></div>
+  <div class="report" ref="lineChart" style="width:1640px;height: 170px"></div>
 </template>
 <script lang="ts" setup>
   import * as echarts from 'echarts'
@@ -12,14 +12,14 @@
   })
 
   let currentInstance = ''
-  onMounted(() => {
+  onBeforeUpdate(() => {
     // 获取DOM元素并且进行初始化
     currentInstance = getCurrentInstance()
     const myChart = echarts.init(currentInstance.ctx.$refs.lineChart);
     //series数据
     let seriesData = [];
     let xAxisData = [];
- 
+
     props.list.map((item) => {
       seriesData.push({
         name: item.title,
@@ -27,7 +27,7 @@
         smooth: true,
         symbol: 'circle',
         symbolSize: 6,
-        itemStyle: { 
+        itemStyle: {
             normal: {
               color: item.colors[1],
               borderColor: "#ffffff",
@@ -37,7 +37,7 @@
                 color: item.colors[1],
                 width:1
               },
-              areaStyle: { 
+              areaStyle: {
                 color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
                 offset: 0,
                 color: item.colors[0]
@@ -50,16 +50,16 @@
         },
         data: item.data
       })
-      
+
 
     })
 
-    props.list.map((item0) => {
+    // props.list.map((item0) => {
       xAxisData.push({
         type: 'category',
         boundaryGap: false,//坐标轴两边留白
         // data: ['01月', '02月', '03月','04月','05月','06月','07月', '08月', '09月','10月','11月','12月'],
-        data: item0.month,
+        data: props.list[0].month,
         axisLabel: { //坐标轴刻度标签的相关设置。
           interval: 0,//设置为 1，表示『隔一个标签显示一个标签』
           textStyle: {
@@ -86,9 +86,9 @@
         }
       }
       })
-      
 
-    })
+
+    // })
     // 创建图标
     myChart.setOption({
       tooltip: {
@@ -96,7 +96,7 @@
       },
       grid: {
           top:'30',
-          left: '10',
+          left: '25',
           right: '30',
           bottom: '0',
           containLabel: true
@@ -109,7 +109,7 @@
             color: "rgba(48,194,255,1)",
             fontSize:10,
             align: 'left'
-        }, 
+        },
         type: 'value',
         // splitNumber: 2,
         // interval:5,

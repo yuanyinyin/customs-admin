@@ -26,7 +26,7 @@
         smooth: true,
         symbol: 'circle',
         symbolSize: 6,
-        itemStyle: { 
+        itemStyle: {
             normal: {
               color: item.colors[1],
               borderColor: "#ffffff",
@@ -36,7 +36,7 @@
                 color: item.colors[1],
                 width:1
               },
-              areaStyle: { 
+              areaStyle: {
                 color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
                 offset: 0,
                 color: item.colors[0]
@@ -50,12 +50,12 @@
         data: item.data
       })
     })
-    props.list.map((item0) => {
+    // props.list.map((item0) => {
       xAxisData.push({
         type: 'category',
         boundaryGap: false,//坐标轴两边留白
         // data: ['01月', '02月', '03月','04月','05月','06月','07月', '08月', '09月','10月','11月','12月'],
-        data:item0.mon,
+        data:props.list[0].mon,
         axisLabel: { //坐标轴刻度标签的相关设置。
           interval: 0,//设置为 1，表示『隔一个标签显示一个标签』
           textStyle: {
@@ -82,7 +82,7 @@
         }
       }
       })
-    })
+    // })
     // 创建图标
     myChart.setOption({
       tooltip: {
@@ -103,7 +103,7 @@
             color: "rgba(48,194,255,1)",
             fontSize:10,
             align: 'left'
-        }, 
+        },
         type: 'value',
         // splitNumber: 2,
         // interval:5,

@@ -599,7 +599,7 @@ const getTotalCustomData = (type) => {
     params={
       startDate: startDate1,
       endDate: endDate1,
-      qyFlag:'1',
+      qyFlag:'0',
       keyFlag:'0'
 
     }
@@ -607,7 +607,7 @@ const getTotalCustomData = (type) => {
     params={
       startDate: startDate1,
       endDate: endDate1,
-      qyFlag:'1',
+      qyFlag:'0',
       keyFlag:'1'
     }
   }

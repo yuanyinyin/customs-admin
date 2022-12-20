@@ -1,7 +1,7 @@
 <template>
 
     <div class="customsData-container scroll-y p">
-        
+
         <el-tabs v-model="activeName" @tab-change="handleTabChange">
         <el-tab-pane label="进口商品货值统计" name="first" >
             <el-container >
@@ -12,7 +12,7 @@
                 </el-main>
                 </el-card>
                 <el-card style="width: 100%;">
-            <el-main style="width: 100%;">     
+            <el-main style="width: 100%;">
                 <div class="import-search mb-1">
                     <el-form :inline="true" :model="listQueryI" class="demo-form-inline">
                     <el-form-item label="统计日期">
@@ -44,10 +44,10 @@
 
             <el-table
                 :data="tableData"
-                style="width: 100%" 
+                style="width: 100%"
                 fit
                 border
-                :summary-method="getSummariesI"   show-summary 
+                :summary-method="getSummariesI"   show-summary
                 highlight-current-row
                 >
                         <el-table-column type="index" label="序号" align="center" width="55"/>
@@ -59,7 +59,7 @@
                      </el-table>
                  </div>
               </el-main>
-            </el-card>            
+            </el-card>
             </el-container>
         </el-tab-pane>
         <el-tab-pane label="出口商品货值统计" name="second" >
@@ -72,7 +72,7 @@
                 </el-card>
                 <el-card style="width: 100%;">
             <el-main style="width: 100%;">
-           
+
                 <div class="export-search mb-1">
                     <el-form :inline="true" :model="listQueryE" class="demo-form-inline">
                     <el-form-item label="统计日期">
@@ -104,11 +104,11 @@
       <div class="export-table mb-1">
             <el-table
                 :data="tableData2"
-                style="width: 100%" 
+                style="width: 100%"
                 fit
                 border
                 height="400px"
-                :summary-method="getSummariesI"   show-summary 
+                :summary-method="getSummariesI"   show-summary
                 highlight-current-row
                 >
                 <el-table-column type="index" label="序号" align="center" width="55"/>
@@ -123,7 +123,7 @@
                </el-card>
             </el-container>
         </el-tab-pane>
-    </el-tabs>       
+    </el-tabs>
     </div>
 </template>
 
@@ -158,7 +158,7 @@ const handleTabChange = () =>{
        case "second": initPickE();break;
     }
 }
- 
+
 onMounted(() => {
     initPickI()
 })
@@ -255,7 +255,7 @@ const getSummariesI = (param) => {
     if (index === 1) {
       sums[index] = '汇总'
       return
-    } 
+    }
     if(data!=null){
         const values = data.map((item) =>
      Number(item[column.property]))
@@ -283,7 +283,7 @@ const getSummariesE = (param) => {
     if (index === 1) {
       sums[index] = '汇总'
       return
-    } 
+    }
     if(data!=null){
         const values = data.map((item) =>
      Number(item[column.property]))
@@ -309,7 +309,7 @@ const getSummariesE = (param) => {
 let canvasI: any = null//document.getElementById('canvas')
     //绘制出口商品货值柱状图
 const loadChar = (_data,type) => {
-    
+
         let date1=parseDateWithoutDayNew(listQueryI.startDate);
         let date2=parseDateWithoutDayNew(listQueryI.endDate);
         // 指定图表的配置项和数据
@@ -339,6 +339,9 @@ const loadChar = (_data,type) => {
                 data: ['货物总值','平均值'],
                 top:'6%'
             },
+          grid: {
+            left: '75',
+          },
             xAxis: {
                 data:data.month,
                 axisLabel:{
