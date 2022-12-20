@@ -39,7 +39,7 @@
     // 创建图标
     myChart.setOption({
       color: props.colors,
-      title: { 
+      title: {
         text: props.title,
         x:'right',
         y: '10',
@@ -54,7 +54,7 @@
         show: true,
         trigger: 'item',
         textStyle: {
-            fontSize: 12, 
+            fontSize: 12,
         },
         // formatter: '{b}：{c}',
         formatter: function(params){
@@ -74,7 +74,7 @@
             fontSize: 12
         }
       },
-      series: [ 
+      series: [
         {
           name: '',
           type: 'pie',

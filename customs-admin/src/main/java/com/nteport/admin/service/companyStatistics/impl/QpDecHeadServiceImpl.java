@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.nteport.admin.entity.NoticeInfo;
 import com.nteport.admin.entity.TDeptEntity;
+import com.nteport.admin.entity.TNoticeEntity;
 import com.nteport.admin.entity.companyStatistics.QpDecHead;
 import com.nteport.admin.entity.system.ApiResponse;
 import com.nteport.admin.entity.system.EnumCode;
 import com.nteport.admin.entity.system.UserEntity;
 import com.nteport.admin.mapper.NoticeInfoMapper;
+import com.nteport.admin.mapper.TNoticeMapper;
 import com.nteport.admin.mapper.statistics.QpDecHeadStatisticsMapper;
 import com.nteport.admin.service.companyStatistics.IQpDecHeadService;
 
@@ -31,7 +33,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
     private QpDecHeadStatisticsMapper qpDecHeadMapper;
 
     @Autowired
-    private NoticeInfoMapper noticeInfoMapper;
+    private TNoticeMapper tNoticeMapper;
 
     @Override
     public ApiResponse queryImOrExCustomsData(Map<String, String> params, UserEntity user) {
@@ -976,7 +978,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             HashMap map0=new HashMap();
             List<Map>list1 = qpDecHeadMapper.queryQyUseDataDash(map0);
             List<Map>list2 = qpDecHeadMapper.queryKeyQyDataDash(map0);
-            List<Map>list3 = qpDecHeadMapper.querAllQyDataDash(map0);
+            List<Map>list3 = qpDecHeadMapper.querAllQyDataDash1(map0);
             Map map = new HashMap();
             if(list1!=null&& list1.size()>0){
                 BigDecimal bigDecimal1 = new BigDecimal(String.valueOf(list1.get(0).get("NOWDAY")));
@@ -1043,7 +1045,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
 
                 // 重点企业/all企业本周
                 list1.get(0).put("NOWWEEK1",list2.get(0).get("NOWWEEK1").toString());
-                list1.get(0).put("NOWWEEK1",list3.get(0).get("NOWWEEK11").toString());
+                list1.get(0).put("NOWWEEK11",list3.get(0).get("NOWWEEK11").toString());
 
                 list1.get(0).put("NOWYEAR1",list2.get(0).get("NOWYEAR1").toString());
                 list1.get(0).put("NOWYEAR11",list3.get(0).get("NOWYEAR11").toString());
@@ -1071,10 +1073,9 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
         JSONObject data = new JSONObject();
 
         try {
-            QueryWrapper<NoticeInfo> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("NOTICE_USER_ID", user.getId());
-            queryWrapper.eq("TYPE",2);
-            List<NoticeInfo> list = noticeInfoMapper.selectList(queryWrapper);
+            QueryWrapper<TNoticeEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.orderByDesc("update_time");
+            List<TNoticeEntity> list = tNoticeMapper.selectList(queryWrapper);
 
 
             data.put("rs", list);

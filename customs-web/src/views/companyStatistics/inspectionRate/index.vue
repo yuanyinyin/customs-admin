@@ -1,7 +1,7 @@
 <template>
 
     <div class="customsData-container scroll-y p">
-        
+
         <el-tabs v-model="activeName" @tab-change="handleTabChange">
         <el-tab-pane label="进口查验统计" name="first" >
             <el-container >
@@ -37,14 +37,14 @@
                 <el-main style="width: 100%;height:500px;">
                         <div id="main1" style="width: 70%;height:100%;"></div>
                 </el-main>
-                </el-card>          
+                </el-card>
             </el-container>
         </el-tab-pane>
         <el-tab-pane label="出口查验统计" name="second" >
             <el-container>
                 <el-card style="width: 100%;">
                     <el-header>出口查验统计</el-header>
-                               
+
                 <div class="export-search mb-1">
                     <el-form :inline="true" :model="listQueryE" class="demo-form-inline">
                     <el-form-item label="统计日期">
@@ -79,7 +79,7 @@
                 </el-card>
             </el-container>
         </el-tab-pane>
-    </el-tabs>       
+    </el-tabs>
     </div>
 </template>
 
@@ -113,7 +113,7 @@ const handleTabChange = () =>{
        case "second": initPickE();break;
     }
 }
- 
+
 onMounted(() => {
     initPickI()
 })
@@ -207,7 +207,7 @@ const getExportInspectRate = () => {
 }
 let canvasI: any = null//document.getElementById('canvas')
 const loadChar = (_data,type) => {
-    
+
     let date1=parseDateWithoutDayNew(listQueryI.startDate);
     let date2=parseDateWithoutDayNew(listQueryI.endDate);
     // 指定图表的配置项和数据
@@ -218,7 +218,7 @@ const loadChar = (_data,type) => {
     for (let i = 0; i < _data.length; i++) {
         monthArry.push(_data[i].MON);
         monthValueArry1.push(_data[i].NUMBCHECKED);
-         
+
         monthValueArry2.push(_data[i].NUMBUNCHECKED)
         monthValueArry3.push(_data[i].rate)
     }
@@ -242,7 +242,7 @@ const loadChar = (_data,type) => {
 				trigger: 'axis',
 				axisPointer: {            // 坐标轴指示器，坐标轴触发有效
 					type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-						
+
 				},
 				formatter:function(datas){
 					var res = datas[0].name + '<br/>', val;
@@ -261,8 +261,8 @@ const loadChar = (_data,type) => {
 
 					res += dotColor0 + datas[0].seriesName  + ": " + datas[0].value  + '</br>';
 					res += dotColor1 + datas[1].seriesName  + ": " + datas[1].value  + '</br>';
-					res += '未查验率: '  + percent + '%' + '</br>'
-					return res; 
+					res += '查验率: '  + percent + '%' + '</br>'
+					return res;
 
 				}
 			},
@@ -292,7 +292,7 @@ const loadChar = (_data,type) => {
             barGap: '20%',
             barCategoryGap: '30%',
             barMaxWidth:'25',
-            type: 'bar', 
+            type: 'bar',
             stack:"Search Engine",
             emphasis: {//折线图的高亮状态。
               focus: "series",//聚焦当前高亮的数据所在的系列的所有图形。
