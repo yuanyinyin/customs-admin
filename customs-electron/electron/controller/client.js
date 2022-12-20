@@ -41,8 +41,23 @@ class ClientController extends Controller {
     return data;
   }
 
+  /**
+   * 新增或修改自启动配置
+   * @param args
+   * @returns {Promise<*>}
+   */
   async updateStartSet(args) {
     const data = reportFileUtil.updateStartSet(args.startSet);
+    return data;
+  }
+
+  /**
+   * 新增或修改 账号密码信息
+   * @param args
+   * @returns {Promise<*>}
+   */
+  async updateAccount(args) {
+    const data = reportFileUtil.updateAccount(args);
     return data;
   }
 
@@ -62,6 +77,15 @@ class ClientController extends Controller {
    */
   async getStartSetState() {
     const data = reportFileUtil.getStartBySys();
+    return data;
+  }
+
+  /**
+   * 获取 用户企业信息
+   * @returns {Promise<string>}
+   */
+  async getAccount() {
+    const data = reportFileUtil.getAccount();
     return data;
   }
 
@@ -208,6 +232,10 @@ class ClientController extends Controller {
   }
 
 
+  /**
+   * 重新启动
+   * @returns {number}
+   */
   restartConfirm() {
     const res = dialog.showMessageBoxSync({
       type: 'info',

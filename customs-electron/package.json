@@ -1,6 +1,6 @@
 {
   "name": "customs",
-  "version": "1.0.4",
+  "version": "1.0.7",
   "description": "自动获取最新报关单数据，助您更好的管理外贸业务",
   "main": "main.js",
   "scripts": {

@@ -19,7 +19,7 @@ module.exports = (appInfo) => {
     mode: {
       vue: {
         hostname: 'localhost',
-        port: 8080
+        port: 9030
       },
       react: {
         hostname: 'localhost',
@@ -33,7 +33,7 @@ module.exports = (appInfo) => {
   };
 
   /* 开发者工具 */
-  config.openDevTools = true;
+  config.openDevTools = false;
 
   /**
    * 应用程序顶部菜单
@@ -74,7 +74,7 @@ module.exports = (appInfo) => {
     enable: true, // 是否启用
     // url: 'http://localhost:8080' // Any web url
     url: 'https://www.nteport.com/customs/' // 外贸帮web页面
-    // url: 'http://localhost:7003/customs/' // 外贸帮web页面
+    // url: 'http://localhost:9030/customs/' // 外贸帮web页面
     //url: 'https://www.baidu.com/' // 外贸帮web页面
   };
 
