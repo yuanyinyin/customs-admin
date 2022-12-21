@@ -18,15 +18,15 @@
         AND NOT EXISTS (SELECT 1 FROM IMPORTANT_COMPANY c WHERE c.ORG_ID = a.ID)
         where 1=1
         <if test="orgName != null and orgName != ''" >
-            and a.ORG_NAME_CN like  CONCAT('%',#{orgName,jdbcType=VARCHAR},'%')
+            and instr(a.ORG_NAME_CN ,#{orgName,jdbcType=VARCHAR})>0
         </if>
         <if test="customNo != null and customNo != ''" >
-            and b.CUSTOM_NO like '%'||#{customNo , jdbcType=VARCHAR }||'%'
+            and instr(b.CUSTOM_NO ,#{customNo,jdbcType=VARCHAR})>0
         </if>
         order by a.update_date desc) A
         WHERE ROWNUM &lt;= #{pageSize,jdbcType=BIGINT}
         )
-        WHERE RN &gt;= #{current,jdbcType=BIGINT}
+        WHERE RN &gt; #{current,jdbcType=BIGINT}
     </select>
     <select id="queryCompanyListCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
         select count(1)
@@ -43,10 +43,10 @@
         c.ORG_ID = a.ID)
         where 1=1
         <if test="orgName != null and orgName != ''" >
-            and a.ORG_NAME_CN like  CONCAT('%',#{orgName,jdbcType=VARCHAR},'%')
+            and instr(a.ORG_NAME_CN ,#{orgName,jdbcType=VARCHAR})>0
         </if>
         <if test="customNo != null and customNo != ''" >
-            and b.CUSTOM_NO like  CONCAT('%',#{customNo,jdbcType=VARCHAR},'%')
+            and instr(b.CUSTOM_NO ,#{customNo,jdbcType=VARCHAR})>0
         </if>
     </select>
 </mapper>

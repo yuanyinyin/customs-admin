@@ -1,326 +1,327 @@
 <template>
-    <div class="scroll-y">
-      <div class="dashboard-container">
+<div>
+  <div class="scroll-y">
+    <div class="dashboard-container">
 
-        <el-row>
-          <el-col :span="24">
-             <el-card :body-style="{padding:'10px'}">
-              <div class="notice">
-                <div class="notice-title">
-                  <el-tag
-                      type="danger"
-                      effect="plain"
-                    >
-                      <svg-icon class="el-input__icon" class-name="notice-icon" icon-class="wm-notice"/>
-                      <span class="notice-text">通知</span>
-                  </el-tag>
-                </div>
-
-                <div class="notice-list">
-                  <vue3-seamless-scroll :list="noticeList" class="notice-scroll" :step="0.8" hover="true" direction="left" :limitMoveNum="3" singleLine="true" >
-                    <div class="item" v-for="(item, index) in noticeList" :key="index">
-                      <el-link type="primary"  @click="openLink(item.title,item.text,item.updateTime)">{{ item.title }}</el-link>
-                    </div>
-                  </vue3-seamless-scroll>
-                </div>
+      <el-row>
+        <el-col :span="24">
+          <el-card :body-style="{padding:'10px'}">
+            <div class="notice">
+              <div class="notice-title">
+                <el-tag
+                  type="danger"
+                  effect="plain"
+                >
+                  <svg-icon class="el-input__icon" class-name="notice-icon" icon-class="wm-notice"/>
+                  <span class="notice-text">通知</span>
+                </el-tag>
               </div>
-            </el-card>
-          </el-col>
-        </el-row>
 
-
-        <el-row :gutter="10">
-          <el-col :sm="12" :md="6">
-            <el-card class="card-item" :body-style="{padding:'15px'}">
-              <div class="card-info">
-                <dl>
-                  <dt>
-                    <span class="data">{{numbNowDay}}</span>
-                    <span class="red">{{rate1}}</span>
-                  </dt>
-                  <dd>今日同步单量</dd>
-                </dl>
-                <div class="card-icon">
-                  <img  src="@/assets/main/icons/icon1.png" />
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-
-          <el-col :sm="12" :md="6">
-            <el-card class="card-item" :body-style="{padding:'15px'}">
-              <div class="card-info">
-                <dl>
-                  <dt>
-                    <span class="data">{{numbNowMonth}}</span>
-                    <span class="red">{{rate2}}</span>
-                  </dt>
-                  <dd>当月数据同步数量</dd>
-                </dl>
-                <div class="card-icon">
-                  <img  src="@/assets/main/icons/icon2.png" />
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-
-          <el-col :sm="12" :md="6">
-            <el-card class="card-item" :body-style="{padding:'15px'}">
-              <div class="card-info">
-                <dl>
-                  <dt>
-                    <span class="data">{{numbNowYear}}</span>
-                    <span class="green">{{rate3}}</span>
-                  </dt>
-                  <dd>当年数据同步数量</dd>
-                </dl>
-                <div class="card-icon">
-                  <img  src="@/assets/main/icons/icon3.png" />
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-
-          <el-col :sm="12" :md="6">
-            <el-card class="card-item" :body-style="{padding:'15px'}">
-              <div class="card-info">
-                <dl>
-                  <dt>
-                    <span class="data">{{numbTotal}}</span>
-                    <!-- <span class="green">+12.32%</span> -->
-                  </dt>
-                  <dd>累计同步报关单数量</dd>
-                </dl>
-                <div class="card-icon">
-                  <img  src="@/assets/main/icons/icon4.png" />
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="10">
-          <el-col :span="24">
-            <div class="page-title">
-              <h3>总体进出口情况</h3>
-              <div>
-                <el-date-picker
-                  v-model="listQueryTotalCustomData.applyDate"
-                  type="monthrange"
-                  style="width:200px"
-                  unlink-panels
-                  range-separator="-"
-                  start-placeholder="开始月份"
-                  end-placeholder="结束月份"
-                  size="small"
-                  format="YYYY-MM"
-                  value-format="YYYY-MM"
-                  @change="onSearchTotalCustomData"
-                />
+              <div class="notice-list">
+                <vue3-seamless-scroll :list="noticeList" class="notice-scroll" :step="0.8" hover="true" direction="left" :limitMoveNum="3" singleLine="true" >
+                  <div class="item" v-for="(item, index) in noticeList" :key="index">
+                    <el-link type="primary"  @click="openLink(item.title,item.text,item.updateTime)">{{ item.title }}</el-link>
+                  </div>
+                </vue3-seamless-scroll>
               </div>
             </div>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="10">
-          <el-col :sm="12" :md="12" :lg="6">
-            <el-card class="card-item" :body-style="{padding:'15px',height:'100%'}">
-              <div class="inout-info">
-                <div class="inout-item">
-                  <div class="inout-tit">
-                    <img src="@/assets/main/icons/icon5.png" alt="">
-                    <span>进口单量</span>
-                  </div>
-                  <div class="inout-con">
-                    <span class="data">{{numbI}}</span>
-                    <span class="unit">票</span>
-                  </div>
-                </div>
-                <div class="inout-item">
-                  <div class="inout-tit">
-                    <img src="@/assets/main/icons/icon7.png" alt="">
-                    <span>货值</span>
-                  </div>
-                  <div class="inout-con">
-                    <span class="data">{{rmbI}}</span>
-                    <span class="unit">万元</span>
-                  </div>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-          <el-col :sm="12" :md="12" :lg="6">
-            <el-card class="card-item" :body-style="{padding:'15px',height:'100%'}">
-              <div class="inout-info">
-                <div class="inout-item">
-                  <div class="inout-tit">
-                    <img src="@/assets/main/icons/icon6.png" alt="">
-                    <span>出口单量</span>
-                  </div>
-                  <div class="inout-con">
-                    <span class="data">{{numbE}}</span>
-                    <span class="unit">票</span>
-                  </div>
-                </div>
-                <div class="inout-item">
-                  <div class="inout-tit">
-                    <img src="@/assets/main/icons/icon7.png" alt="">
-                    <span>货值</span>
-                  </div>
-                  <div class="inout-con">
-                    <span class="data">{{rmbE}}</span>
-                    <span class="unit">万元</span>
-                  </div>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-          <el-col  :md="24" :lg="12">
-            <el-card class="card-item" :body-style="{padding:'15px',height:'100%'}" >
-              <div class="statistics">
-                <div class="statistics-item">
-                  <pie-chart summary="汇总" unit="单" :colors="['#DE6BFF','#FFD26F']" title="进出口单量占比" :list="listOne" v-show="flagTotalCustomDataNumb" />
-                </div>
-                <div class="statistics-item">
-                  <pie-chart summary="汇总" unit="单" :colors="['#DE6BFF','#FFD26F']" title="进出口货值占比" :list="listTwo" v-show="flagTotalCustomDataSum"/>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-        </el-row>
+          </el-card>
+        </el-col>
+      </el-row>
 
 
-        <el-row :gutter="10">
-          <el-col :span="24">
-            <div class="page-title">
-              <h3>近一年报关单数据情况</h3>
-              <div>
-                <el-date-picker
-                  v-model="listQueryCustomsData.applyDate"
-                  type="monthrange"
-                  style="width:200px"
-                  unlink-panels
-                  range-separator="-"
-                  start-placeholder="开始月份"
-                  end-placeholder="结束月份"
-                  size="small"
-                  format="YYYY-MM"
-                  value-format="YYYY-MM"
-                  @change="onSearchCustomsData"
-                />
+      <el-row :gutter="10">
+        <el-col :sm="12" :md="6">
+          <el-card class="card-item" :body-style="{padding:'15px'}">
+            <div class="card-info">
+              <dl>
+                <dt>
+                  <span class="data">{{numbNowDay}}</span>
+                  <span class="red">{{rate1}}</span>
+                </dt>
+                <dd>今日同步单量</dd>
+              </dl>
+              <div class="card-icon">
+                <img  src="@/assets/main/icons/icon1.png" />
               </div>
             </div>
-          </el-col>
-        </el-row>
+          </el-card>
+        </el-col>
 
-        <el-row :gutter="10">
-          <el-col :span="24">
-            <el-card class="card-item" :body-style="{padding:'15px'}" >
-              <template #header>
-                <div class="card-header">
-                  <el-tabs v-model="activeName" class="nav-tabs" @tab-change="switchReport">
-                    <el-tab-pane label="单 量" name="first"></el-tab-pane>
-                    <el-tab-pane label="货 值" name="second"></el-tab-pane>
-                  </el-tabs>
-                </div>
-              </template>
-              <div v-if="activeName == 'first'" class="nav-report">
-                <line-chart :list="listThree"  v-show="flagCustomNumb"/>
+        <el-col :sm="12" :md="6">
+          <el-card class="card-item" :body-style="{padding:'15px'}">
+            <div class="card-info">
+              <dl>
+                <dt>
+                  <span class="data">{{numbNowMonth}}</span>
+                  <span class="red">{{rate2}}</span>
+                </dt>
+                <dd>当月数据同步数量</dd>
+              </dl>
+              <div class="card-icon">
+                <img  src="@/assets/main/icons/icon2.png" />
               </div>
-              <div v-if="activeName == 'second'" class="nav-report">
-                <line-chart :list="listFour" v-show="flagCustomSum" />
-              </div>
-            </el-card>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="10">
-          <el-col :span="24">
-            <div class="page-title">
-              <h3>近一年申报商品货值TOP10</h3>
             </div>
-          </el-col>
-        </el-row>
+          </el-card>
+        </el-col>
 
-        <el-row :gutter="10">
-          <el-col :sm="24" :md="14">
-            <el-card class="card-item" :body-style="{padding:'15px',height:'100%'}" >
-              <template #header>
-                <div class="inout-header">
-                  <el-tabs v-model="activeIndex" class="nav-tabs" @tab-change="switchInOut">
-                    <el-tab-pane label="进口" name="first"></el-tab-pane>
-                    <el-tab-pane label="出口" name="second"></el-tab-pane>
-                  </el-tabs>
-                  <div>
-                    <el-date-picker
-                      v-model="listQueryTopGoods.applyDate"
-                      type="monthrange"
-                      style="width:200px"
-                      unlink-panels
-                      range-separator="-"
-                      start-placeholder="开始月份"
-                      end-placeholder="结束月份"
-                      size="small"
-                      format="YYYY-MM"
-                      value-format="YYYY-MM"
-                      @change="onSearchTopGoods"
-                    />
-                  </div>
+        <el-col :sm="12" :md="6">
+          <el-card class="card-item" :body-style="{padding:'15px'}">
+            <div class="card-info">
+              <dl>
+                <dt>
+                  <span class="data">{{numbNowYear}}</span>
+                  <span class="green">{{rate3}}</span>
+                </dt>
+                <dd>当年数据同步数量</dd>
+              </dl>
+              <div class="card-icon">
+                <img  src="@/assets/main/icons/icon3.png" />
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+
+        <el-col :sm="12" :md="6">
+          <el-card class="card-item" :body-style="{padding:'15px'}">
+            <div class="card-info">
+              <dl>
+                <dt>
+                  <span class="data">{{numbTotal}}</span>
+                  <!-- <span class="green">+12.32%</span> -->
+                </dt>
+                <dd>累计同步报关单数量</dd>
+              </dl>
+              <div class="card-icon">
+                <img  src="@/assets/main/icons/icon4.png" />
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="10">
+        <el-col :span="24">
+          <div class="page-title">
+            <h3>总体进出口情况</h3>
+            <div>
+              <el-date-picker
+                v-model="listQueryTotalCustomData.applyDate"
+                type="monthrange"
+                style="width:200px"
+                unlink-panels
+                range-separator="-"
+                start-placeholder="开始月份"
+                end-placeholder="结束月份"
+                size="small"
+                format="YYYY-MM"
+                value-format="YYYY-MM"
+                @change="onSearchTotalCustomData"
+              />
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="10">
+        <el-col :sm="12" :md="12" :lg="6">
+          <el-card class="card-item" :body-style="{padding:'15px',height:'100%'}">
+            <div class="inout-info">
+              <div class="inout-item">
+                <div class="inout-tit">
+                  <img src="@/assets/main/icons/icon5.png" alt="">
+                  <span>进口单量</span>
                 </div>
-              </template>
-              <div v-if="activeIndex == 'first'">
-                <el-table :data="tableDataOne" style="width: 100%" size="small" :show-header="false">
-                  <el-table-column type="index" :index="index" />
-                  <el-table-column prop="GNAME" show-overflow-tooltip />
-                  <el-table-column prop="RMB" width="120" align="right">
-                    <template #default="scope">￥{{ scope.row.RMB || 0 }}</template>
-                  </el-table-column>
-                </el-table>
-              </div>
-              <div v-if="activeIndex == 'second'">
-                <el-table :data="tableDataTwo" style="width: 100%" size="small" :show-header="false">
-                  <el-table-column type="index" :index="index" />
-                  <el-table-column prop="GNAME" show-overflow-tooltip />
-                  <el-table-column prop="RMB" width="120" align="right">
-                    <template #default="scope">￥{{ scope.row.RMB || 0 }}</template>
-                  </el-table-column>
-                </el-table>
-              </div>
-            </el-card>
-          </el-col>
-          <el-col :sm="24" :md="10">
-             <el-card class="card-item" :body-style="{padding:'15px',height:'100%'}" >
-              <template #header>
-                <div class="inout-header">
-                  <div class="card-title">查验率</div>
-
-                  <div>
-                    <el-date-picker
-                      v-model="listQueryInspectRate.applyDate"
-                      type="monthrange"
-                      style="width:200px"
-                      unlink-panels
-                      range-separator="-"
-                      start-placeholder="开始月份"
-                      end-placeholder="结束月份"
-                      size="small"
-                      format="YYYY-MM"
-                      value-format="YYYY-MM"
-                      @change="onSearchInspectRate"
-                    />
-                  </div>
+                <div class="inout-con">
+                  <span class="data">{{numbI}}</span>
+                  <span class="unit">票</span>
                 </div>
-              </template>
-              <div class="report-box">
-                <pie-chart unit="次" :colors="['#2C9AD5','#FFD26F']" :list="listFive" v-show="flagInpspectRate"/>
               </div>
-             </el-card>
-          </el-col>
-        </el-row>
+              <div class="inout-item">
+                <div class="inout-tit">
+                  <img src="@/assets/main/icons/icon7.png" alt="">
+                  <span>货值</span>
+                </div>
+                <div class="inout-con">
+                  <span class="data">{{rmbI}}</span>
+                  <span class="unit">万元</span>
+                </div>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :sm="12" :md="12" :lg="6">
+          <el-card class="card-item" :body-style="{padding:'15px',height:'100%'}">
+            <div class="inout-info">
+              <div class="inout-item">
+                <div class="inout-tit">
+                  <img src="@/assets/main/icons/icon6.png" alt="">
+                  <span>出口单量</span>
+                </div>
+                <div class="inout-con">
+                  <span class="data">{{numbE}}</span>
+                  <span class="unit">票</span>
+                </div>
+              </div>
+              <div class="inout-item">
+                <div class="inout-tit">
+                  <img src="@/assets/main/icons/icon7.png" alt="">
+                  <span>货值</span>
+                </div>
+                <div class="inout-con">
+                  <span class="data">{{rmbE}}</span>
+                  <span class="unit">万元</span>
+                </div>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col  :md="24" :lg="12">
+          <el-card class="card-item" :body-style="{padding:'15px',height:'100%'}" >
+            <div class="statistics">
+              <div class="statistics-item">
+                <pie-chart summary="汇总" unit="单" :colors="['#DE6BFF','#FFD26F']" title="进出口单量占比" :list="listOne" v-show="flagTotalCustomDataNumb" />
+              </div>
+              <div class="statistics-item">
+                <pie-chart summary="汇总" unit="单" :colors="['#DE6BFF','#FFD26F']" title="进出口货值占比" :list="listTwo" v-show="flagTotalCustomDataSum"/>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
 
 
-      </div>
+      <el-row :gutter="10">
+        <el-col :span="24">
+          <div class="page-title">
+            <h3>近一年报关单数据情况</h3>
+            <div>
+              <el-date-picker
+                v-model="listQueryCustomsData.applyDate"
+                type="monthrange"
+                style="width:200px"
+                unlink-panels
+                range-separator="-"
+                start-placeholder="开始月份"
+                end-placeholder="结束月份"
+                size="small"
+                format="YYYY-MM"
+                value-format="YYYY-MM"
+                @change="onSearchCustomsData"
+              />
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="10">
+        <el-col :span="24">
+          <el-card class="card-item" :body-style="{padding:'15px'}" >
+            <template #header>
+              <div class="card-header">
+                <el-tabs v-model="activeName" class="nav-tabs" @tab-change="switchReport">
+                  <el-tab-pane label="单 量" name="first"></el-tab-pane>
+                  <el-tab-pane label="货 值" name="second"></el-tab-pane>
+                </el-tabs>
+              </div>
+            </template>
+            <div v-if="activeName == 'first'" class="nav-report">
+              <line-chart :list="listThree"  v-show="flagCustomNumb"/>
+            </div>
+            <div v-if="activeName == 'second'" class="nav-report">
+              <line-chart :list="listFour" v-show="flagCustomSum" />
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="10">
+        <el-col :span="24">
+          <div class="page-title">
+            <h3>近一年申报商品货值TOP10</h3>
+          </div>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="10">
+        <el-col :sm="24" :md="14">
+          <el-card class="card-item" :body-style="{padding:'15px',height:'100%'}" >
+            <template #header>
+              <div class="inout-header">
+                <el-tabs v-model="activeIndex" class="nav-tabs" @tab-change="switchInOut">
+                  <el-tab-pane label="进口" name="first"></el-tab-pane>
+                  <el-tab-pane label="出口" name="second"></el-tab-pane>
+                </el-tabs>
+                <div>
+                  <el-date-picker
+                    v-model="listQueryTopGoods.applyDate"
+                    type="monthrange"
+                    style="width:200px"
+                    unlink-panels
+                    range-separator="-"
+                    start-placeholder="开始月份"
+                    end-placeholder="结束月份"
+                    size="small"
+                    format="YYYY-MM"
+                    value-format="YYYY-MM"
+                    @change="onSearchTopGoods"
+                  />
+                </div>
+              </div>
+            </template>
+            <div v-if="activeIndex == 'first'">
+              <el-table :data="tableDataOne" style="width: 100%" size="small" :show-header="false">
+                <el-table-column type="index" :index="index" />
+                <el-table-column prop="GNAME" show-overflow-tooltip />
+                <el-table-column prop="RMB" width="120" align="right">
+                  <template #default="scope">￥{{ scope.row.RMB || 0 }}</template>
+                </el-table-column>
+              </el-table>
+            </div>
+            <div v-if="activeIndex == 'second'">
+              <el-table :data="tableDataTwo" style="width: 100%" size="small" :show-header="false">
+                <el-table-column type="index" :index="index" />
+                <el-table-column prop="GNAME" show-overflow-tooltip />
+                <el-table-column prop="RMB" width="120" align="right">
+                  <template #default="scope">￥{{ scope.row.RMB || 0 }}</template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :sm="24" :md="10">
+          <el-card class="card-item" :body-style="{padding:'15px',height:'100%'}" >
+            <template #header>
+              <div class="inout-header">
+                <div class="card-title">查验率</div>
+
+                <div>
+                  <el-date-picker
+                    v-model="listQueryInspectRate.applyDate"
+                    type="monthrange"
+                    style="width:200px"
+                    unlink-panels
+                    range-separator="-"
+                    start-placeholder="开始月份"
+                    end-placeholder="结束月份"
+                    size="small"
+                    format="YYYY-MM"
+                    value-format="YYYY-MM"
+                    @change="onSearchInspectRate"
+                  />
+                </div>
+              </div>
+            </template>
+            <div class="report-box">
+              <pie-chart unit="次" :colors="['#2C9AD5','#FFD26F']" :list="listFive" v-show="flagInpspectRate"/>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+
+
     </div>
+  </div>
   <el-dialog v-model="tablemodel"  :dataTmp="dataTmp" :dataname="dataname" :datatype="datatype"  @open="openFun"
              width="75%"
              align-center>
@@ -328,6 +329,7 @@
     <div id="main3" style="width: 100%;height:400px;"></div>
 
   </el-dialog>
+</div>
   </template>
 
   <script lang="ts" setup>

@@ -1,124 +1,126 @@
 <template>
 
+  <div>
     <div class="customsData-container scroll-y p">
-        
-        <el-tabs v-model="activeName" @tab-change="handleTabChange">
+
+      <el-tabs v-model="activeName" @tab-change="handleTabChange">
         <el-tab-pane label="进出口商品金额TOP10" name="first" >
-            <el-container >
-                <el-card style="width: 100%;">
-                    <el-header>进口商品金额TOP10</el-header>
-                <el-main style="width: 100%;height:500px;">
-                        <div id="wordcloud_echarts1" style="width: 70%;height:100%;"></div>
-                </el-main>
-                </el-card>
-                <el-card style="width: 100%;">
-            <el-main style="width: 100%;">     
+          <el-container >
+            <el-card style="width: 100%;">
+              <el-header>进口商品金额TOP10</el-header>
+              <el-main style="width: 100%;height:500px;">
+                <div id="wordcloud_echarts1" style="width: 70%;height:100%;"></div>
+              </el-main>
+            </el-card>
+            <el-card style="width: 100%;">
+              <el-main style="width: 100%;">
                 <div class="import-search mb-1">
-                    <el-form :inline="true" :model="listQueryI" class="demo-form-inline">
+                  <el-form :inline="true" :model="listQueryI" class="demo-form-inline">
                     <el-form-item label="统计日期">
-                        <div class="block">
-                            <span class="demonstration"></span>
-                            <el-date-picker
-                            v-model="listQueryI.startDate"
-                            type="month"
-                            placeholder="统计起始日期">
-                            </el-date-picker>
-                        </div>
-                        <div class="block">
-                            <span class="demonstration">~</span>
-                            <el-date-picker
-                            v-model="listQueryI.endDate"
-                            type="month"
-                            placeholder="统计起始日期">
-                            </el-date-picker>
-                        </div>
+                      <div class="block">
+                        <span class="demonstration"></span>
+                        <el-date-picker
+                          v-model="listQueryI.startDate"
+                          type="month"
+                          placeholder="统计起始日期">
+                        </el-date-picker>
+                      </div>
+                      <div class="block">
+                        <span class="demonstration">~</span>
+                        <el-date-picker
+                          v-model="listQueryI.endDate"
+                          type="month"
+                          placeholder="统计起始日期">
+                        </el-date-picker>
+                      </div>
                     </el-form-item>
                     <el-form-item>
                     <span class="filter-item">
                         <el-button type="success" :icon="Search" @click="onSearchI">查询</el-button>
                     </span>
                     </el-form-item>
-                    </el-form>
+                  </el-form>
                 </div>
-      <div class="import-table mb-1">
+                <div class="import-table mb-1">
 
-            <el-table
-                :data="tableData"
-                style="width: 140%" 
-                fit
-                border
-                highlight-current-row
-                >
-                        <el-table-column type="index" label="TOP10" align="center" width="65"   />
-                        <el-table-column prop="CODETS" label="商品编码" align="center"/>
-                        <el-table-column prop="GNAME" label="商品名称" align="center"/>
-                        <el-table-column prop="NUMB" label="申报频率" align="center"/>
-                     </el-table>
-                 </div>
+                  <el-table
+                    :data="tableData"
+                    style="width: 140%"
+                    fit
+                    border
+                    highlight-current-row
+                  >
+                    <el-table-column type="index" label="TOP10" align="center" width="65"   />
+                    <el-table-column prop="CODETS" label="商品编码" align="center"/>
+                    <el-table-column prop="GNAME" label="商品名称" align="center"/>
+                    <el-table-column prop="NUMB" label="申报频率" align="center"/>
+                  </el-table>
+                </div>
               </el-main>
-            </el-card>            
-            </el-container>
+            </el-card>
+          </el-container>
         </el-tab-pane>
         <el-tab-pane label="出口商品金额TOP10" name="second" >
-            <el-container>
-                <el-card style="width: 100%;">
-                    <el-header>出口商品金额TOP10</el-header>
-                <el-main style="width: 100%;height:500px;">
-                        <div id="wordcloud_echarts2" style="width: 70%;height:100%;"></div>
-                </el-main>
-                </el-card>
-                <el-card style="width: 100%;">
-            <el-main style="width: 100%;">
-           
+          <el-container>
+            <el-card style="width: 100%;">
+              <el-header>出口商品金额TOP10</el-header>
+              <el-main style="width: 100%;height:500px;">
+                <div id="wordcloud_echarts2" style="width: 70%;height:100%;"></div>
+              </el-main>
+            </el-card>
+            <el-card style="width: 100%;">
+              <el-main style="width: 100%;">
+
                 <div class="export-search mb-1">
-                    <el-form :inline="true" :model="listQueryE" class="demo-form-inline">
+                  <el-form :inline="true" :model="listQueryE" class="demo-form-inline">
                     <el-form-item label="统计日期">
-                        <div class="block">
-                            <span class="demonstration"></span>
-                            <el-date-picker
-                            v-model="listQueryE.startDate"
-                            type="month"
-                            placeholder="统计起始日期">
-                            </el-date-picker>
-                        </div>
-                        <div class="block">
-                            <span class="demonstration">~</span>
-                            <el-date-picker
-                            v-model="listQueryE.endDate"
-                            type="month"
-                            placeholder="统计起始日期">
-                            </el-date-picker>
-                        </div>
+                      <div class="block">
+                        <span class="demonstration"></span>
+                        <el-date-picker
+                          v-model="listQueryE.startDate"
+                          type="month"
+                          placeholder="统计起始日期">
+                        </el-date-picker>
+                      </div>
+                      <div class="block">
+                        <span class="demonstration">~</span>
+                        <el-date-picker
+                          v-model="listQueryE.endDate"
+                          type="month"
+                          placeholder="统计起始日期">
+                        </el-date-picker>
+                      </div>
                     </el-form-item>
                     <el-form-item>
                     <span class="filter-item">
                         <el-button type="success" :icon="Search" @click="onSearchE">查询</el-button>
                     </span>
                     </el-form-item>
-                    </el-form>
+                  </el-form>
                 </div>
 
-      <div class="export-table mb-1">
-            <el-table
-                :data="tableData2"
-                style="width: 100%" 
-                fit
-                border
-                height="400px"
-                highlight-current-row
-                >
-                        <el-table-column type="index" label="TOP10" align="center" width="65"   />
-                        <el-table-column prop="CODETS" label="商品编码" align="center"/>
-                        <el-table-column prop="GNAME" label="商品名称" align="center"/>
-                        <el-table-column prop="NUMB" label="申报频率" align="center"/>
-                     </el-table>
-                 </div>
-                </el-main>
-               </el-card>
-            </el-container>
+                <div class="export-table mb-1">
+                  <el-table
+                    :data="tableData2"
+                    style="width: 100%"
+                    fit
+                    border
+                    height="400px"
+                    highlight-current-row
+                  >
+                    <el-table-column type="index" label="TOP10" align="center" width="65"   />
+                    <el-table-column prop="CODETS" label="商品编码" align="center"/>
+                    <el-table-column prop="GNAME" label="商品名称" align="center"/>
+                    <el-table-column prop="NUMB" label="申报频率" align="center"/>
+                  </el-table>
+                </div>
+              </el-main>
+            </el-card>
+          </el-container>
         </el-tab-pane>
-    </el-tabs>       
+      </el-tabs>
     </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -152,7 +154,7 @@ const handleTabChange = () =>{
        case "second": initPickE();break;
     }
 }
- 
+
 onMounted(() => {
     initPickI()
 })
@@ -310,5 +312,5 @@ const loadChar = (_data,type) => {
       myChartI.setOption(option)
     }
 </script>
-const 
+const
 <style scoped lang="scss"></style>
