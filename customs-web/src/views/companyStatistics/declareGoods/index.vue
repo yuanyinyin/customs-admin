@@ -19,7 +19,7 @@
                     <el-form-item label="统计日期">
                       <div class="block">
                         <span class="demonstration"></span>
-                        <el-date-picker
+                        <el-date-picker  style="width:100px;"
                           v-model="listQueryI.startDate"
                           type="month"
                           placeholder="统计起始日期">
@@ -27,7 +27,7 @@
                       </div>
                       <div class="block">
                         <span class="demonstration">~</span>
-                        <el-date-picker
+                        <el-date-picker  style="width:100px;"
                           v-model="listQueryI.endDate"
                           type="month"
                           placeholder="统计起始日期">
@@ -76,7 +76,7 @@
                     <el-form-item label="统计日期">
                       <div class="block">
                         <span class="demonstration"></span>
-                        <el-date-picker
+                        <el-date-picker style="width:100px;"
                           v-model="listQueryE.startDate"
                           type="month"
                           placeholder="统计起始日期">
@@ -84,7 +84,7 @@
                       </div>
                       <div class="block">
                         <span class="demonstration">~</span>
-                        <el-date-picker
+                        <el-date-picker style="width:100px;"
                           v-model="listQueryE.endDate"
                           type="month"
                           placeholder="统计起始日期">
@@ -194,6 +194,7 @@ const initPickI = () => {
     try {
         getImportTopGoods()
     } catch (e) {
+      console.log(e)
     }
 
     }, 500)
@@ -273,7 +274,7 @@ const loadChar = (_data,type) => {
         // 指定图表的配置项和数据
         const option = {
             title: {
-                text: date1+'~'+date2+totalType+'商品申报频率统计',
+                text: date1+'~'+date2+totalType+'商品申报频率',
             },
             tooltip: {},
             legend: {
@@ -293,7 +294,7 @@ const loadChar = (_data,type) => {
                 }
             },
             grid: {
-                left:'15%'
+              left: '110',
             },
             series: [
                 {
@@ -314,3 +315,8 @@ const loadChar = (_data,type) => {
 </script>
 const
 <style scoped lang="scss"></style>
+<style>
+  .el-input__inner{
+    width: 50px;
+  }
+</style>

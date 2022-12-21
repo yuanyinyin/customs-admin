@@ -3,11 +3,11 @@
     <div class="customsData-container scroll-y p">
 
         <el-tabs v-model="activeName" @tab-change="handleTabChange">
-        <el-tab-pane label="进口商品货值统计" name="first" >
+        <el-tab-pane label="进口货值统计" name="first" >
             <el-container >
                 <el-card style="width: 150%;">
-                    <el-header>进口商品货值统计</el-header>
-                <el-main style="width: 100%;height:500px;">
+                    <el-header>进口货值统计</el-header>
+                <el-main style="width: 140%;height:500px;">
                         <div id="main1" style="width: 70%;height:100%;"></div>
                 </el-main>
                 </el-card>
@@ -18,7 +18,7 @@
                     <el-form-item label="统计日期">
                         <div class="block">
                             <span class="demonstration"></span>
-                            <el-date-picker
+                            <el-date-picker style="width:100px;"
                             v-model="listQueryI.startDate"
                             type="month"
                             placeholder="统计起始日期">
@@ -26,7 +26,7 @@
                         </div>
                         <div class="block">
                             <span class="demonstration">~</span>
-                            <el-date-picker
+                            <el-date-picker style="width:100px;"
                             v-model="listQueryI.endDate"
                             type="month"
                             placeholder="统计起始日期">
@@ -55,18 +55,18 @@
                         <el-table-column prop="CURRENCY" label="币值" align="center"/>
                         <el-table-column prop="NUMB" label="金额" align="center"/>
                         <el-table-column prop="RATE" label="汇率" align="center"/>
-                        <el-table-column prop="RMB" label="人民币金额" align="center"/>
+                        <el-table-column prop="RMB" label="人民币金额（元）" align="center"/>
                      </el-table>
                  </div>
               </el-main>
             </el-card>
             </el-container>
         </el-tab-pane>
-        <el-tab-pane label="出口商品货值统计" name="second" >
+        <el-tab-pane label="出口货值统计" name="second" >
             <el-container>
                 <el-card style="width: 100%;">
-                    <el-header>出口商品货值统计</el-header>
-                <el-main style="width: 100%;height:500px;">
+                    <el-header>出口货值统计</el-header>
+                <el-main style="width: 140%;height:500px;">
                         <div id="main2" style="width: 70%;height:100%;"></div>
                 </el-main>
                 </el-card>
@@ -78,7 +78,7 @@
                     <el-form-item label="统计日期">
                         <div class="block">
                             <span class="demonstration"></span>
-                            <el-date-picker
+                            <el-date-picker style="width:100px;"
                             v-model="listQueryE.startDate"
                             type="month"
                             placeholder="统计起始日期">
@@ -86,7 +86,7 @@
                         </div>
                         <div class="block">
                             <span class="demonstration">~</span>
-                            <el-date-picker
+                            <el-date-picker style="width:100px;"
                             v-model="listQueryE.endDate"
                             type="month"
                             placeholder="统计起始日期">
@@ -116,7 +116,7 @@
                         <el-table-column prop="CURRENCY" label="币值" align="center"/>
                         <el-table-column prop="NUMB" label="金额" align="center"/>
                         <el-table-column prop="RATE" label="汇率" align="center"/>
-                        <el-table-column prop="RMB" label="人民币金额" align="center"/>
+                        <el-table-column prop="RMB" label="人民币金额（元）" align="center"/>
                      </el-table>
                  </div>
                 </el-main>
@@ -198,6 +198,7 @@ const initPickI = () => {
     try {
         getImportCustomsData()
     } catch (e) {
+      console.log(e)
     }
 
     }, 500)
@@ -307,7 +308,7 @@ const getSummariesE = (param) => {
 }
 
 let canvasI: any = null//document.getElementById('canvas')
-    //绘制出口商品货值柱状图
+    //绘制出口货值柱状图
 const loadChar = (_data,type) => {
 
         let date1=parseDateWithoutDayNew(listQueryI.startDate);
@@ -346,7 +347,8 @@ const loadChar = (_data,type) => {
                 data:data.month,
                 axisLabel:{
                     interval:0,
-                    rotate:0
+                    rotate:45,
+                    margin:10
                 }
             },
             yAxis: {

@@ -1,7 +1,7 @@
 <template>
 
     <div class="customsData-container scroll-y p">
-        
+
         <el-tabs v-model="activeName" @tab-change="handleTabChange">
         <el-tab-pane label="企业进口区域统计" name="first" >
             <el-container >
@@ -41,10 +41,10 @@
                     </el-form-item>
                     </el-form>
                 </div>
-                <el-main style="width: 100%;height:500px;">
+                <el-main style="width: 140%;height:500px;">
                         <div id="main1" style="width: 70%;height:100%;"></div>
                 </el-main>
-                </el-card>          
+                </el-card>
             </el-container>
         </el-tab-pane>
         <el-tab-pane label="企业出口区域统计" name="second" >
@@ -88,10 +88,10 @@
                 <el-main style="width: 100%;height:500px;">
                         <div id="main2" style="width: 70%;height:100%;"></div>
                 </el-main>
-                </el-card>          
+                </el-card>
             </el-container>
         </el-tab-pane>
-    </el-tabs>       
+    </el-tabs>
     </div>
 </template>
 
@@ -127,7 +127,7 @@ let activeNameE = ref('firstE')
 const handleTabChange = () =>{
     switch(activeName._rawValue){
        case "first":initPickI(); break;
-       case "second": 
+       case "second":
        activeNameE = ref('firstE');
        initPickE();
         break;
@@ -229,12 +229,12 @@ const getAreaDataImport = (tabtype) => {
     .catch((response) => {})
 }
 const getAreaDataExport = (tabtype) => {
-    let 
+    let
      params={
       startDate: parseDateWithoutDay(listQueryE.startDate),
       endDate: parseDateWithoutDay(listQueryE.endDate),
       ieFlag:'E'
-    } 
+    }
     console.log(111111,params)
   store
     .dispatch('manageStatistics/getAreaData',params)
@@ -258,7 +258,7 @@ const getAreaDataByCode = (areaCode,areaName,type,tabType) => {
         endDate: date2,
         ieFlag:type
         }
-    console.log(params) 
+    console.log(params)
   store
     .dispatch('manageStatistics/getAreaDataByCode',params)
     .then((response) => {
@@ -286,7 +286,7 @@ const getExportAreaData = (tabtype) => {
 let canvasI: any = null//document.getElementById('canvas')
     //绘制出口报关单量柱状图
 const loadChar = (_data,type,tabtype) => {
-  
+
         let date1=parseDateWithoutDayNew(listQueryI.startDate);
         let date2=parseDateWithoutDayNew(listQueryI.endDate);
         // 指定图表的配置项和数据
@@ -305,11 +305,11 @@ const loadChar = (_data,type,tabtype) => {
             areaValueArry3.push(_data[i].SUMTOTALUSD)
             areaValueArry4.push(_data[i].SUMNETWT);
             areaValueArry5.push(_data[i].SUMGROSSWET);
-           
+
 
         }
         let data={areaCode:areaCodeArry,area:areaArry,val1:areaValueArry1,val2:areaValueArry2,val3:areaValueArry3,val4:areaValueArry4,val5:areaValueArry5};
-      
+
         let totalType=''
             let mainType=''
             if(type=='I'){
@@ -322,9 +322,9 @@ const loadChar = (_data,type,tabtype) => {
                 date2=parseDateWithoutDayNew(listQueryE.endDate);
             }
             let option={}
-         
+
             if(tabtype=='firstI'||tabtype=='firstE'){
-                
+
                   option = {
                 title: {
                     text: '企业'+totalType+'区域单量分析',
@@ -353,7 +353,7 @@ const loadChar = (_data,type,tabtype) => {
                     data:data.area,
                     axisLabel:{
                         interval:0,
-                        margin:20,
+                        margin:10,
                         rotate:-15
                         // formatter: function (value) {
                         //     //截取最后一个>后面的字符串
@@ -393,7 +393,7 @@ const loadChar = (_data,type,tabtype) => {
                 ]
                 };
             }else if(tabtype=='secondI'||tabtype=='secondE'){
-          
+
                 option = {
                 title: {
                 text: '企业'+totalType+'区域人民币、美元货值分析',
@@ -422,7 +422,7 @@ const loadChar = (_data,type,tabtype) => {
                         data:data.area,
                         axisLabel:{
                         interval:0,
-                        margin:20,
+                        margin:10,
                         rotate:-15
                         // formatter: function (value) {
                         //     //截取最后一个>后面的字符串
@@ -479,7 +479,7 @@ const loadChar = (_data,type,tabtype) => {
                     ]
                     };
                 }else if(tabtype=='thirdI'||tabtype=='thirdE'){
-                  
+
                     option = {
                     title: {
                     text: '企业'+totalType+'区域净重、毛重分析',
@@ -508,7 +508,7 @@ const loadChar = (_data,type,tabtype) => {
                             data:data.area,
                             axisLabel:{
                             interval:0,
-                            margin:20,
+                            margin:10,
                             rotate:-15
                             // formatter: function (value) {
                             //     //截取最后一个>后面的字符串
@@ -576,7 +576,7 @@ const loadChar = (_data,type,tabtype) => {
         let str=_data[param.dataIndex].AREANAME
         getAreaDataByCode(str_before,str,type,tabtype);
      })
-        
+
     }
     const loadChar2 = (_data,areaName,type,tabType) => {
         let date1=parseDateWithoutDayNew(listQueryI.startDate);
@@ -598,7 +598,7 @@ const loadChar = (_data,type,tabtype) => {
             monthValueArry5.push(_data[i].SUMGROSSWET);
         }
         let data={month:monthArry,val1:monthValueArry1,val2:monthValueArry2,val3:monthValueArry3,val4:monthValueArry4,val5:monthValueArry5};
- 
+
         let totalType=''
             let mainType=''
             if(type=='I'){
@@ -836,7 +836,7 @@ const loadChar = (_data,type,tabtype) => {
       myChartI.clear()
       myChartI.setOption(option)
       myChartI.off("click")
-        
+
     }
 </script>
 

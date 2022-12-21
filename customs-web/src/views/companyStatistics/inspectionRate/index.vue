@@ -153,6 +153,7 @@ const initPickI = () => {
     try {
         getImportInspectRate()
     } catch (e) {
+      console.log(e)
     }
 
     }, 500)
@@ -274,7 +275,8 @@ const loadChar = (_data,type) => {
             data:data.month,
             axisLabel:{
                 interval:0,
-                rotate:0
+                rotate:45,
+                margin:10
             }
         },
         yAxis: {
