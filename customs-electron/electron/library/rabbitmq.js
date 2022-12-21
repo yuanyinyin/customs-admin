@@ -35,11 +35,25 @@ function sendQueueMsg(params, callbackfun) {
   amqp.connect(serverConfig).then(function(conn) {
     return conn.createChannel().then(function(ch) {
       var ex = exchange;
-      var ok = ch.assertExchange(ex, exchange_type, {durable: true});
+      var ok = ch.assertExchange(ex, exchange_type, {durable: true});//初始化和持久化交换机
       // 交换器类型direct、fanout、topic、headers
       return ok.then(function() {
+        /*
+          消息持久化  参考：nodemodules源码(网上基本没有资料) 实现了直接通过队列发送持久化消息 E:\git_new_workspace\customs\customs-electron\node_modules\amqplib\examples\tutorials\new_task.js
+          下例代码实现通过交换机发送持久化消息
+          特别注意：rabbitmq控制台中持久化的数据  http://172.16.22.11:15672/
+            message_id:	消息ID
+            priority:	0
+            delivery_mode:	2     包括java代码使用   特别注意:但是vue中使用{deliveryMode: true}
+            content_type:	text/plain
+            消息优先级priority字段定义为一个无符号byte,所以实际的优先级应该在0到255之间；消息如果没有设置priority优先级字段，那么priority字段值默认为0；如果优先级队列priority属性被设置为比x-max-priority大，那么priority的值被设置为x-max-priority的值。
+       */
         ch.publish(ex, '', Buffer.from(body), { //注意第一个参数为交换机名称  第二个参数为Routing key(1、当交换器类型为direct时 该值只能为'' 不能为null  2、当对应交换机类型绑定queue时有Routing key配置时才需要填写)
-          headers: headers
+          headers: headers, //null '' {}  三者效果一样
+          priority:	0, //优先级 数值越大优先级越高   0-255
+          deliveryMode:true,  //消息持久化
+          contentType:'text/plain',  //注意属性写法和java及rabbitmq结果集不一样  自己尝试摸索出来 网上几乎没有相关文档
+          messageId:guid() //注意属性写法和java及rabbitmq结果集不一样  自己尝试摸索出来 网上几乎没有相关文档
         });
         if(callbackfun)callbackfun('发送成功!');
         return ch.close();
@@ -71,6 +85,13 @@ function receiveQueueMsg(queue, callback) {
 //
 // }
 
+function guid() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16 | 0,
+        v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
 
 exports.rabbitmq = {
   sendQueueMsg: sendQueueMsg,
