@@ -221,11 +221,11 @@ const actions = {
               orgName: data.deptName,
               orgCode: "",
             }
-            ipcRenderer.invoke('controller.client.updateAccount', account).then(res => {
+            /*ipcRenderer.invoke('controller.client.updateAccount', account).then(res => {
               console.log("持久化本地账户信息");
               resolve(data)
-            })
-            //resolve(data)
+            })*/
+            resolve(data)
           } else {
             return reject('Verification failed, please Login again.')
           }
