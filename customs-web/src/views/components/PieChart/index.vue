@@ -1,5 +1,5 @@
 <template>
-  <div class="report" ref="chart"></div>
+  <div class="report" ref="chart" style="width:400px;height: 200px"></div>
 </template>
 <script lang="ts" setup>
   import * as echarts from 'echarts'
@@ -32,7 +32,7 @@
                   return acc + cur.value
               }, 0);
   let currentInstance = ''
-  onMounted(() => {
+  onBeforeUpdate(() => {
     // 获取DOM元素并且进行初始化
     currentInstance = getCurrentInstance()
     const myChart = echarts.init(currentInstance.ctx.$refs.chart);

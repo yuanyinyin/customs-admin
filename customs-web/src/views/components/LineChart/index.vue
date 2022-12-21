@@ -1,5 +1,5 @@
 <template>
-  <div class="report" ref="lineChart"></div>
+  <div class="report" ref="lineChart"  style="width:1840px;height: 170px"></div>
 </template>
 <script lang="ts" setup>
   import * as echarts from 'echarts'
@@ -12,7 +12,7 @@
   })
 
   let currentInstance = ''
-  onMounted(() => {
+  onBeforeUpdate(() => {
     // 获取DOM元素并且进行初始化
     currentInstance = getCurrentInstance()
     const myChart = echarts.init(currentInstance.ctx.$refs.lineChart);
