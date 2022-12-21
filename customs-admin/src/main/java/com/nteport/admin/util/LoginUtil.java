@@ -1,6 +1,7 @@
 package com.nteport.admin.util;
 
 import com.nteport.admin.entity.system.UserEntity;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Map;
 /*
@@ -8,7 +9,10 @@ import java.util.Map;
  */
 public class LoginUtil {
     public static boolean useNtPtlLogin = true;//是否从核心库登录和读取权限
-    public static String menu_root_id="A5615576-31E1-4212-A051-3AF93CA68AFD";
+
+//    public static String menu_root_id="A5615576-31E1-4212-A051-3AF93CA68AFD";
+    @Value("${login.menu.rootId}")
+    public static String menu_root_id;//外贸帮rm菜单根节点
     public static UserEntity ptlUser2UserEntity(Map ntPtl_user){
         UserEntity user=null;
         if (ntPtl_user!=null){
