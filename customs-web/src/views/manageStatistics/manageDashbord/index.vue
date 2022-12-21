@@ -2,32 +2,6 @@
   <div class="scroll-y">
     <div class="dashboard-container">
 
-<!--      <el-row>-->
-<!--        <el-col :span="24">-->
-<!--           <el-card :body-style="{padding:'10px'}">-->
-<!--            <div class="notice">-->
-<!--              <div class="notice-title">-->
-<!--                <el-tag-->
-<!--                    type="danger"-->
-<!--                    effect="plain"-->
-<!--                  >-->
-<!--                    <svg-icon class="el-input__icon" class-name="notice-icon" icon-class="wm-notice"/>-->
-<!--                    <span class="notice-text">通知</span>-->
-<!--                </el-tag>-->
-<!--              </div>-->
-
-<!--              <div class="notice-list">-->
-<!--                <vue3-seamless-scroll :list="noticeList" class="notice-scroll" :step="0.8" hover="true" direction="left" :limitMoveNum="3" singleLine="true" >-->
-<!--                  <div class="item" v-for="(item, index) in noticeList" :key="index">-->
-<!--                    <el-link type="primary">{{ item.title }}</el-link>-->
-<!--                  </div>-->
-<!--                </vue3-seamless-scroll>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </el-card>-->
-<!--        </el-col>-->
-<!--      </el-row>-->
-
       <el-row :gutter="10">
         <el-col :span="24">
           <el-card class="card-item" :body-style="{padding:'5px 15px 15px',height:'100%'}" >
@@ -248,13 +222,13 @@
               </div>
             </template>
             <div v-if="activeName == 'first'" class="nav-report">
-              <line-chart :list="listThree"  v-if="flagThree"/>
+              <line-chart :list="listThree"  v-show="flagThree"/>
             </div>
             <div v-if="activeName == 'second'" class="nav-report">
-              <line-chart :list="listFour"  v-if="flagFour"/>
+              <line-chart :list="listFour"  v-show="flagFour"/>
             </div>
             <div v-if="activeName == 'third'" class="nav-report">
-              <line-chart :list="listFive"  v-if="flagFive"/>
+              <line-chart :list="listFive"  v-show="flagFive"/>
             </div>
           </el-card>
         </el-col>
@@ -295,13 +269,13 @@
               </div>
             </template>
             <div v-if="activeNameTwo == 'first'" class="nav-report">
-              <bar-chart :list="listSix" v-if="flagSix"/>
+              <bar-chart :list="listSix" v-show="flagSix"/>
             </div>
             <div v-if="activeNameTwo == 'second'" class="nav-report">
-              <bar-chart :list="listSeven" v-if="flagSeven" />
+              <bar-chart :list="listSeven" v-show="flagSeven" />
             </div>
             <div v-if="activeNameTwo == 'third'" class="nav-report">
-              <bar-chart :list="listEight" v-if="flagEight"/>
+              <bar-chart :list="listEight" v-show="flagEight"/>
             </div>
           </el-card>
         </el-col>
@@ -322,24 +296,6 @@ import { ElMessageBox, ElMessage } from 'element-plus'
 import { parseDateWithoutDay} from '@/utils/dateTime';
 import { type } from 'os';
 const store = useStore()
-//模拟数据
-const noticeList = reactive([
-  {
-    title: '南通跨境电商迎来实质性利好'
-  },
-  {
-    title: '关于建设“南通跨境电子商务综合试验区”的一点思考'
-  },
-  {
-    title: '总值超三千亿，同比增长13.2% 前10月南通外贸进出口数据出炉'
-  },
-  {
-    title: '南通电子口岸组织党员干部观看党的二十大开幕盛况'
-  },
-  {
-    title: 'RCEP生效6个月 ，海安市签发RCEP原产地证书164份'
-  }
-])
 
 const listOne = ref([])
 const listTwo = ref([])
@@ -360,9 +316,7 @@ const flagSeven = ref(false)
 const flagEight = ref(false)
 
 
-const dateRange = ref('')
-const dateRangeTwo = ref('')
-const dateRangeThree = ref('')
+
 //总体进出口情况
 const listQueryTotalCustomData = reactive({
 
@@ -672,6 +626,7 @@ const getCustomDataDash = (type,tabtype) => {
   store
     .dispatch('manageStatistics/getCustomDataDash',params)
     .then((response) => {
+
         listThree.value=[]
         listFour.value=[]
         listFive.value=[]
