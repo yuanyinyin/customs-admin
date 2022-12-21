@@ -4,18 +4,18 @@
 
     <!-- 报关单量统计 -->
     <select id="queryImOrExCustomsData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-        select to_char( count(1)) numb,substr(d.declarationData,0,6) as mon
+        select * from (select  to_char( count(1)) numb,substr(d.declarationData,0,6) as mon
         from nsw.qp_dechead d where 1=1 and d.isdelete !='1'
-        <if test="qyFlag != null and qyFlag != ''" >
+        <if test="qyFlag ==1">
             and d.orgid = #{orgid,jdbcType=VARCHAR}
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
         </if>
         and d.declarationdata is not null
-        group by substr(d.declarationData,0,6)
+        group by substr(d.declarationData,0,6))
+        where 1=1 and mon &gt;= #{startDate,jdbcType=VARCHAR}
+        and mon &lt;= #{endDate,jdbcType=VARCHAR}
         order by mon
     </select>
 <!--    进出口运输方式-->
@@ -23,8 +23,8 @@
         select count(d.trafmode_value) as numb,d.trafmode_value traf
         from nsw.qp_dechead d where 1=1 and d.isdelete !='1'
         and d.orgid= #{orgid,jdbcType=VARCHAR}
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;=#{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;=#{endDate,jdbcType=VARCHAR}
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
         </if>
@@ -35,8 +35,8 @@
         select d.trafmode_value traf,d.ieport_value ieport,d.custommaster_value custom,count(d.custommaster_value) numb
         from nsw.qp_dechead d where 1=1 and d.isdelete !='1'
         and d.orgid= #{orgid,jdbcType=VARCHAR}
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;=#{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;=#{endDate,jdbcType=VARCHAR}
         and d.trafmode_value= #{trafMode,jdbcType=VARCHAR}
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
@@ -54,8 +54,8 @@
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and d.trademode_value is not null
         group by d.trademode_value)
         order by numb desc
@@ -63,7 +63,7 @@
     <!--报关货值统计-->
     <select id="queryGoodsTotal1" resultType="java.util.HashMap" parameterType="java.util.HashMap">
         select mon,currency,rate,sum(val) numb,round(sum(val)*rate,2) rmb from(
-        select substr(d.declarationData,0,6) as mon,s.TRADECURR_VALUE  currency,s.CURRENTRATE  rate,s.DECLTOTAL  val
+        select substr(d.declarationData,0,6) as mon,s.TRADECURR_VALUE  currency,NVL(s.CURRENTRATE ,1)  rate,s.DECLTOTAL  val
         from nsw.QP_DECLIST s
         left join  nsw.qp_dechead d
         on s.HEADID=d.id
@@ -73,8 +73,8 @@
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         )
         group by mon,currency,rate
         order by mon ASC
@@ -85,13 +85,13 @@
         from nsw.QP_DECLIST s
         left join  nsw.qp_dechead d
         on s.HEADID=d.id
-        where 1=1
+        where 1=1   and d.isdelete != '1'
         and d.orgid = #{orgid,jdbcType=VARCHAR}
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         )
         group by mon,currency,rate
         order by mon ASC
@@ -110,8 +110,8 @@
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and s.codeTS IS NOT NULL)
         group by codeTS,gname,currency,rate
         order by rmb desc)
@@ -130,8 +130,8 @@
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
         </if>
         and s.codeTS is not null
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         group by codeTS,gname
         order by numb desc)
         where rownum &lt;= 10
@@ -151,8 +151,8 @@
         <if test="keyFlag ==1">
             and exists(select 1 from important_company where  d.orgId= org_id )
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and s.AREA_CODE is not null
         group by s.AREA_CODE,s.AREA_NAME
         order by s.AREA_CODE
@@ -169,8 +169,8 @@
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and s.AREA_CODE =#{areaCode,jdbcType=VARCHAR}
         and d.declarationdata is not null
         group by substr(d.declarationData,0,6)
@@ -183,8 +183,8 @@
         <if test="qyFlag != null and qyFlag != ''" >
             and d.orgid = #{orgid,jdbcType=VARCHAR}
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
         </if>
@@ -196,8 +196,8 @@
         select to_char( count(1)) numbchecked,substr(d.declarationData,0,6) as mon
         from nsw.qp_dechead d where 1=1 and d.isdelete !='1'
         and d.orgid= #{orgid,jdbcType=VARCHAR}
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
         </if>
@@ -209,7 +209,7 @@
         order by mon
     </select>
     <select id="queryGoodsData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-        SELECT codeTS,
+        select * from (SELECT codeTS,
         gname  ,sum(rmb)rmb FROM(
         select * from(SELECT codeTS,gname,currency,rate,sum(val) numb,round(sum(val)*rate,2) rmb FROM (
         SELECT s.codeTS codeTS,s.gname gname,s.TRADECURR_VALUE  currency,NVL(s.CURRENTRATE ,1)  rate,s.DECLTOTAL  val FROM nsw.QP_DECLIST s LEFT JOIN nsw.qp_dechead d ON s.HEADID=d.ID
@@ -218,13 +218,13 @@
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and s.codeTS IS NOT NULL)
         group by codeTS,gname,currency,rate
         order by rmb desc))
         GROUP BY  codeTS,
-        gname
+        gname)     where rownum &lt;=10
     </select>
     <select id="queryGoodsDataByGNAME" resultType="java.util.HashMap" parameterType="java.util.HashMap">
 
@@ -239,8 +239,8 @@
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and s.codeTS IS NOT NULL
         and d.declarationdata is not null
         and s.gname =#{gname,jdbcType=VARCHAR}
@@ -254,8 +254,8 @@
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and d.declarationdata is not null
         and s.codeTS IS NOT NULL
         and s.gname =#{gname,jdbcType=VARCHAR}
@@ -275,8 +275,8 @@
         WHERE 1=1
         and d1.isdelete != '1'
         and d1.ieFlag= 'I'
-        and d1.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d1.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d1.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d1.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and d1.declarationdata is not null
         <if test="keyCompanyFlag != null and keyCompanyFlag != ''" >
             and exists (select 1 from IMPORTANT_COMPANY where ORG_ID=d1.orgId)
@@ -287,8 +287,8 @@
         WHERE 1=1
         and d1.isdelete != '1'
         and d1.ieFlag= 'E'
-        and d1.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d1.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d1.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d1.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and d1.declarationdata is not null
         GROUP BY d1.orgId  )b ON b.orgId =s.org_id order by customtotalrmbI desc,customtotalrmbE desc,numbI desc,numbE desc) A
                 WHERE ROWNUM &lt;= #{pageSize,jdbcType=BIGINT}
@@ -303,8 +303,8 @@
         WHERE 1=1
         and d1.isdelete != '1'
         and d1.ieFlag= 'I'
-        and d1.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d1.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d1.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d1.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and d1.declarationdata is not null
         <if test="keyCompanyFlag != null and keyCompanyFlag != ''" >
             and exists (select 1 from IMPORTANT_COMPANY where ORG_ID=d1.orgId)
@@ -315,8 +315,8 @@
        WHERE 1=1
         and d1.isdelete != '1'
         and d1.ieFlag= 'E'
-        and d1.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d1.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d1.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d1.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and d1.declarationdata is not null
         <if test="keyCompanyFlag != null and keyCompanyFlag != ''" >
             and exists (select 1 from IMPORTANT_COMPANY where ORG_ID=d1.orgId)
@@ -335,8 +335,8 @@
     WHERE 1=1
     and d1.isdelete != '1'
     and d1.ieFlag= 'I'
-    and d1.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-    and d1.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+    and substr(d1.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+    and substr(d1.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
     and d1.declarationdata is not null
     <if test="keyCompanyFlag != null and keyCompanyFlag != ''" >
         and exists (select 1 from IMPORTANT_COMPANY where ORG_ID=s.org_id)
@@ -347,8 +347,8 @@
     WHERE 1=1
     and d1.isdelete != '1'
     and d1.ieFlag= 'E'
-    and d1.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-    and d1.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+    and substr(d1.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+    and substr(d1.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
     and d1.declarationdata is not null
     <if test="keyCompanyFlag != null and keyCompanyFlag != ''" >
         and exists (select 1 from IMPORTANT_COMPANY where ORG_ID=s.org_id)
@@ -363,8 +363,8 @@
         FROM nsw.qp_dechead d    WHERE  1=1
         AND d.ORGID=#{orgId,jdbcType=VARCHAR}
         and d.isdelete != '1'
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6)&gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and d.declarationdata is not null
         group by substr(d.declarationData,0,6)
         order by mon) a1  LEFT JOIN
@@ -382,8 +382,8 @@
         1=1
         and d1.isdelete != '1'
         and d1.ieFlag= 'I'
-        and d1.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d1.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d1.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d1.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and d1.declarationdata is not null
         AND d1.ORGID=#{orgId,jdbcType=VARCHAR}
         GROUP BY
@@ -406,8 +406,8 @@
         1=1
         and d1.isdelete != '1'
         and d1.ieFlag= 'E'
-        and d1.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d1.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d1.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d1.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and d1.declarationdata is not null
         AND d1.ORGID=#{orgId,jdbcType=VARCHAR}
         GROUP BY
@@ -425,8 +425,8 @@
         <if test="qyFlag != null and qyFlag != ''" >
             and d.orgid = #{orgid,jdbcType=VARCHAR}
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata&lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and d.declarationdata is not null
         AND d.CHECKTIME is not  null
         group by d.IEFLAG
@@ -441,14 +441,14 @@
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and d.declarationdata is not null
         group by substr(d.declarationData,0,6)
         order by mon ASC
     </select>
     <select id="queryTotalCustomDataDash" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-        SELECT a.*,b.* FROM (SELECT nvl(to_char( count(1)),0) numbI,nvl(round(sum(d.customTotalRmb),2),0) rmbI FROM    nsw.qp_dechead d where 1=1
+        SELECT a.*,b.* FROM (SELECT nvl(to_char( count(1)),0) numbI,nvl(round(sum(d.customTotalRmb),2),0) rmbI FROM    nsw.qp_dechead d where 1=1   and d.isdelete != '1'
         AND  d.ieflag='I'
         <if test="qyFlag ==1">
             and d.orgid = #{orgid,jdbcType=VARCHAR}
@@ -456,10 +456,10 @@
         <if test="keyFlag==1">
             and exists(select 1 from important_company where  d.orgId= org_id )
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and d.declarationdata is not null)a,
-        (SELECT nvl(to_char( count(1)),0) numbE,nvl(round(sum(d.customTotalRmb),2),0) rmbE FROM    nsw.qp_dechead d where 1=1
+        (SELECT nvl(to_char( count(1)),0) numbE,nvl(round(sum(d.customTotalRmb),2),0) rmbE FROM    nsw.qp_dechead d where 1=1   and d.isdelete != '1'
         AND  d.ieflag='E'
         <if test="qyFlag ==1">
             and d.orgid = #{orgid,jdbcType=VARCHAR}
@@ -467,12 +467,12 @@
         <if test="keyFlag==1">
             and exists(select 1 from important_company where  d.orgId= org_id )
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and d.declarationdata is not null)b
     </select>
     <select id="querySysTimeCustomData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-        SELECT a.*,b.* FROM (SELECT to_char( count(1)) numbBeforeDay FROM nsw.qp_dechead d WHERE 1=1  and d.declarationdata is not null
+        SELECT a.*,b.* FROM (SELECT to_char( count(1)) numbBeforeDay FROM nsw.qp_dechead d WHERE 1=1  and d.declarationdata is not null   AND  d.ISDELETE !='1'
         <if test="qyFlag ==1">
             and d.orgid = #{orgid,jdbcType=VARCHAR}
         </if>
@@ -481,7 +481,7 @@
         </if>
         and    to_date(to_char(d.CREATETIME , 'yyyy-mm-dd'),'yyyy-mm-dd')  =
         trunc ( sysdate - 1 ))a,
-        (SELECT to_char( count(1)) numbNowDay FROM nsw.qp_dechead d WHERE 1=1  and d.declarationdata is not null
+        (SELECT to_char( count(1)) numbNowDay FROM nsw.qp_dechead d WHERE 1=1  and d.declarationdata is not null   AND  d.ISDELETE !='1'
         <if test="qyFlag==1">
             and d.orgid = #{orgid,jdbcType=VARCHAR}
         </if>
@@ -491,7 +491,7 @@
         and  to_date(to_char(d.CREATETIME , 'yyyy-mm-dd'),'yyyy-mm-dd')&gt;=TRUNC(SYSDATE) and d.createTime &lt;= TRUNC(SYSDATE)+1)b
     </select>
     <select id="queryMonthCustomData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-        SELECT a.*,b.* FROM (SELECT to_char(count(1))numbNowMonth FROM nsw.qp_dechead d WHERE 1=1
+        SELECT a.*,b.* FROM (SELECT to_char(count(1))numbNowMonth FROM nsw.qp_dechead d WHERE 1=1   AND  d.ISDELETE !='1'
         <if test="qyFlag ==1">
             and d.orgid = #{orgid,jdbcType=VARCHAR}
         </if>
@@ -499,7 +499,7 @@
             and exists(select 1 from important_company where  d.orgId= org_id )
         </if>
         AND  d.CREATETIME>=trunc(SYSDATE, 'mm') and d.CREATETIME  &lt;= last_day(SYSDATE))a ,
-        (SELECT to_char(count(1))numbbeforeMonth FROM nsw.qp_dechead d WHERE 1=1
+        (SELECT to_char(count(1))numbbeforeMonth FROM nsw.qp_dechead d WHERE 1=1   AND  d.ISDELETE !='1'
         <if test="qyFlag==1">
             and d.orgid = #{orgid,jdbcType=VARCHAR}
         </if>
@@ -509,7 +509,7 @@
         AND   to_char(d.CREATETIME , 'yyyy-mm')  =to_char(add_months(trunc(sysdate),-1),'yyyy-mm'))b
     </select>
     <select id="queryYearCustomData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-        SELECT a.* ,b.* FROM (SELECT to_char(count(1))numbNowYear FROM nsw.qp_dechead d WHERE 1=1
+        SELECT a.* ,b.* FROM (SELECT to_char(count(1))numbNowYear FROM nsw.qp_dechead d WHERE 1=1   AND  d.ISDELETE !='1'
         <if test="qyFlag==1">
             and d.orgid = #{orgid,jdbcType=VARCHAR}
         </if>
@@ -517,7 +517,7 @@
             and exists(select 1 from important_company where  d.orgId= org_id )
         </if>
         AND   to_char(d.CREATETIME,'yyyy') =  to_char(sysdate,'yyyy'))a,
-        (SELECT to_char(count(1))numbBeforeYear FROM nsw.qp_dechead d WHERE 1=1
+        (SELECT to_char(count(1))numbBeforeYear FROM nsw.qp_dechead d WHERE 1=1   AND  d.ISDELETE !='1'
         <if test="qyFlag ==1">
             and d.orgid = #{orgid,jdbcType=VARCHAR}
         </if>
@@ -527,7 +527,7 @@
         AND   to_number(to_char(d.CREATETIME,'yyyy')) = to_number(to_char(sysdate,'yyyy'))-1)b
     </select>
     <select id="queryTotalCustomData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-        SELECT to_char(count(1))numbTotal FROM nsw.qp_dechead d WHERE 1=1 and d.declarationdata is not null
+        SELECT to_char(count(1))numbTotal FROM nsw.qp_dechead d WHERE 1=1 and d.declarationdata is not null   AND  d.ISDELETE !='1'
         <if test="qyFlag ==1">
         and d.orgid = #{orgid,jdbcType=VARCHAR}
         </if>
@@ -550,8 +550,8 @@
         <if test="keyFlag ==1">
             and exists(select 1 from important_company where  d.orgId= org_id )
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and d.declarationdata is not null
         and s.AREA_CODE is not null
         group by s.AREA_CODE,s.AREA_NAME
@@ -570,8 +570,8 @@
         <if test="keyFlag ==1">
             and exists(select 1 from important_company where  d.orgId= org_id )
         </if>
-        and d.declarationdata &gt;= #{startDate,jdbcType=VARCHAR}
-        and d.declarationdata &lt;= #{endDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
+        and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and d.declarationdata is not null
         group by substr(d.declarationData,0,6)
         order by mon
@@ -587,27 +587,41 @@
         (select nvl(sum(count(distinct dept_id)),0)beforeYear  ,1 fg  from T_LOGIN_LOG a   where to_char(CREATE_TIME ,'yyyy')=to_char( add_months(sysdate,-12),'yyyy')GROUP BY dept_id)g
     </select>
     <select id="queryKeyQyDataDash" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-        SELECT a.*,b.*,b2.*,c.*,d.*,e.*,e2.*,f.*,g.*,g2.* FROM (SELECT COUNT(1)nowday1  FROM  IMPORTANT_COMPANY ic WHERE TO_CHAR(CREATE_DATE,'YYYY-MM-DD')=TO_CHAR(SYSDATE,'YYYY-MM-DD'))a ,
-        (select count(1)beforeDay1 from IMPORTANT_COMPANY ic  where to_char(CREATE_DATE ,'yyyy-mm-dd')=to_char( add_months(sysdate,-12),'yyyy-mm-dd'))b,
-        (select count(1)beforeDay2 from IMPORTANT_COMPANY ic  where to_char(CREATE_DATE ,'yyyy-mm-dd')=to_char( add_months(sysdate,-24),'yyyy-mm-dd'))b2,
-        (select count(*)nowweek1 from IMPORTANT_COMPANY ic where CREATE_DATE > sysdate - (to_char(sysdate-1,'D')))c,
-        (SELECT COUNT(1)nowMonth1 FROM  IMPORTANT_COMPANY ic WHERE TO_CHAR(CREATE_DATE,'YYYY-MM')=TO_CHAR(SYSDATE,'YYYY-MM'))d,
-        (select count(1)beforeMonth1 from IMPORTANT_COMPANY ic  where to_char(CREATE_DATE ,'yyyy-mm')=to_char( add_months(sysdate,-12),'yyyy-mm'))e,
-        (select count(1)beforeMonth2 from IMPORTANT_COMPANY ic  where to_char(CREATE_DATE ,'yyyy-mm')=to_char( add_months(sysdate,-24),'yyyy-mm'))e2,
-        (SELECT COUNT(1)nowYear1 FROM  IMPORTANT_COMPANY ic WHERE TO_CHAR(CREATE_DATE,'yyyy')=TO_CHAR(SYSDATE,'yyyy'))f,
-        (select count(1)beforeYear1 from IMPORTANT_COMPANY ic  where to_char(CREATE_DATE ,'yyyy')=to_char( add_months(sysdate,-12),'yyyy'))g,
-        (select count(1)beforeYear2 from IMPORTANT_COMPANY ic  where to_char(CREATE_DATE ,'yyyy')=to_char( add_months(sysdate,-24),'yyyy'))g2
+        SELECT a.*,b.*,b2.*,c.*,d.*,e.*,e2.*,f.*,g.*,g2.* FROM (
+        SELECT COUNT(1)nowday1  FROM  IMPORTANT_COMPANY ic WHERE 1=1 and  exists(select 1 from T_LOGIN_LOG t where t.DEPT_ID =ic.ORG_ID and to_char(t.CREATE_TIME ,'yyyy-mm-dd')=to_char( add_months(sysdate,-12),'yyyy-mm-dd')))a ,
+        (select count(1)beforeDay1 from IMPORTANT_COMPANY ic  where  1=1 and  exists(select 1 from T_LOGIN_LOG t where t.DEPT_ID =ic.ORG_ID and to_char(t.CREATE_TIME ,'yyyy-mm-dd')=to_char( add_months(sysdate,-12),'yyyy-mm-dd')))b,
+        (select count(1)beforeDay2 from IMPORTANT_COMPANY ic  where  1=1  and exists(select 1 from T_LOGIN_LOG t where t.DEPT_ID =ic.ORG_ID and to_char(t.CREATE_TIME ,'yyyy-mm-dd')=to_char( add_months(sysdate,-12),'yyyy-mm-dd')))b2,
+        (select count(*)nowweek1 from IMPORTANT_COMPANY ic where  1=1 and  exists(select 1 from T_LOGIN_LOG t where t.DEPT_ID =ic.ORG_ID and to_char(t.CREATE_TIME ,'yyyy-mm-dd')=to_char( add_months(sysdate,-12),'yyyy-mm-dd')))c,
+        (SELECT COUNT(1)nowMonth1 FROM  IMPORTANT_COMPANY ic WHERE  1=1 and exists(select 1 from T_LOGIN_LOG t where t.DEPT_ID =ic.ORG_ID and to_char(t.CREATE_TIME ,'yyyy-mm-dd')=to_char( add_months(sysdate,-12),'yyyy-mm-dd')))d,
+        (select count(1)beforeMonth1 from IMPORTANT_COMPANY ic  where  1=1 and exists(select 1 from T_LOGIN_LOG t where t.DEPT_ID =ic.ORG_ID and to_char(t.CREATE_TIME ,'yyyy-mm-dd')=to_char( add_months(sysdate,-12),'yyyy-mm-dd')))e,
+        (select count(1)beforeMonth2 from IMPORTANT_COMPANY ic  where  1=1 and  exists(select 1 from T_LOGIN_LOG t where t.DEPT_ID =ic.ORG_ID and to_char(t.CREATE_TIME ,'yyyy-mm-dd')=to_char( add_months(sysdate,-12),'yyyy-mm-dd')))e2,
+        (SELECT COUNT(1)nowYear1 FROM  IMPORTANT_COMPANY ic WHERE  1=1 and exists(select 1 from T_LOGIN_LOG t where t.DEPT_ID =ic.ORG_ID and to_char(t.CREATE_TIME ,'yyyy-mm-dd')=to_char( add_months(sysdate,-12),'yyyy-mm-dd')))f,
+        (select count(1)beforeYear1 from IMPORTANT_COMPANY ic  where 1=1 and exists(select 1 from T_LOGIN_LOG t where t.DEPT_ID =ic.ORG_ID and to_char(t.CREATE_TIME ,'yyyy-mm-dd')=to_char( add_months(sysdate,-12),'yyyy-mm-dd')))g,
+        (select count(1)beforeYear2 from IMPORTANT_COMPANY ic  where  1=1 and  exists(select 1 from T_LOGIN_LOG t where t.DEPT_ID =ic.ORG_ID and to_char(t.CREATE_TIME ,'yyyy-mm-dd')=to_char( add_months(sysdate,-12),'yyyy-mm-dd')))g2
     </select>
     <select id="querAllQyDataDash" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-        SELECT a.*,b.*,b2.*,c.*,d.*,e.*,e2.*,f.*,g.*,g2.* FROM (SELECT COUNT(1)nowday11  FROM  ORG_BASEINFO@NT_PTL ic WHERE TO_CHAR(CREATE_DATE,'YYYY-MM-DD')=TO_CHAR(SYSDATE,'YYYY-MM-DD'))a ,
-        (select count(1)beforeDay11 from ORG_BASEINFO@NT_PTL ic  where to_char(CREATE_DATE ,'yyyy-mm-dd')=to_char( add_months(sysdate,-12),'yyyy-mm-dd'))b,
-        (select count(1)beforeDay21 from ORG_BASEINFO@NT_PTL ic  where to_char(CREATE_DATE ,'yyyy-mm-dd')=to_char( add_months(sysdate,-24),'yyyy-mm-dd'))b2,
-        (select count(*)nowweek11 from ORG_BASEINFO@NT_PTL ic where CREATE_DATE > sysdate - (to_char(sysdate-1,'D')))c,
-        (SELECT COUNT(1)nowMonth11 FROM  ORG_BASEINFO@NT_PTL ic WHERE TO_CHAR(CREATE_DATE,'YYYY-MM')=TO_CHAR(SYSDATE,'YYYY-MM'))d,
-        (select count(1)beforeMonth11 from ORG_BASEINFO@NT_PTL ic  where to_char(CREATE_DATE ,'yyyy-mm')=to_char( add_months(sysdate,-12),'yyyy-mm'))e,
-        (select count(1)beforeMonth21 from ORG_BASEINFO@NT_PTL ic  where to_char(CREATE_DATE ,'yyyy-mm')=to_char( add_months(sysdate,-24),'yyyy-mm'))e2,
-        (SELECT COUNT(1)nowYear11 FROM  ORG_BASEINFO@NT_PTL ic WHERE TO_CHAR(CREATE_DATE,'yyyy')=TO_CHAR(SYSDATE,'yyyy'))f,
-        (select count(1)beforeYear11 from ORG_BASEINFO@NT_PTL ic  where to_char(CREATE_DATE ,'yyyy')=to_char( add_months(sysdate,-12),'yyyy'))g,
-        (select count(1)beforeYear21 from ORG_BASEINFO@NT_PTL ic  where to_char(CREATE_DATE ,'yyyy')=to_char( add_months(sysdate,-24),'yyyy'))g2
+        SELECT a.*,b.*,b2.*,c.*,d.*,e.*,e2.*,f.*,g.*,g2.* FROM (SELECT COUNT(1)nowday11  FROM  IMPORTANT_COMPANY ic WHERE TO_CHAR(CREATE_DATE,'YYYY-MM-DD')=TO_CHAR(SYSDATE,'YYYY-MM-DD'))a ,
+        (select count(1)beforeDay11 from IMPORTANT_COMPANY  ic  where to_char(CREATE_DATE ,'yyyy-mm-dd')=to_char( add_months(sysdate,-12),'yyyy-mm-dd'))b,
+        (select count(1)beforeDay21 from IMPORTANT_COMPANY  ic  where to_char(CREATE_DATE ,'yyyy-mm-dd')=to_char( add_months(sysdate,-24),'yyyy-mm-dd'))b2,
+        (select count(*)nowweek11 from IMPORTANT_COMPANY  ic where CREATE_DATE > sysdate - (to_char(sysdate-1,'D')))c,
+        (SELECT COUNT(1)nowMonth11 FROM  IMPORTANT_COMPANY  ic WHERE TO_CHAR(CREATE_DATE,'YYYY-MM')=TO_CHAR(SYSDATE,'YYYY-MM'))d,
+        (select count(1)beforeMonth11 from IMPORTANT_COMPANY  ic  where to_char(CREATE_DATE ,'yyyy-mm')=to_char( add_months(sysdate,-12),'yyyy-mm'))e,
+        (select count(1)beforeMonth21 from IMPORTANT_COMPANY  ic  where to_char(CREATE_DATE ,'yyyy-mm')=to_char( add_months(sysdate,-24),'yyyy-mm'))e2,
+        (SELECT COUNT(1)nowYear11 FROM  IMPORTANT_COMPANY  ic WHERE TO_CHAR(CREATE_DATE,'yyyy')=TO_CHAR(SYSDATE,'yyyy'))f,
+        (select count(1)beforeYear11 from IMPORTANT_COMPANY ic  where to_char(CREATE_DATE ,'yyyy')=to_char( add_months(sysdate,-12),'yyyy'))g,
+        (select count(1)beforeYear21 from IMPORTANT_COMPANY  ic  where to_char(CREATE_DATE ,'yyyy')=to_char( add_months(sysdate,-24),'yyyy'))g2
+    </select>
+    <select id="querAllQyDataDash1" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT a.*,b.*,b2.*,c.*,d.*,e.*,e2.*,f.*,g.*,g2.* FROM (
+        SELECT COUNT(1)nowday11  FROM  IMPORTANT_COMPANY ic  )a ,
+       (select count(1)beforeDay11 from IMPORTANT_COMPANY  ic )b,
+       (select count(1)beforeDay21 from IMPORTANT_COMPANY  ic  )b2,
+       (select count(*)nowweek11 from IMPORTANT_COMPANY  ic)c,
+       (SELECT COUNT(1)nowMonth11 FROM  IMPORTANT_COMPANY  ic )d,
+       (select count(1)beforeMonth11 from IMPORTANT_COMPANY  ic )e,
+       (select count(1)beforeMonth21 from IMPORTANT_COMPANY  ic )e2,
+       (SELECT COUNT(1)nowYear11 FROM  IMPORTANT_COMPANY  ic )f,
+       (select count(1)beforeYear11 from IMPORTANT_COMPANY ic  )g,
+       (select count(1)beforeYear21 from IMPORTANT_COMPANY  ic )g2
     </select>
 </mapper>
