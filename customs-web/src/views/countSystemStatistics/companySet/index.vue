@@ -70,11 +70,11 @@
           </div>
           </el-card>
           <el-dialog v-model="tablemodel"  :dataTmp="dataTmp" :dataname="dataname" :datatype="datatype"
-            width="1700px"
+            width="1500px"
             align-center>
             <div class="head-container">
-          <el-form :inline="true" :model="listQueryD" class="demo-form-inline">
-            <el-form-item label="海关十位编码">
+          <el-form :inline="true" :model="listQueryD" class="demo-form-inline" :rules="rules" >
+            <el-form-item label="海关十位编码" prop="customNo">
              <el-input
                     v-model="listQueryD.customNo"
                     placeholder="海关十位编码"
@@ -82,7 +82,7 @@
                     class="filter-item"
             />
             </el-form-item>
-            <el-form-item label="企业名称">
+            <el-form-item label="企业名称" prop="orgName">
               <el-input v-model="listQueryD.orgName" placeholder="企业名称" clearable></el-input>
             </el-form-item>
             <el-form-item>
@@ -171,6 +171,11 @@ let handleAdd = () => {
     tablemodel.value=true;
     // getCompanyD()
 }
+const rules = ref({
+  customNo: [{required: true, message: '请输入海关十位编码', trigger: 'blur'}],
+      orgName: [{required: true, message: '请输入企业名称', trigger: 'blur'}],
+    })
+
 const  multipleSelection=[];
 const  multipleSelection1=[];
 const handleCancel1 = () => {

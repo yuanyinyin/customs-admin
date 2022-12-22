@@ -1,7 +1,7 @@
 <template>
 
     <div class="customsData-container scroll-y p">
-        
+
         <el-tabs v-model="activeName" @tab-change="handleTabChange">
         <el-tab-pane label="进出口商品金额TOP10" name="first" >
             <el-container >
@@ -12,13 +12,13 @@
                 </el-main>
                 </el-card>
                 <el-card style="width: 100%;">
-            <el-main style="width: 100%;">     
+            <el-main style="width: 100%;">
                 <div class="import-search mb-1">
                     <el-form :inline="true" :model="listQueryI" class="demo-form-inline">
                     <el-form-item label="统计日期">
                         <div class="block">
                             <span class="demonstration"></span>
-                            <el-date-picker
+                            <el-date-picker style="width:100px;"
                             v-model="listQueryI.startDate"
                             type="month"
                             placeholder="统计起始日期">
@@ -26,7 +26,7 @@
                         </div>
                         <div class="block">
                             <span class="demonstration">~</span>
-                            <el-date-picker
+                            <el-date-picker style="width:100px;"
                             v-model="listQueryI.endDate"
                             type="month"
                             placeholder="统计起始日期">
@@ -44,7 +44,7 @@
 
             <el-table
                 :data="tableData"
-                style="width: 140%" 
+                style="width: 140%"
                 fit
                 border
                 highlight-current-row
@@ -52,11 +52,11 @@
                         <el-table-column type="index" label="TOP10" align="center" width="65"   />
                         <el-table-column prop="CODETS" label="商品编码" align="center"/>
                         <el-table-column prop="GNAME" label="商品名称" align="center"/>
-                        <el-table-column prop="RMB" label="人民币金额" align="center"/>
+                        <el-table-column prop="RMB" label="金额（元）" align="center"/>
                      </el-table>
                  </div>
               </el-main>
-            </el-card>            
+            </el-card>
             </el-container>
         </el-tab-pane>
         <el-tab-pane label="出口商品金额TOP10" name="second" >
@@ -69,13 +69,13 @@
                 </el-card>
                 <el-card style="width: 100%;">
             <el-main style="width: 100%;">
-           
+
                 <div class="export-search mb-1">
                     <el-form :inline="true" :model="listQueryE" class="demo-form-inline">
                     <el-form-item label="统计日期">
                         <div class="block">
                             <span class="demonstration"></span>
-                            <el-date-picker
+                            <el-date-picker style="width:100px;"
                             v-model="listQueryE.startDate"
                             type="month"
                             placeholder="统计起始日期">
@@ -83,7 +83,7 @@
                         </div>
                         <div class="block">
                             <span class="demonstration">~</span>
-                            <el-date-picker
+                            <el-date-picker style="width:100px;"
                             v-model="listQueryE.endDate"
                             type="month"
                             placeholder="统计起始日期">
@@ -101,7 +101,7 @@
       <div class="export-table mb-1">
             <el-table
                 :data="tableData2"
-                style="width: 100%" 
+                style="width: 100%"
                 fit
                 border
                 height="400px"
@@ -110,14 +110,14 @@
                         <el-table-column type="index" label="TOP10" align="center" width="65"   />
                         <el-table-column prop="CODETS" label="商品编码" align="center"/>
                         <el-table-column prop="GNAME" label="商品名称" align="center"/>
-                        <el-table-column prop="TOTAL" label="人民币金额" align="center"/>
+                        <el-table-column prop="TOTAL" label="金额（元）" align="center"/>
                      </el-table>
                  </div>
                 </el-main>
                </el-card>
             </el-container>
         </el-tab-pane>
-    </el-tabs>       
+    </el-tabs>
     </div>
 </template>
 
@@ -152,7 +152,7 @@ const handleTabChange = () =>{
        case "second": initPickE();break;
     }
 }
- 
+
 onMounted(() => {
     initPickI()
 })
@@ -192,6 +192,7 @@ const initPickI = () => {
     try {
         getImportTopGoods()
     } catch (e) {
+      console.log(e)
     }
 
     }, 500)
@@ -269,7 +270,8 @@ const loadChar = (_data,type) => {
         const option = {
             title:{
                 show:true,
-                text: date1+'~'+date2+totalType+'商品申报金额TOP10统计'
+                text: date1+'~'+date2+totalType+'商品TOP10',
+                left: 10,
             },
             series: [{
                 type: 'wordCloud',
@@ -309,5 +311,5 @@ const loadChar = (_data,type) => {
       myChartI.setOption(option)
     }
 </script>
-const 
+const
 <style scoped lang="scss"></style>

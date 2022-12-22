@@ -1,7 +1,7 @@
 <template>
 
     <div class="customsData-container scroll-y p">
-        
+
         <el-tabs v-model="activeName" @tab-change="handleTabChange">
         <el-tab-pane label="进口商品货值统计" name="first" >
             <el-container >
@@ -12,7 +12,7 @@
                 </el-main>
                 </el-card>
                 <el-card style="width: 100%;">
-            <el-main style="width: 100%;">     
+            <el-main style="width: 100%;">
                 <div class="import-search mb-1">
                     <el-form :inline="true" :model="listQueryI" class="demo-form-inline">
                     <el-form-item label="统计日期">
@@ -44,10 +44,10 @@
 
             <el-table
                 :data="tableData"
-                style="width: 100%" 
+                style="width: 100%"
                 fit
                 border
-                :summary-method="getSummariesI"   show-summary 
+                :summary-method="getSummariesI"   show-summary
                 highlight-current-row
                 >
                         <el-table-column type="index" label="序号" align="center" width="55"/>
@@ -60,7 +60,7 @@
                      </el-table>
                  </div>
               </el-main>
-            </el-card>            
+            </el-card>
             </el-container>
         </el-tab-pane>
         <el-tab-pane label="出口商品货值统计" name="second" >
@@ -73,7 +73,7 @@
                 </el-card>
                 <el-card style="width: 100%;">
             <el-main style="width: 100%;">
-           
+
                 <div class="export-search mb-1">
                     <el-form :inline="true" :model="listQueryE" class="demo-form-inline">
                     <el-form-item label="统计日期">
@@ -105,11 +105,11 @@
       <div class="export-table mb-1">
             <el-table
                 :data="tableData2"
-                style="width: 100%" 
+                style="width: 100%"
                 fit
                 border
                 height="400px"
-                :summary-method="getSummariesI"   show-summary 
+                :summary-method="getSummariesI"   show-summary
                 highlight-current-row
                 >
                 <el-table-column type="index" label="序号" align="center" width="55"/>
@@ -124,7 +124,7 @@
                </el-card>
             </el-container>
         </el-tab-pane>
-    </el-tabs>       
+    </el-tabs>
     </div>
     <el-drawer
     v-model="table3"
@@ -192,7 +192,7 @@ const listQueryE = reactive({
   startDate:'',
   endDate:'',
 })
- 
+
 
 const activeName = ref('first')
 const handleTabChange = () =>{
@@ -202,7 +202,7 @@ const handleTabChange = () =>{
        case "second": initPickE();break;
     }
 }
- 
+
 onMounted(() => {
     initPickI()
 })
@@ -299,7 +299,7 @@ const getSummariesI = (param) => {
     if (index === 1) {
       sums[index] = '汇总'
       return
-    } 
+    }
     if(data!=null){
         const values = data.map((item) =>
      Number(item[column.property]))
@@ -333,7 +333,7 @@ const getGoodsDataByGNAME = (CODETS,gname,type) => {
         endDate: date2,
         ieFlag:type
         }
-    console.log(params) 
+    console.log(params)
   store
     .dispatch('manageStatistics/getGoodsDataByGNAME',params)
     .then((response) => {
@@ -346,7 +346,7 @@ const getGoodsDataByGNAME = (CODETS,gname,type) => {
 let canvasI: any = null//document.getElementById('canvas')
     //绘制出口商品货值柱状图
 const loadChar = (_data,type) => {
-    
+
         let date1=parseDateWithoutDayNew(listQueryI.startDate);
         let date2=parseDateWithoutDayNew(listQueryI.endDate);
         // 指定图表的配置项和数据
@@ -389,7 +389,7 @@ const loadChar = (_data,type) => {
                 data:data.month,
                 axisLabel:{
                     interval:0,
-                    margin:20,
+                    margin:10,
                     rotate:-15
                 },
                     triggerEvent: true
@@ -441,7 +441,7 @@ const loadChar = (_data,type) => {
         getGoodsDataByGNAME(str_before,str,type);
         alert(drawer.value )
      })
-      
+
     }
     const loadChar2 = (_data,areaName,type,tabType) => {
         let date1=parseDateWithoutDayNew(listQueryI.startDate);
@@ -463,7 +463,7 @@ const loadChar = (_data,type) => {
             monthValueArry5.push(_data[i].SUMGROSSWET);
         }
         let data={month:monthArry,val1:monthValueArry1,val2:monthValueArry2,val3:monthValueArry3,val4:monthValueArry4,val5:monthValueArry5};
- 
+
         let totalType=''
             let mainType=''
             if(type=='I'){
@@ -698,7 +698,7 @@ const loadChar = (_data,type) => {
       myChartI.clear()
       myChartI.setOption(option)
       myChartI.off("click")
-        
+
     }
 </script>
 

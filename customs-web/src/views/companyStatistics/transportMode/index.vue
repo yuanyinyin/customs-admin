@@ -4,11 +4,11 @@
         <el-tabs v-model="activeName" @tab-change="handleTabChange">
             <el-tab-pane label="进口运输方式统计" name="first" >
                 <div class="dashboard-container">
-  
-                    <div class="dashboard-card"> 
+
+                    <div class="dashboard-card">
                         <div class="flex-between">
                         </div>
-                        <div id="main1" style="width: 100%;height:100%;"></div>             
+                        <div id="main1" style="width: 100%;height:100%;"></div>
                     </div>
 
                     <div class="dashboard-card">
@@ -19,13 +19,13 @@
                         </div>
                         <div class="dashboard-card-body">
                             <el-card>
-          
+
                                 <div class="import-search mb-1">
                                     <el-form :inline="true" :model="listQueryI" class="demo-form-inline">
                                     <el-form-item label="统计日期">
                                         <div class="block">
                                             <span class="demonstration"></span>
-                                            <el-date-picker
+                                            <el-date-picker  style="width:100px;"
                                             v-model="listQueryI.startDate"
                                             type="month"
                                             placeholder="统计起始日期">
@@ -33,7 +33,7 @@
                                         </div>
                                         <div class="block">
                                             <span class="demonstration">~</span>
-                                            <el-date-picker
+                                            <el-date-picker style="width:100px;"
                                             v-model="listQueryI.endDate"
                                             type="month"
                                             placeholder="统计起始日期">
@@ -51,19 +51,19 @@
                         <div class="import-table mb-1">
                             <el-table tooltip-effect="dark"
                                 :data="tableData"
-                                style="width: 100%" 
+                                style="width: 100%"
                                 fit
                                 border
                                 height="200"
-                                :summary-method="getSummariesI"   show-summary 
+                                :summary-method="getSummariesI"   show-summary
                                 highlight-current-row
                                 >
-                                        <el-table-column type="index" label="序号" align="center" width="55"/>
+                                        <el-table-column type="index" label="序号" align="center" width="45"/>
                                         <el-table-column prop="TRAF" label="运输方式" align="center" />
-                                        <el-table-column prop="NUMB" label="报关单量" align="center"/>
-                                        <el-table-column prop="rate" label="占比" align="center">
+                                        <el-table-column prop="NUMB" label="报关单量" align="center"  />
+                                        <el-table-column prop="rate" label="占比" align="center" >
                                         </el-table-column>
-                                        <el-table-column fixed="right" label="操作" width="180" align="center">
+                                        <el-table-column fixed="right" label="操作" width="75" align="center">
                                             <template #default="scope">
                                             <el-button
                                                 v-for="(item, index) in btnInRows"
@@ -75,18 +75,18 @@
                                             </template>
                                         </el-table-column>
                              </el-table>
-                            </div>           
+                            </div>
                           </el-card>
                        </div>
                     </div>
 
-                    <div class="dashboard-card"> 
+                    <div class="dashboard-card">
                         <div class="flex-between">
                             <!-- <span>进口运输方式统计</span> -->
                         </div>
                         <div id="main2" style="width: 100%;height:100%;"></div>
-                      
-                        
+
+
                     </div>
 
                     <div class="dashboard-card">
@@ -101,13 +101,13 @@
                         <div class="import-table mb-1">
                             <el-table
                                 :data="tableData2"
-                                style="width: 100%" 
+                                style="width: 100%"
                                 fit
                                 border
                                 height="200"
                                 highlight-current-row
                                 >
-                                        <el-table-column type="index" label="序号" align="center" width="55"/>
+                                        <el-table-column type="index" label="序号" align="center" width="45"/>
                                         <el-table-column prop="TRAF" label="运输方式" align="center"/>
                                         <el-table-column prop="CUSTOM" label="进出口岸" align="center"/>
                                         <el-table-column prop="rate1" label="占比" align="center"/>
@@ -115,7 +115,7 @@
                                         <el-table-column prop="NUMB" label="报关单量" align="center"/>
                                         <el-table-column prop="rate2" label="占比" align="center"/>
                             </el-table>
-                            </div>           
+                            </div>
                             </el-card>
                         </div>
                     </div>
@@ -124,11 +124,11 @@
             </el-tab-pane>
             <el-tab-pane label="出口运输方式统计" name="second" >
                 <div class="dashboard-container">
-  
-                    <div class="dashboard-card"> 
+
+                    <div class="dashboard-card">
                         <div class="flex-between">
                         </div>
-                        <div id="main3" style="width: 100%;height:100%;"></div>             
+                        <div id="main3" style="width: 100%;height:100%;"></div>
                     </div>
 
                     <div class="dashboard-card">
@@ -145,7 +145,7 @@
                                     <el-form-item label="统计日期">
                                         <div class="block">
                                             <span class="demonstration"></span>
-                                            <el-date-picker
+                                            <el-date-picker style="width:100px;"
                                             v-model="listQueryE.startDate"
                                             type="month"
                                             placeholder="统计起始日期">
@@ -153,7 +153,7 @@
                                         </div>
                                         <div class="block">
                                             <span class="demonstration">~</span>
-                                            <el-date-picker
+                                            <el-date-picker style="width:100px;"
                                             v-model="listQueryE.endDate"
                                             type="month"
                                             placeholder="统计起始日期">
@@ -171,19 +171,19 @@
                         <div class="export-table mb-1">
                             <el-table
                                 :data="tableData3"
-                                style="width: 100%" 
+                                style="width: 100%"
                                 fit
                                 border
                                 height="200"
-                                :summary-method="getSummariesE"   show-summary 
+                                :summary-method="getSummariesE"   show-summary
                                 highlight-current-row
                                 >
-                                        <el-table-column type="index" label="序号" align="center" width="55"/>
+                                        <el-table-column type="index" label="序号" align="center" width="45"/>
                                         <el-table-column prop="TRAF" label="运输方式" align="center"/>
                                         <el-table-column prop="NUMB" label="报关单量" align="center"/>
                                         <el-table-column prop="rate" label="占比" align="center">
                                         </el-table-column>
-                                        <el-table-column fixed="right" label="操作" width="180" align="center">
+                                        <el-table-column fixed="right" label="操作" width="75" align="center">
                                             <template #default="scope">
                                             <el-button
                                                 v-for="(item, index) in btnInRows"
@@ -195,18 +195,18 @@
                                             </template>
                                         </el-table-column>
                             </el-table>
-                            </div>           
+                            </div>
                             </el-card>
                         </div>
                     </div>
 
-                    <div class="dashboard-card"> 
+                    <div class="dashboard-card">
                         <div class="flex-between">
                             <!-- <span>进口运输方式统计</span> -->
                         </div>
                         <div id="main4" style="width: 100%;height:100%;"></div>
-                        
-                        
+
+
                     </div>
 
                     <div class="dashboard-card">
@@ -221,7 +221,7 @@
                         <div class="import-table mb-1">
                             <el-table
                                 :data="tableData4"
-                                style="width: 100%" 
+                                style="width: 100%"
                                 fit
                                 border
                                 height="200"
@@ -235,7 +235,7 @@
                                         <el-table-column prop="NUMB" label="报关单量" align="center"/>
                                         <el-table-column prop="rate2" label="占比" align="center"/>
                             </el-table>
-                            </div>           
+                            </div>
                             </el-card>
                         </div>
                     </div>
@@ -246,7 +246,7 @@
 
     </div>
   </template>
-  
+
   <script setup lang="ts">
   import { addSuggest } from '@/api/suggest'
   import { ElMessage } from 'element-plus'
@@ -297,7 +297,7 @@ const btnInRows = ref(
 )
 let handleQuery = (para,type) => {
    getPortStatistics(para,type);
-} 
+}
 const onSearchI = () => {
     if(listQueryI.startDate===null||listQueryI.startDate===''||listQueryI.endDate===null||listQueryI.endDate===''){
         ElMessage({ message: '请填写统计起始日期', type: 'error' })
@@ -310,7 +310,7 @@ const onSearchI = () => {
         return;
     }
     getImportTransportMode()
-} 
+}
 const onSearchE = () => {
     if(listQueryE.startDate===null||listQueryE.startDate===''||listQueryE.endDate===null||listQueryE.endDate===''){
         ElMessage({ message: '请填写统计起始日期', type: 'error' })
@@ -323,7 +323,7 @@ const onSearchE = () => {
         return;
     }
     getExportTransportMode()
-} 
+}
 const initPickI = () => {
     const end = new Date();
     const start = new Date(new Date().getFullYear(), 0);
@@ -384,7 +384,7 @@ const getPortStatistics = (para,type) => {
       }else  if(type=='E'){
         tableData4.value = response.rs
       }
-     
+
       loadPort(response.rs,type)
 
     })
@@ -410,7 +410,7 @@ const getExportTransportMode = () => {
 
     //进口运输方式统计
 const loadChar = (_data,type) => {
-    
+
     let date1=parseDateWithoutDayNew(listQueryI.startDate);
     let date2=parseDateWithoutDayNew(listQueryI.endDate);
     // 指定图表的配置项和数据
@@ -438,7 +438,7 @@ const loadChar = (_data,type) => {
                 title: {
                     text: date1+'~'+date2+totalType+'运输方式统计'
                 },
-   
+
                 legend: {
                     orient:'vertical',
                     data: modeArry,
@@ -463,7 +463,7 @@ const loadChar = (_data,type) => {
                             fontWeight: 'bold'
                             }
                         },
-                    }, 
+                    },
                 ],
             };
     let canvasI: any = null
@@ -473,7 +473,7 @@ const loadChar = (_data,type) => {
       myChartI.setOption(option)
 }
 const loadPort= (_data,type) => {
-    
+
     let date1=parseDateWithoutDayNew(listQueryI.startDate);
     let date2=parseDateWithoutDayNew(listQueryI.endDate);
             // 指定图表的配置项和数据
@@ -575,7 +575,7 @@ const getSummariesI = (param) => {
     if (index === 1) {
       sums[index] = '合计'
       return
-    } 
+    }
     if(data!=null){
         const values = data.map((item) =>
      Number(item[column.property]))
@@ -604,7 +604,7 @@ const getSummariesE = (param) => {
     if (index === 1) {
       sums[index] = '合计'
       return
-    } 
+    }
     if(data!=null){
         const values = data.map((item) =>
      Number(item[column.property]))
@@ -627,11 +627,10 @@ const getSummariesE = (param) => {
   return sums
 }
 
-  
- 
+
+
   </script>
-  
+
   <style lang="scss" scoped>
   @import '@/styles/addNew.scss';
   </style>
-  

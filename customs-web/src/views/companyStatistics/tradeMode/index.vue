@@ -25,7 +25,7 @@
                                     <el-form-item label="统计日期">
                                         <div class="block">
                                             <span class="demonstration"></span>
-                                            <el-date-picker
+                                            <el-date-picker style="width:100px;"
                                             v-model="listQueryI.startDate"
                                             type="month"
                                             placeholder="统计起始日期">
@@ -33,7 +33,7 @@
                                         </div>
                                         <div class="block">
                                             <span class="demonstration">~</span>
-                                            <el-date-picker
+                                            <el-date-picker style="width:100px;"
                                             v-model="listQueryI.endDate"
                                             type="month"
                                             placeholder="统计起始日期">
@@ -139,7 +139,7 @@
                                     <el-form-item label="统计日期">
                                         <div class="block">
                                             <span class="demonstration"></span>
-                                            <el-date-picker
+                                            <el-date-picker style="width:100px;"
                                             v-model="listQueryE.startDate"
                                             type="month"
                                             placeholder="统计起始日期">
@@ -147,7 +147,7 @@
                                         </div>
                                         <div class="block">
                                             <span class="demonstration">~</span>
-                                            <el-date-picker
+                                            <el-date-picker style="width:100px;"
                                             v-model="listQueryE.endDate"
                                             type="month"
                                             placeholder="统计起始日期">
@@ -485,7 +485,8 @@ const loadChar1= (_data,type) => {
                 data:data.month,
                 axisLabel:{
                     interval:0,
-                    rotate:0
+                    rotate:45,
+                    margin:10
                 }
             },
             yAxis: {

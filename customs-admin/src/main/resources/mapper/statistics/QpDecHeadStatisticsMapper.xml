@@ -64,8 +64,8 @@
     <select id="queryGoodsTotal1" resultType="java.util.HashMap" parameterType="java.util.HashMap">
         select mon,currency,rate,sum(val) numb,round(sum(val)*rate,2) rmb from(
         select substr(d.declarationData,0,6) as mon,s.TRADECURR_VALUE  currency,NVL(s.CURRENTRATE ,1)  rate,s.DECLTOTAL  val
-        from nsw.QP_DECLIST s
-        left join  nsw.qp_dechead d
+        from  nsw.qp_dechead d
+        left join  nsw.QP_DECLIST s
         on s.HEADID=d.id
         where 1=1
         and d.orgid = #{orgid,jdbcType=VARCHAR}
@@ -82,8 +82,8 @@
     <select id="queryGoodsTotal2" resultType="java.util.HashMap" parameterType="java.util.HashMap">
         select mon,sum(RMB) RMB from(select mon,currency,rate,sum(val) numb,round(sum(val)*rate,2) rmb from(
         select substr(d.declarationData,0,6) as mon,s.TRADECURR_VALUE  currency,NVL(s.CURRENTRATE ,1)  rate,s.DECLTOTAL  val
-        from nsw.QP_DECLIST s
-        left join  nsw.qp_dechead d
+        from  nsw.qp_dechead d
+        left join  nsw.QP_DECLIST s
         on s.HEADID=d.id
         where 1=1   and d.isdelete != '1'
         and d.orgid = #{orgid,jdbcType=VARCHAR}
@@ -101,7 +101,8 @@
 
     </select>
     <select id="queryTopGoods" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-        select * from(SELECT codeTS,gname,currency,rate,sum(val) numb,round(sum(val)*rate,2) rmb FROM (SELECT s.codeTS codeTS,s.gname gname,s.TRADECURR_VALUE  currency,NVL(s.CURRENTRATE ,1)  rate,s.DECLTOTAL  val FROM nsw.QP_DECLIST s LEFT JOIN nsw.qp_dechead d ON s.HEADID=d.ID
+        select * from(SELECT codeTS,gname,currency,rate,sum(val) numb,round(sum(val)*rate,2) rmb
+          FROM (SELECT s.codeTS codeTS,s.gname gname,s.TRADECURR_VALUE  currency,NVL(s.CURRENTRATE ,1)  rate,s.DECLTOTAL  val FROM nsw.qp_dechead d LEFT JOIN nsw.QP_DECLIST s ON s.HEADID=d.ID
         WHERE 1=1
         <if test="qyFlag != null and qyFlag != ''" >
             and d.orgid = #{orgid,jdbcType=VARCHAR}
@@ -180,7 +181,7 @@
     <select id="queryInspectRate" resultType="java.util.HashMap" parameterType="java.util.HashMap">
         select to_char( count(1)) numb,substr(d.declarationData,0,6) as mon
         from nsw.qp_dechead d where 1=1 and d.isdelete !='1'
-        <if test="qyFlag != null and qyFlag != ''" >
+        <if test="qyFlag ==1">
             and d.orgid = #{orgid,jdbcType=VARCHAR}
         </if>
         and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
@@ -204,7 +205,7 @@
         and
         substr(d.declarationData,0,6)= #{mon,jdbcType=VARCHAR}
         and d.declarationdata is not null
-        AND d.CHECKTIME is  null
+        AND d.CHECKTIME is not null
         group by substr(d.declarationData,0,6)
         order by mon
     </select>
