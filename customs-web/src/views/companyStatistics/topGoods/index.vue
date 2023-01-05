@@ -215,7 +215,8 @@ const getImportTopGoods = () => {
     let params={
       startDate: parseDateWithoutDay(listQueryI.startDate),
       endDate: parseDateWithoutDay(listQueryI.endDate),
-      ieFlag:'I'
+      ieFlag:'I',
+      qyFlag:'1'
     }
   store
     .dispatch('companyStatistics/getTopGoods',params)
