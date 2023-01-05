@@ -535,6 +535,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             String startDate = params.get("startDate");
             String endDate = params.get("endDate");
             String ieFlag = params.get("ieFlag");
+            String qyFlag = params.get("qyFlag");
             startDate = startDate.replace("-","");
             endDate = endDate.replace("-","");
 
@@ -542,7 +543,8 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             map0.put("startDate", startDate);
             map0.put("endDate", endDate);
             map0.put("ieFlag", ieFlag);
-
+            map0.put("qyFlag", qyFlag);
+            map0.put("orgId", user.getDeptId());
             List<Map>list = qpDecHeadMapper.queryGoodsData(map0);
 
             //组装json数据

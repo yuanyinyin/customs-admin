@@ -1,19 +1,18 @@
 <template>
-    <div class="companyset-container scroll-y p">
+    <div class="goodsset-container scroll-y p">
         <el-card shadow="hover" :body-style="{ padding: '20px 20px 5px  20px ' }">
         <!-- <el-card> -->
        <div class="head-container">
           <el-form :inline="true" :model="listQuery" class="demo-form-inline">
-            <el-form-item label="海关十位编码">
+            <el-form-item label="税则代码">
              <el-input
-                    v-model="listQuery.customCode"
-                    placeholder="海关十位编码"
-                    style="width: 200px;margin-right:10px; "
-                    class="filter-item" clearable
+                    v-model="listQuery.hscode"
+                    placeholder="税则代码"
+                    style="width: 200px;margin-right:10px; "  clearable
             />
             </el-form-item>
-            <el-form-item label="企业名称">
-              <el-input v-model="listQuery.orgName" placeholder="企业名称" clearable></el-input>
+            <el-form-item label="商品名称">
+              <el-input v-model="listQuery.goodsName" placeholder="商品名称" clearable></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="success" :icon="Search" @click="handleFilter">查询</el-button>
@@ -37,9 +36,15 @@
                     <span>{{ (listQuery.page -1) * listQuery.limit + scope.$index +1 }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="orgId" label="机构id" align="center"/>
-                <el-table-column prop="customCode" label="海关十位编码" align="center"/>
-                <el-table-column prop="orgName" label="企业名称" align="center"/>
+
+                <el-table-column prop="hscode" label="税则代码" align="center"/>
+                <el-table-column prop="goodsName" label="商品名称" align="center"/>
+                  <el-table-column prop="ieflag" label="进出口标识" align="center">
+                    <template #default="scope">
+                      <el-tag v-if="scope.row.ieflag=== `I`" type="success">进口</el-tag>
+                      <el-tag v-if="scope.row.ieflag  === `E`" type="warning">出口</el-tag>
+                    </template>
+                  </el-table-column>
                 <el-table-column prop="createUser" label="操作员" align="center"/>
                 <el-table-column label="操作" align="center">
                   <template #default="scope">
@@ -64,7 +69,7 @@
               layout="total, sizes, prev, pager, next, jumper"
               :total="total"
               @size-change="handleSizeChange"
-              @current-change="getKeyCompany"
+              @current-change="getKeyGoods"
             >
             </el-pagination>
           </div>
@@ -74,16 +79,16 @@
             align-center>
             <div class="head-container">
           <el-form :inline="true" :model="listQueryD" class="demo-form-inline" :rules="rules" >
-            <el-form-item label="海关十位编码" prop="customNo">
+            <el-form-item label="税则代码" prop="codets">
              <el-input
-                    v-model="listQueryD.customNo"
-                    placeholder="海关十位编码"
+                    v-model="listQueryD.codets"
+                    placeholder="税则代码"
                     style="width: 200px;margin-right:10px; "
                     class="filter-item" clearable
             />
             </el-form-item>
-            <el-form-item label="企业名称" prop="orgName">
-              <el-input v-model="listQueryD.orgName" placeholder="企业名称" clearable></el-input>
+            <el-form-item label="商品名称" prop="gname">
+              <el-input v-model="listQueryD.gname" placeholder="商品名称" clearable></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="success" :icon="Search" @click="handleFilterD">查询</el-button>
@@ -97,23 +102,15 @@
                 highlight-current-row @selection-change="handleSelectionChange"  :selectData="selectData" >
             <el-table-column type="selection" align="center" width="50" />
             <el-table-column type="index" label="序号" align="center" width="55"/>
-            <el-table-column property="ID" label="机构id" />
-            <el-table-column property="CUSTOM_NO" label="海关十位编码" />
-            <el-table-column property="ORG_NAME_CN" label="企业名称" />
-            <el-table-column property="AREA_NAME" label="地址" />>
-            <!-- <el-table-column label="操作" align="center">
-                  <template #default="scope">
-                  <el-button
-                    v-for="(item, index) in btnInRowsD"
-                    v-show="checkBtnShowD(item.option, scope.row)"
-                    :key="index"
-                    :type="item.type"
-                    @click="handleClickD(item.option, scope.row)"
-                  >
-                    {{ item.text }}
-                  </el-button>
+
+            <el-table-column property="CODETS" label="税则代码" />
+            <el-table-column property="GNAME" label="商品名称" />
+              <el-table-column prop="IEFLAG" label="进出口标识" align="center">
+                <template #default="scope">
+                  <el-tag v-if="scope.row.IEFLAG=== `I`" type="success">进口</el-tag>
+                  <el-tag v-if="scope.row.IEFLAG  === `E`" type="warning">出口</el-tag>
                 </template>
-                </el-table-column> -->
+              </el-table-column>
             </el-table>
             <div class="block columnCC mt-2">
             <el-pagination
@@ -124,7 +121,7 @@
               layout="total, sizes, prev, pager, next, jumper"
               :total="pageTotal"
               @size-change="handleSizeChangeD"
-              @current-change="getCompanyD"
+              @current-change="getGoodsD"
             >
             </el-pagination>
           </div>
@@ -138,7 +135,7 @@
     import { Search,Delete } from '@element-plus/icons-vue'
     import { dialogTy } from '~/dialog'
     import {Ref} from 'vue'
-    import {cancelKeyCompany,addCompany,cancelCompany} from "@/api/countSystemStatistics";
+    import {cancelGoods,cancelKeyGoods,addGoods} from "@/api/countSystemStatistics";
 
     import {ElMessage, ElMessageBox,ElTable} from 'element-plus'
     const store = useStore()
@@ -164,16 +161,15 @@
       limit: 10,
        })
     onMounted(() => {
-      getKeyCompany()
+      getKeyGoods()
 
     })
 let handleAdd = () => {
     tablemodel.value=true;
-    // getCompanyD()
 }
 const rules = ref({
   customNo: [{required: true, message: '请输入海关十位编码', trigger: 'blur'}],
-      orgName: [{required: true, message: '请输入企业名称', trigger: 'blur'}],
+      orgName: [{required: true, message: '请输入商品名称', trigger: 'blur'}],
     })
 
 const  multipleSelection=[];
@@ -196,27 +192,27 @@ const handleCancel1 = () => {
        if (index == 0) {
         console.log(1223,e)
             ids2 = e.id
-            ids3 = e.orgName
+            ids3 = e.goodsName
         }
         else {
             ids2 += "," + e.id
-            ids3 += "," + e.orgName
+            ids3 += "," + e.goodsName
         }
      })
-  ElMessageBox.confirm('取消重点企业设置,'+ids3+', 是否继续?', {
+  ElMessageBox.confirm('取消重点商品设置,'+ids3+', 是否继续?', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
 
     let param={ids:ids2}
-    cancelCompany(param)
+    cancelGoods(param)
     .then((res) => {
         if (res && res.code === 200) {
-            ElMessage({ message: '取消重点企业设置成功', type: 'success' })
+            ElMessage({ message: '取消重点商品设置成功', type: 'success' })
             // todo 无感刷新
             tablemodel.value=false;
-            getKeyCompany();
+            getKeyGoods();
         } else {
         ElMessage({ message: res.message, type: 'error' })
         }
@@ -224,7 +220,6 @@ const handleCancel1 = () => {
   })
 }
 let handleAddD = () => {
-    console.log(1244,selectData.value)
     if (selectData.value==null||selectData1.value=='') {
         ElMessage({ message: '请选择一条记录', type: 'error' })
         return;
@@ -237,13 +232,13 @@ let handleAddD = () => {
     selectData.value.forEach(e => {
        Ids.push(e)
      })
-  addCompany(Ids)
+  addGoods(Ids)
     .then((res) => {
         if (res && res.code === 200) {
-            ElMessage({ message: '重点企业设置成功', type: 'success' })
+            ElMessage({ message: '重点商品设置成功', type: 'success' })
             // todo 无感刷新
             tablemodel.value=false;
-            getKeyCompany();
+            getKeyGoods();
         } else {
         ElMessage({ message: res.message, type: 'error' })
         }
@@ -279,26 +274,25 @@ const handleSelection = (selection, row) => {
 }
 /**查询部分 */
 const listQueryD = reactive({
-  customNo: '',
-  orgName: '',
+  codets: '',
+  gname: '',
   page: 1,
   limit: 10
 })
-const getCompanyD = () => {
-  if(listQueryD.customNo==''||listQueryD.customNo==''||listQueryD.orgName==''||listQueryD.orgName==null){
+const getGoodsD = () => {
+  if(listQueryD.codets==''||listQueryD.codets==''||listQueryD.gname==''||listQueryD.gname==null){
     ElMessage({ message: '请填写查询条件', type: 'warning' })
     return;
   }
     let params={
-    customNo: listQueryD.customNo,
-    orgName: listQueryD.orgName,
+      codets: listQueryD.codets,
+      gname: listQueryD.gname,
       page: listQueryD.page,
       limit: listQueryD.limit,
     }
   store
-    .dispatch('countSystemStatistics/getCompanyList',params)
+    .dispatch('countSystemStatistics/getGoodsList',params)
     .then((response) => {
-      console.log(11111,response)
       tableDataD.value = response.items
       pageTotal.value = response.total
 
@@ -306,11 +300,11 @@ const getCompanyD = () => {
     .catch((response) => {})
 }
 
-    // 列表展现已经设置重点企业的名单
-const getKeyCompany = () => {
+    // 列表展现已经设置重点商品的名单
+const getKeyGoods = () => {
 
     store
-    .dispatch('countSystemStatistics/getKeyCompany', listQuery._rawValue)
+    .dispatch('countSystemStatistics/getKeyGoods', listQuery._rawValue)
     .then((response) => {
       console.log('eee',response)
       tableData.value = response.items
@@ -324,28 +318,28 @@ const getKeyCompany = () => {
      */
     const handleSizeChange = () => {
       listQuery.page = 1
-      getKeyCompany()
+      getKeyGoods()
     }
     const handleSizeChangeD = () => {
       listQueryD.page = 1
-      getCompanyD()
+      getGoodsD()
     }
     /**
      * 查询框处理
      */
     const handleFilter = () => {
       listQuery.page = 1
-      getKeyCompany()
+      getKeyGoods()
     }
     const handleFilterD= () => {
       listQueryD.page = 1
-      getCompanyD()
+      getGoodsD()
     }
  /**按钮部分 */
 const btnInRows = ref(
   [
     {
-      text: '取消重点企业',
+      text: '取消重点商品',
       type: 'text',
       option: 'cancel',
     },
@@ -354,7 +348,7 @@ const btnInRows = ref(
 // const btnInRowsD = ref(
 //   [
 //     {
-//       text: '重点企业',
+//       text: '重点商品',
 //       type: 'text',
 //       option: 'add',
 //     },
@@ -365,7 +359,7 @@ const current = ref(-1)
 const handleClick = (op: string, ...restPara: any) => {
   console.log(restPara)
   if (op == 'cancel') {
-    handleCancelCompay(restPara[0])
+    handleCancelGoods(restPara[0])
   }
 }
  //按钮显示条件
@@ -384,17 +378,17 @@ const checkBtnShowD = (option:any, row:any) => {
 
   return true
 }
-const handleCancelCompay = (row) => {
-  ElMessageBox.confirm('取消重点企业设置,'+row.orgName+', 是否继续?', {
+const handleCancelGoods = (row) => {
+  ElMessageBox.confirm('取消重点商品设置,'+row.goodsName+', 是否继续?', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    cancelKeyCompany(row.id)
+    cancelKeyGoods(row.id)
       .then(res => {
-        ElMessage({ message: '取消重点企业设置成功', type: 'success' })
+        ElMessage({ message: '取消重点商品设置成功', type: 'success' })
         // todo 无感刷新
-        getKeyCompany()
+        getKeyGoods()
       })
   }).catch(() => {
 

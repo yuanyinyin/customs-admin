@@ -27,5 +27,6 @@ public interface ImportantCompanyService extends IService<ImportantCompanyEntity
     ApiResponse addCompany(String jsonString, UserEntity user);
 
     ApiResponse cancelCompany(Map<String, String> params, UserEntity user);
+
 }
 
