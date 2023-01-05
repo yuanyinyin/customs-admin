@@ -219,6 +219,10 @@
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
         </if>
+        <if test="qyFlag ==1">
+            and exists(select 1 from important_goods c where c.hscode=s.codets and c.GOODS_NAME=s.gname and c.ieflag=d.ieflag
+            and c.OWNER_ORG_ID=#{orgId,jdbcType=VARCHAR})
+        </if>
         and substr(d.declarationData,0,6) &gt;= #{startDate,jdbcType=VARCHAR}
         and substr(d.declarationData,0,6) &lt;= #{endDate,jdbcType=VARCHAR}
         and s.codeTS IS NOT NULL)

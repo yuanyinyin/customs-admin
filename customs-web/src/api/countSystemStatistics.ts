@@ -60,3 +60,59 @@ export function addCompany(data) {
       isAlertErrorMsg: true
     })
   }
+
+export function getKeyGoods(data: ObjTy) {
+  return request({
+    url: '/countSystemStatistics/queryKeyGoods',
+    data,
+    method: 'get',
+    bfLoading: true,
+    isParams: true,
+    isAlertErrorMsg: true
+  })
+
+}
+/**
+ * 取消
+ * @param id id
+ */
+export function cancelGoods(data) {
+  return request({
+    url: `/countSystemStatistics/cancelGoods`,
+    data,
+    method: 'post',
+    isParams: true,
+    bfLoading: true,
+    isAlertErrorMsg: true
+  })
+}
+export function cancelKeyGoods(id: number) {
+  return request({
+    url: `/countSystemStatistics/cancelKeyGoods/${id}`,
+    method: 'delete',
+    isParams: true,
+    bfLoading: true,
+    isAlertErrorMsg: true
+  })
+}
+export function getGoodsList(data: ObjTy) {
+  return request({
+    url: '/countSystemStatistics/queryGoodsList',
+    data,
+    method: 'get',
+    bfLoading: true,
+    isParams: true,
+    isAlertErrorMsg: true
+  })
+
+}
+export function addGoods(data) {
+  return request({
+    url: `/countSystemStatistics/addGoods`,
+    method: 'post',
+    data,
+    // isParams: true,
+    bfLoading: true,
+    isAlertErrorMsg: true
+  })
+}

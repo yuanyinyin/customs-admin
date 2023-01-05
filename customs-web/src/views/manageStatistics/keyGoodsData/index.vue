@@ -4,10 +4,10 @@
     <div class="customsData-container scroll-y p">
 
       <el-tabs v-model="activeName" @tab-change="handleTabChange">
-        <el-tab-pane label="进口商品货值TOP10统计" name="first">
+        <el-tab-pane label="重点商品进口货值TOP10统计" name="first">
           <el-container>
             <el-card style="width: 100%;">
-              <el-header>进口商品货值TOP10统计</el-header>
+              <el-header>重点商品进口货值TOP10统计</el-header>
               <el-main style="width: 140%;height:500px;">
                 <div id="main1" style="width: 70%;height:100%;"></div>
               </el-main>
@@ -64,10 +64,10 @@
             </el-card>
           </el-container>
         </el-tab-pane>
-        <el-tab-pane label="出口商品货值TOP10统计" name="second">
+        <el-tab-pane label="重点商品出口货值TOP10统计" name="second">
           <el-container>
             <el-card style="width: 100%;">
-              <el-header>出口商品货值TOP10统计</el-header>
+              <el-header>重点商品出口货值TOP10统计</el-header>
               <el-main style="width: 140%;height:500px;">
                 <div id="main2" style="width: 70%;height:100%;"></div>
               </el-main>
@@ -269,7 +269,7 @@ const getImportCustomsData = () => {
     startDate: parseDateWithoutDay(listQueryI.startDate),
     endDate: parseDateWithoutDay(listQueryI.endDate),
     ieFlag: 'I',
-    qyFlag:0
+    qyFlag:1
   }
   store
     .dispatch('manageStatistics/getGoodsData', params)
@@ -287,7 +287,7 @@ const getExportCustomsData = () => {
     startDate: parseDateWithoutDay(listQueryE.startDate),
     endDate: parseDateWithoutDay(listQueryE.endDate),
     ieFlag: 'E',
-    qyFlag:0
+    qyFlag:1
   }
   store
     .dispatch('manageStatistics/getGoodsData', params2)
@@ -428,7 +428,7 @@ const openFun = () => {
   })
 }
 let canvasI: any = null//document.getElementById('canvas')
-//绘制出口商品货值柱状图
+//绘制重点商品出口货值柱状图
 const loadChar = (_data, type) => {
 
   let date1 = parseDateWithoutDayNew(listQueryI.startDate);
@@ -454,7 +454,7 @@ const loadChar = (_data, type) => {
   }
   const option = {
     title: {
-      text: date1 + '~' + date2 + totalType + '商品TOP10'
+      text: date1 + '~' + date2+ '重点商品' + totalType + 'TOP10'
     },
     tooltip: {},
     legend: {
