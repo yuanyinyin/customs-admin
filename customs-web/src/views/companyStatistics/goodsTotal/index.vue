@@ -221,7 +221,8 @@ const getImportCustomsData = () => {
     let params={
       startDate: parseDateWithoutDay(listQueryI.startDate),
       endDate: parseDateWithoutDay(listQueryI.endDate),
-      ieFlag:'I'
+      ieFlag:'I',
+      qyFlag:'1'
     }
   store
     .dispatch('companyStatistics/getGoodsTotal',params)
@@ -237,7 +238,8 @@ const getExportCustomsData = () => {
     let params2={
       startDate: parseDateWithoutDay(listQueryE.startDate),
       endDate: parseDateWithoutDay(listQueryE.endDate),
-      ieFlag:'E'
+      ieFlag:'E',
+      qyFlag:'1'
     }
   store
     .dispatch('companyStatistics/getGoodsTotal',params2)

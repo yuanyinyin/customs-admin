@@ -269,6 +269,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             String startDate = params.get("startDate");
             String endDate = params.get("endDate");
             String ieFlag = params.get("ieFlag");
+            String qyFlag = params.get("qyFlag");
             startDate = startDate.replace("-","");
             endDate = endDate.replace("-","");
 
@@ -277,6 +278,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             map0.put("endDate", endDate);
             map0.put("orgid",user.getDeptId());
             map0.put("ieFlag", ieFlag);
+            map0.put("qyFlag", qyFlag);
 
             List<Map>list1 = qpDecHeadMapper.queryGoodsTotal1(map0);
 
@@ -377,6 +379,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             String startDate = params.get("startDate");
             String endDate = params.get("endDate");
             String ieFlag = params.get("ieFlag");
+            String qyFlag = params.get("qyFlag");
             startDate = startDate.replace("-","");
             endDate = endDate.replace("-","");
 
@@ -385,6 +388,7 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             map0.put("endDate", endDate);
             map0.put("orgid",user.getDeptId());
             map0.put("ieFlag", ieFlag);
+            map0.put("qyFlag", qyFlag);
 
             List<Map>list = qpDecHeadMapper.queryTopFrequency(map0);
 

@@ -68,7 +68,9 @@
         left join  nsw.QP_DECLIST s
         on s.HEADID=d.id
         where 1=1
-        and d.orgid = #{orgid,jdbcType=VARCHAR}
+        <if test="qyFlag==1">
+            and d.orgid = #{orgid,jdbcType=VARCHAR}
+        </if>
         and d.isdelete != '1'
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
@@ -104,7 +106,7 @@
         select * from(SELECT codeTS,gname,currency,rate,sum(val) numb,round(sum(val)*rate,2) rmb
           FROM (SELECT s.codeTS codeTS,s.gname gname,s.TRADECURR_VALUE  currency,NVL(s.CURRENTRATE ,1)  rate,s.DECLTOTAL  val FROM nsw.qp_dechead d LEFT JOIN nsw.QP_DECLIST s ON s.HEADID=d.ID
         WHERE 1=1
-        <if test="qyFlag != null and qyFlag != ''" >
+        <if test="qyFlag==1">
             and d.orgid = #{orgid,jdbcType=VARCHAR}
         </if>
         and d.isdelete != '1'
@@ -125,7 +127,9 @@
         LEFT JOIN nsw.QP_DECLIST S
         ON d.ID=s.headId
         WHERE 1=1
-        and d.orgid = #{orgid,jdbcType=VARCHAR}
+        <if test="qyFlag==1">
+            and d.orgid = #{orgid,jdbcType=VARCHAR}
+        </if>
         and d.isdelete != '1'
         <if test="ieFlag != null and ieFlag != ''" >
             and d.ieFlag= #{ieFlag,jdbcType=VARCHAR}
