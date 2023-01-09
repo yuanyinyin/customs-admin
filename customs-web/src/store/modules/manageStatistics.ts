@@ -1,4 +1,16 @@
-import {getAreaData,getAreaDataByCode,getGoodsData,getGoodsDataDetail,getKeyCompanyData,getKeyCompanyDataSum,getKeyCompanyDataByCode,getAreaDataDash,getCustomDataDash,getQyUseDataDash} from '@/api/manageStatistics'
+import {
+  getAreaData,
+  getAreaDataByCode,
+  getGoodsData,
+  getGoodsDataDetail,
+  getKeyCompanyData,
+  getKeyCompanyDataSum,
+  getKeyCompanyDataByCode,
+  getAreaDataDash,
+  getCustomDataDash,
+  getQyUseDataDash,
+  getCompanyRateData, getCompanyUseDataList
+} from '@/api/manageStatistics'
 import { ObjTy } from '~/common'
 const getDefaultState = () => {
   return {
@@ -196,6 +208,46 @@ const actions = {
 
     return new Promise((resolve, reject) => {
       getQyUseDataDash(data)
+        .then((res) => {
+          if (res && res.code === 200) {
+            const data = res.data
+            if (!data) {
+              return reject(res.message)
+            }
+            return resolve(data)
+          } else {
+            return reject(res)
+          }
+        })
+        .catch((error) => {
+          return reject(error)
+        })
+    })
+  },
+  getCompanyRateData({ commit }: ObjTy, data: ObjTy) {
+
+    return new Promise((resolve, reject) => {
+      getCompanyRateData(data)
+        .then((res) => {
+          if (res && res.code === 200) {
+            const data = res.data
+            if (!data) {
+              return reject(res.message)
+            }
+            return resolve(data)
+          } else {
+            return reject(res)
+          }
+        })
+        .catch((error) => {
+          return reject(error)
+        })
+    })
+  },
+  getCompanyUseDataList({ commit }: ObjTy, data: ObjTy) {
+
+    return new Promise((resolve, reject) => {
+      getCompanyUseDataList(data)
         .then((res) => {
           if (res && res.code === 200) {
             const data = res.data

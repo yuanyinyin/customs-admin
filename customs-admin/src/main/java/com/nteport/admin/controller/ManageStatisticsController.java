@@ -131,4 +131,24 @@ public class ManageStatisticsController {
     public ApiResponse queryQyUseDataDash(@RequestParam Map<String, String> params, UserEntity user) {
         return iQpDecHeadService.queryQyUseDataDash(params,user);
     }
+    /**
+     * 管理端  企业使用占比
+     *   平台活跃度
+     * @param params
+     * @return
+     */
+    @GetMapping("/queryCompanyRateData")
+    public ApiResponse queryCompanyRateData(@RequestParam Map<String, String> params, UserEntity user) {
+        return iQpDecHeadService.queryCompanyRateData(params,user);
+    }
+    /**
+     * 管理端  企业使用占比
+     *   用户
+     * @param params
+     * @return
+     */
+    @GetMapping("/queryCompanyUseDataList")
+    public ApiResponse queryCompanyUseDataList(@RequestParam Map<String, String> params, UserEntity user) {
+        return iQpDecHeadService.queryCompanyUseDataList(params,user);
+    }
 }

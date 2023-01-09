@@ -484,6 +484,9 @@ const loadChar = (_data, type) => {
         name: '商品货值',
         type: 'bar',
         data: data.val,
+        barGap: '20%',
+        barCategoryGap: '30%',
+        barMaxWidth:'25',
         markLine: { // 设置平均线
           data: [
             {
@@ -511,6 +514,7 @@ const loadChar = (_data, type) => {
   myChartI.clear();
   myChartI.setOption(option);
   myChartI.on("click", function (param) {
+    console.log(112223,param)
     let str_before = _data[param.dataIndex].CODETS
     let str = _data[param.dataIndex].GNAME
     getGoodsDataDetail(str_before, str, type);

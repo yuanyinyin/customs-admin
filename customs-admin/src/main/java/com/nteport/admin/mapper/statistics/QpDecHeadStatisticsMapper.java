@@ -51,4 +51,13 @@ public interface QpDecHeadStatisticsMapper extends BaseMapper<QpDecHead> {
 
     List querAllQyDataDash1(HashMap hashMap);
 
+
+    List queryCompanyRateData(HashMap hashMap);
+    List queryCompanyUseDataList(HashMap hashMap);
+    Integer queryCompanyUseDataListCount(HashMap hashMap);
+    List queryCompanyUseDataListnot(HashMap hashMap);
+    Integer queryCompanyUseDataListnotCount(HashMap hashMap);
+    Integer queryCompanyUseDataByCodeCount(HashMap hashMap);
+    List queryCompanyUseDataByCode(HashMap hashMap);
+    List queryCompanyUseDataByCode1(HashMap hashMap);
 }

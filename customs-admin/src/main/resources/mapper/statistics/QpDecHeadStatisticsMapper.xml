@@ -633,4 +633,170 @@
        (select count(1)beforeYear11 from IMPORTANT_COMPANY ic  )g,
        (select count(1)beforeYear21 from IMPORTANT_COMPANY  ic )g2
     </select>
+    <select id="queryCompanyRateData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT  a.*,b.*,c.*,d.* FROM
+        (SELECT  nvl(sum(count(distinct dept_id)),0) useQy   FROM  T_LOGIN_LOG a    WHERE 1=1
+        <if test="searchFlag ==1">
+            and TO_CHAR(CREATE_TIME,'YYYY-MM-DD')=TO_CHAR(SYSDATE,'YYYY-MM-DD')
+        </if>
+        <if test="searchFlag ==2">
+            and CREATE_TIME>trunc(sysdate-6)
+        </if>
+        <if test="searchFlag ==3">
+            and CREATE_TIME  between TRUNC(SYSDATE-30) and TRUNC(SYSDATE)
+        </if>
+        <if test="searchFlag ==4">
+            and to_char(CREATE_TIME ,'yyyy-mm-dd')&gt;=to_char( add_months(sysdate,-6),'yyyy-mm-dd')
+        </if>
+        <if test="searchFlag ==5">
+            and to_char(CREATE_TIME ,'yyyy')=to_char(sysdate,'yyyy')
+        </if>
+        GROUP BY dept_id)a  ,
+        (SELECT count(1)AllQy FROM ORG_BASEINFO@NT_PTL )b  ,
+        (SELECT  nvl(sum(count(distinct dept_id)),0) useKeyQy   FROM  T_LOGIN_LOG a    WHERE 1=1
+        <if test="searchFlag ==1">
+            and  TO_CHAR(CREATE_TIME,'YYYY-MM-DD')=TO_CHAR(SYSDATE,'YYYY-MM-DD')
+        </if>
+        <if test="searchFlag ==2">
+            and CREATE_TIME>trunc(sysdate-6)
+        </if>
+        <if test="searchFlag ==3">
+            and CREATE_TIME  between TRUNC(SYSDATE-30) and TRUNC(SYSDATE)
+        </if>
+        <if test="searchFlag ==4">
+            and to_char(CREATE_TIME ,'yyyy-mm-dd')&gt;=to_char( add_months(sysdate,-6),'yyyy-mm-dd')
+        </if>
+        <if test="searchFlag ==5">
+            and to_char(CREATE_TIME ,'yyyy')=to_char(sysdate,'yyyy')
+        </if>
+        and exists (select 1 from important_company where ORG_ID=a.dept_id)
+        GROUP BY dept_id
+        )c  ,
+        (SELECT count(1)allKeyQy FROM important_company )d
+    </select>
+    <select id="queryCompanyUseDataList" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select  * from  (
+        SELECT A.*, ROWNUM RN
+        FROM (
+        SELECT DEPT_ID,b.ORG_NAME_CN    FROM T_LOGIN_LOG a LEFT join  ORG_BASEINFO@NT_PTL b ON b.id=a.DEPT_ID
+        where 1=1
+        <if test="companyName != null and companyName != ''" >
+            and instr(b.ORG_NAME_CN ,#{companyName,jdbcType=VARCHAR})>0
+        </if>
+        <if test="searchFlag ==1">
+            and TO_CHAR(a.CREATE_TIME,'YYYY-MM-DD')=TO_CHAR(SYSDATE,'YYYY-MM-DD')
+        </if>
+        <if test="searchFlag ==2">
+            and a.CREATE_TIME>trunc(sysdate-6)
+        </if>
+        <if test="searchFlag ==3">
+            and a.CREATE_TIME  between TRUNC(SYSDATE-30) and TRUNC(SYSDATE)
+        </if>
+        <if test="searchFlag ==4">
+            and to_char(a.CREATE_TIME ,'yyyy-mm-dd')&gt;=to_char( add_months(sysdate,-6),'yyyy-mm-dd')
+        </if>
+        <if test="searchFlag ==5">
+            and to_char(a.CREATE_TIME ,'yyyy')=to_char(sysdate,'yyyy')
+        </if>
+        GROUP BY DEPT_ID  ,b.ORG_NAME_CN
+        )A
+        WHERE ROWNUM &lt;= #{pageSize,jdbcType=BIGINT}
+        )
+        WHERE RN &gt;= #{current,jdbcType=BIGINT}
+    </select>
+    <select id="queryCompanyUseDataListCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        select count(1) from (SELECT DEPT_ID,b.ORG_NAME_CN    FROM T_LOGIN_LOG a LEFT join  ORG_BASEINFO@NT_PTL b ON b.id=a.DEPT_ID
+        where 1=1
+        <if test="companyName != null and companyName != ''" >
+            and instr(b.ORG_NAME_CN ,#{companyName,jdbcType=VARCHAR})>0
+        </if>
+        <if test="searchFlag ==1">
+            and TO_CHAR(a.CREATE_TIME,'YYYY-MM-DD')=TO_CHAR(SYSDATE,'YYYY-MM-DD')
+        </if>
+        <if test="searchFlag ==2">
+            and a.CREATE_TIME>trunc(sysdate-6)
+        </if>
+        <if test="searchFlag ==3">
+            and a.CREATE_TIME  between TRUNC(SYSDATE-30) and TRUNC(SYSDATE)
+        </if>
+        <if test="searchFlag ==4">
+            and to_char(a.CREATE_TIME ,'yyyy-mm-dd')&gt;=to_char( add_months(sysdate,-6),'yyyy-mm-dd')
+        </if>
+        <if test="searchFlag ==5">
+            and to_char(a.CREATE_TIME ,'yyyy')=to_char(sysdate,'yyyy')
+        </if>
+        GROUP BY DEPT_ID  ,b.ORG_NAME_CN
+        )
+    </select>
+    <select id="queryCompanyUseDataListnot" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select  * from  (
+        SELECT A.*, ROWNUM RN
+        FROM (SELECT c.id DEPT_ID,c.ORG_NAME_CN FROM ORG_BASEINFO@NT_PTL   c WHERE c.id NOT in  (
+        SELECT DEPT_ID   FROM T_LOGIN_LOG a
+        where 1=1
+        <if test="companyName != null and companyName != ''" >
+            and instr(c.ORG_NAME_CN ,#{companyName,jdbcType=VARCHAR})>0
+        </if>
+        <if test="searchFlag ==1">
+            and TO_CHAR(a.CREATE_TIME,'YYYY-MM-DD')=TO_CHAR(SYSDATE,'YYYY-MM-DD')
+        </if>
+        <if test="searchFlag ==2">
+            and a.CREATE_TIME>trunc(sysdate-6)
+        </if>
+        <if test="searchFlag ==3">
+            and a.CREATE_TIME  between TRUNC(SYSDATE-30) and TRUNC(SYSDATE)
+        </if>
+        <if test="searchFlag ==4">
+            and to_char(a.CREATE_TIME ,'yyyy-mm-dd')&gt;=to_char( add_months(sysdate,-6),'yyyy-mm-dd')
+        </if>
+        <if test="searchFlag ==5">
+            and to_char(a.CREATE_TIME ,'yyyy')=to_char(sysdate,'yyyy')
+        </if>
+        GROUP BY DEPT_ID )
+        )A
+        WHERE ROWNUM &lt;= #{pageSize,jdbcType=BIGINT}
+        )
+        WHERE RN &gt;= #{current,jdbcType=BIGINT}
+    </select>
+    <select id="queryCompanyUseDataListnotCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        select count(1) from (
+        SELECT c.id DEPT_ID,c.ORG_NAME_CN FROM ORG_BASEINFO@NT_PTL c WHERE c.id NOT in (
+        SELECT DEPT_ID FROM T_LOGIN_LOG a
+        where 1=1
+        <if test="companyName != null and companyName != ''" >
+            and instr(c.ORG_NAME_CN ,#{companyName,jdbcType=VARCHAR})>0
+        </if>
+        <if test="searchFlag ==1">
+            and TO_CHAR(a.CREATE_TIME,'YYYY-MM-DD')=TO_CHAR(SYSDATE,'YYYY-MM-DD')
+        </if>
+        <if test="searchFlag ==2">
+            and a.CREATE_TIME>trunc(sysdate-6)
+        </if>
+        <if test="searchFlag ==3">
+            and a.CREATE_TIME between TRUNC(SYSDATE-30) and TRUNC(SYSDATE)
+        </if>
+        <if test="searchFlag ==4">
+            and to_char(a.CREATE_TIME ,'yyyy-mm-dd')&gt;=to_char( add_months(sysdate,-6),'yyyy-mm-dd')
+        </if>
+        <if test="searchFlag ==5">
+            and to_char(a.CREATE_TIME ,'yyyy')=to_char(sysdate,'yyyy')
+        </if>
+        GROUP BY DEPT_ID
+        )
+        )A
+    </select>
+    <select id="queryCompanyUseDataByCodeCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        SELECT count(1)countcode FROM T_LOGIN_LOG a WHERE DEPT_ID = #{deptId,jdbcType=VARCHAR}
+    </select>
+    <select id="queryCompanyUseDataByCode" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select to_char(a.UPDATE_TIME  ,'yyyy-mm-dd HH24:MI:SS')  UPDATE_TIME from (select * from ( SELECT * FROM T_LOGIN_LOG a WHERE DEPT_ID = #{deptId,jdbcType=VARCHAR}   ORDER BY UPDATE_TIME desc) where ROWNUM=1)a
+    </select>
+    <select id="queryCompanyUseDataByCode1" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select to_char(a.UPDATE_TIME  ,'yyyy-mm-dd HH24:MI:SS')  UPDATE_TIME,TO_NUMBER(TO_DATE(a.UPDATE_TIME ) -  TO_DATE(b.UPDATE_TIME)  )
+            AS todate from (select * from ( SELECT * FROM T_LOGIN_LOG a WHERE DEPT_ID = #{deptId,jdbcType=VARCHAR}   ORDER BY UPDATE_TIME desc) where ROWNUM=1)a,
+                           (SELECT *
+                            FROM (SELECT c.*, rownum rn from ( SELECT * FROM T_LOGIN_LOG a WHERE DEPT_ID = #{deptId,jdbcType=VARCHAR}   ORDER BY UPDATE_TIME desc ) c
+                                  WHERE rownum &lt;=2)
+                            WHERE rn > 1)b
+    </select>
 </mapper>

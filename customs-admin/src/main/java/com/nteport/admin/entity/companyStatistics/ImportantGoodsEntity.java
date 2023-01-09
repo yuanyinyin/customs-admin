@@ -30,9 +30,6 @@ public class ImportantGoodsEntity {
     @TableField("OWNER_ORG_ID")
     private String ownerOrg_id;
 
-    @TableField("OWNER_ORG_NAME")
-    private String ownerOrg_name;
-
     @TableField("CREATE_DATE")
     private Date createDate;
 

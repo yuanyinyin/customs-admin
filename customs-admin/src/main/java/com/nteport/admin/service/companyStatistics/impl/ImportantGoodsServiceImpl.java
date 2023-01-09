@@ -139,7 +139,6 @@ public class ImportantGoodsServiceImpl extends ServiceImpl<ImportantGoodsMapper,
                     importantGoods.setHscode(CODETS);
                     importantGoods.setIeflag(IEFLAG);
                     importantGoods.setOwnerOrg_id(user.getDeptId());
-                    importantGoods.setOwnerOrg_name(user.getDeptName());
                     importantGoods.setCreateUserId(user.getId());
                     importantGoods.setCreateUser(user.getRealName());
                     importantGoods.setUpdateUserId(user.getId());

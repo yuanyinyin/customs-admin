@@ -1094,4 +1094,92 @@ public class QpDecHeadServiceImpl extends ServiceImpl<QpDecHeadStatisticsMapper,
             return response;
         }
     }
+
+    @Override
+    public ApiResponse queryCompanyRateData(Map<String, String> params, UserEntity user) {
+        ApiResponse response = new ApiResponse();
+        JSONObject data = new JSONObject();
+
+        try {
+            String searchFlag = params.get("searchFlag");
+
+            HashMap map0=new HashMap();
+            map0.put("searchFlag", searchFlag);
+            List<Map>list1 = qpDecHeadMapper.queryCompanyRateData(map0);
+
+            data.put("rs", list1);
+            response.fillMessage(data);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.fillMessage(EnumCode.ERROR_SERVER);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return response;
+        }
+    }
+    @Override
+    public ApiResponse queryCompanyUseDataList(Map<String, String> params, UserEntity user) {
+        ApiResponse response = new ApiResponse();
+        JSONObject data = new JSONObject();
+        //分页
+        Long pageSize = Long.parseLong(params.get("limit"));
+        Long pageNum = Long.parseLong(params.get("page"));
+        try {
+            String companyName = params.get("companyName");
+            String searchFlag = params.get("searchFlag");
+            String queryFlag = params.get("queryFlag");
+            HashMap map0=new HashMap();
+            map0.put("searchFlag", searchFlag);
+            map0.put("companyName", companyName);
+            long current = (pageNum - 1) * pageSize;
+            map0.put("current", current);
+            map0.put("pageSize", pageNum*pageSize);
+            Integer countcompany = 0;
+            List<Map>list1=new ArrayList<>();
+            Map map = new HashMap();
+            HashMap map1=new HashMap();
+            if("1".equals(queryFlag)){
+                list1 = qpDecHeadMapper.queryCompanyUseDataList(map0);
+                countcompany = qpDecHeadMapper.queryCompanyUseDataListCount(map0);
+                for(int i=0;i<list1.size();i++){
+                    map1=new HashMap();
+                    map1.put("deptId",list1.get(i).get("DEPT_ID"));
+                    Integer integer = qpDecHeadMapper.queryCompanyUseDataByCodeCount(map1);
+                    List list=new ArrayList();
+                    if(integer>1){
+                        list = qpDecHeadMapper.queryCompanyUseDataByCode1(map1);
+                    }else{
+                        list = qpDecHeadMapper.queryCompanyUseDataByCode(map1);
+                    }
+
+                    list1.get(i).put("companyInfo",list);
+                }
+            }else if("2".equals(queryFlag)){
+                list1 = qpDecHeadMapper.queryCompanyUseDataListnot(map0);
+                countcompany = qpDecHeadMapper.queryCompanyUseDataListnotCount(map0);
+                for(int i=0;i<list1.size();i++){
+                    map1=new HashMap();
+                    map1.put("deptId",list1.get(i).get("DEPT_ID"));
+                    Integer integer = qpDecHeadMapper.queryCompanyUseDataByCodeCount(map1);
+                    List list=new ArrayList();
+                    if(integer>1){
+                        list = qpDecHeadMapper.queryCompanyUseDataByCode1(map1);
+                    }else{
+                        list = qpDecHeadMapper.queryCompanyUseDataByCode(map1);
+                    }
+                    list1.get(i).put("companyInfo",list);
+                }
+            }
+
+            data.put("items", list1);
+            data.put("total", countcompany);
+            return ApiResponse.success(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.fillMessage(EnumCode.ERROR_SERVER);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return response;
+        }
+    }
 }
+

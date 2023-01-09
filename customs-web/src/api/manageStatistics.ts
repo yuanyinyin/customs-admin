@@ -112,3 +112,27 @@ export function getQyUseDataDash(data: ObjTy) {
   })
 
 }
+export function getCompanyRateData(data: ObjTy) {
+  return request({
+    url: '/manageStatistics/queryCompanyRateData',
+    data,
+    method: 'get',
+    bfLoading: true,
+    isParams: true,
+    isAlertErrorMsg: true
+  })
+
+}
+
+export function getCompanyUseDataList(data: ObjTy) {
+  return request({
+    url: '/manageStatistics/queryCompanyUseDataList',
+    data,
+    method: 'get',
+    bfLoading: true,
+    isParams: true,
+    isAlertErrorMsg: true
+  })
+
+}
+

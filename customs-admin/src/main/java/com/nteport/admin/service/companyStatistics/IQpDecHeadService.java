@@ -38,5 +38,7 @@ public interface IQpDecHeadService extends IService<QpDecHead> {
     ApiResponse queryQyUseDataDash(Map<String, String> params, UserEntity user);
 
     ApiResponse queryNoticeInfoDash(Map<String, String> params, UserEntity user);
+    ApiResponse queryCompanyRateData(Map<String, String> params, UserEntity user);
+    ApiResponse queryCompanyUseDataList(Map<String, String> params, UserEntity user);
 }
 

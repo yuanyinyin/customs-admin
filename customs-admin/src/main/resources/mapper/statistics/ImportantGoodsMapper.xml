@@ -7,6 +7,7 @@
         SELECT A.*, ROWNUM RN
         FROM (SELECT  s.codeTS, s.gname,d.IEFLAG ,count(1)countcode FROM nsw.qp_dechead d LEFT JOIN nsw.QP_DECLIST s ON s.HEADID=d.ID
         where 1=1 and  s.CODETS IS NOT null
+        and d.isdelete !='1'
         AND NOT EXISTS (SELECT 1 FROM IMPORTANT_GOODS c
         WHERE c.hscode = s.codeTS and c.ieflag=d.ieflag and s.gname=c.GOODS_NAME and c.OWNER_ORG_ID=#{orgId,jdbcType=VARCHAR})
         <if test="codets != null and codets != ''" >
@@ -24,6 +25,7 @@
     <select id="queryGoodsListCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
         select count(1) from (SELECT  s.codeTS, s.gname,d.IEFLAG, count(1) FROM nsw.qp_dechead d LEFT JOIN nsw.QP_DECLIST s ON s.HEADID=d.ID
         where 1=1 and  s.CODETS IS NOT null
+        and d.isdelete !='1'
         AND NOT EXISTS (SELECT 1 FROM IMPORTANT_GOODS c
         WHERE c.hscode = s.codeTS and c.ieflag=d.ieflag and s.gname=c.GOODS_NAME and c.OWNER_ORG_ID=#{orgId,jdbcType=VARCHAR})
         <if test="codets != null and codets != ''" >
